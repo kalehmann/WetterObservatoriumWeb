@@ -12,10 +12,14 @@ services:
                 env_file: ".env"
                 image: "postgres:latest"
         php:
+                build:
+                        args:
+                                PHP_VERSION: "8"
+                        context: "."
+                        target: "wo_php"
                 depends_on:
                         - "db"
                 env_file: ".env"
-                image: "php:8-fpm-alpine"
                 volumes:
                         - ".:/application"
         web:
