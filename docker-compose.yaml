@@ -12,13 +12,22 @@ services:
                         target: "wo_php"
                 volumes:
                         - ".:/application"
-        web:
+        web-apache:
                 depends_on:
                         - "php"
-                image: "nginx:latest"
+                image: "httpd:alpine"
+                ports:
+                        - "8081:80"
+                volumes:
+                        - ".:/application:ro"
+                        - "./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
+        web-nginx:
+                depends_on:
+                        - "php"
+                image: "nginx:alpine"
                 ports:
                         - "8080:80"
                 volumes:
-                        - ".:/application"
+                        - ".:/application:ro"
                         - "./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"
 ...

@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^/?api(?:/(.*))?$ /api.php?_path=$1 [L]
+</IfModule>
