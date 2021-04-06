@@ -19,6 +19,8 @@ services:
                         target: "wo_php"
                 depends_on:
                         - "db"
+                environment:
+                        APP_ENV: "dev"
                 env_file: ".env"
                 volumes:
                         - ".:/application"

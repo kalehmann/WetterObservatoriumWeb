@@ -1,0 +1,3 @@
+#index:
+#    path: /
+#    controller: KaLehmann\WetterObservatoriumWeb\Controller\DefaultController::index
