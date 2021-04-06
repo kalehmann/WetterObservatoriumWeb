@@ -23,4 +23,6 @@ declare(strict_types=1);
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-echo 'Hello, world!';
+$path = $_GET['_path'] ?? '';
+
+echo 'Path : ' . $path;
