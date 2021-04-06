@@ -1,0 +1,17 @@
+{
+    "name": "kalehmann/wetterobservatoriumweb",
+    "type": "project",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Karsten Lehmann",
+            "email": "mail@kalehmann.de"
+        }
+    ],
+    "require": {},
+    "autoload": {
+	"psr-4": {
+	    "KaLehmann\\WetterObservatoriumWeb\\": "src/"
+	}
+    }
+}
