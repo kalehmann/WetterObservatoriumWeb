@@ -8,7 +8,9 @@
             "email": "mail@kalehmann.de"
         }
     ],
-    "require": {},
+    "require": {
+	"php": ">=8.0"
+    },
     "autoload": {
 	"psr-4": {
 	    "KaLehmann\\WetterObservatoriumWeb\\": "src/"
