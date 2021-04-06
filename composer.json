@@ -1,7 +1,7 @@
 {
     "name": "kalehmann/wetterobservatoriumweb",
     "type": "project",
-    "license": "GPL-3.0",
+    "license": "AGPL-3.0-only",
     "authors": [
         {
             "name": "Karsten Lehmann",
