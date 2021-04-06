@@ -10,8 +10,6 @@ services:
                                 PHP_VERSION: "8"
                         context: "."
                         target: "wo_php"
-                depends_on:
-                        - "db"
                 volumes:
                         - ".:/application"
         web:
