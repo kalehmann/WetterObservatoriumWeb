@@ -23,6 +23,9 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Actions;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Action for storing weather date.
  *
