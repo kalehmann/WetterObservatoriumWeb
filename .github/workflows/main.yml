@@ -11,4 +11,6 @@ jobs:
                         - name: "PHPUnit tests"
                           id: "phpunit-tests"
                           uses: "./.github/actions/phpunit-tests"
+                          with:
+                                  path-to-tests: "tests/"
 ...
