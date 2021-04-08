@@ -13,5 +13,5 @@ runs:
         args:
                 - "php"
                 - "vendor/bin/phpunit"
-                - "${{ inputs.path-to-tests }}"
+                - ${{ inputs.path-to-tests }}
 ...
