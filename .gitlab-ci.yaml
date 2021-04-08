@@ -1,0 +1,10 @@
+---
+image: "lehmannka/wetterobservatoriumweb:testing"
+
+before_script:
+        - "composer install"
+
+unit_tests:
+        script:
+                - "/usr/bin/env php vendor/bin/phpunit tests/"
+...
