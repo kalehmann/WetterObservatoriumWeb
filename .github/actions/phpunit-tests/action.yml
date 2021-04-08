@@ -1,13 +1,15 @@
 ---
-name: 'PHPUnit tests'
-description: 'Runs PHP tests using PHPUnit'
+name: "PHPUnit tests"
+author: "Karsten Lehmann <mail@kalehmann.de>"
+description: "Runs PHP tests using PHPUnit"
 inputs:
         path-to-tests:
-                description: 'The path to the directory containing the tests'
+                description: "The path to the directory containing the tests"
                 required: true
 runs:
-        using: 'docker'
-        image: 'Dockerfile'
+        using: "docker"
+        image: "Dockerfile"
+        entrypoint: "./vendor/bin/phpunit"
         args:
-                - '${{ inputs.path-to-tests }}'
+                - "${{ inputs.path-to-tests }}"
 ...
