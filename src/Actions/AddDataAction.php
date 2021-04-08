@@ -43,13 +43,13 @@ class AddDataAction implements ActionInterface
             return false;
         }
 
-        return (bool)preg_match('^\/api\/[a-z]+$', $request->getUri());
+        return (bool)preg_match('/^\/api\/[a-z]+\/?$/', $request->getUri()->getPath());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __invoke(RequestInterface $request): ResponseInterface;
+    public function __invoke(RequestInterface $request): ResponseInterface
     {
 
     }
