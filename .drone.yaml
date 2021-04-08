@@ -1,0 +1,35 @@
+---
+kind: "pipeline"
+type: "docker"
+name: "deployment"
+
+steps:
+        - name: "Install the dependencies"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - "composer install --no-dev --classmap-authoritative"
+        - name: "Deploy the website"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - 'lftp -e "
+                      set ftp:ssl-force true;
+                      set ssl:verify-certificate yes;
+                      open -u $${USER},$${PASSWORD} $${SERVER};
+                      mirror --reverse --delete $(pwd) public_html/blumenwetter-kalehmann-de;
+                      exit;"'
+          depends_on:
+                  - "Install the dependencies"
+          environment:
+                  USER:
+                          from_secret: "ftp_user"
+                  PASSWORD:
+                          from_secret: "ftp_password"
+                  SERVER:
+                          from_secret: "ftp_server"
+          when:
+                  branch:
+                          - "master"
+
+image_pull_secrets:
+        - "dockerconfigjson"
+...
