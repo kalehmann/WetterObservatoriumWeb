@@ -10,6 +10,7 @@ services:
                                 PHP_VERSION: "8"
                         context: "."
                         target: "wo_php"
+                working_dir: "/application"
                 volumes:
                         - ".:/application"
         web-apache:
