@@ -9,7 +9,9 @@ inputs:
 runs:
         using: "docker"
         image: "../../../Dockerfile"
-        entrypoint: "./vendor/bin/phpunit"
+        entrypoint: "/usr/bin/env"
         args:
+                - "php"
+                - "vendor/bin/phpunit"
                 - "${{ inputs.path-to-tests }}"
 ...
