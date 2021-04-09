@@ -15,7 +15,7 @@ steps:
                       set ftp:ssl-force true;
                       set ssl:verify-certificate yes;
                       open -u $${USER},$${PASSWORD} $${SERVER};
-                      mirror --reverse --delete $(pwd) public_html/blumenwetter-kalehmann-de;
+                      mirror --reverse --delete --parallel=20 $(pwd) public_html/blumenwetter-kalehmann-de;
                       exit;"'
           depends_on:
                   - "Install the dependencies"
