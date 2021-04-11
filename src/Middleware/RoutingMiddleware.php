@@ -25,6 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\MiddleWare;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -73,7 +74,7 @@ class RoutingMiddleware implements MiddlewareInterface
             $request->getUri()->getPath(),
         );
 
-        switch($routeInfo[0]) {
+        switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 $response = $this->psr17Factory->createResponse(404);
 
