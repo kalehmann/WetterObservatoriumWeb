@@ -95,7 +95,6 @@ class RoutingMiddleware implements MiddlewareInterface
                 $response = $this->psr17Factory->createResponse(404);
 
                 return $response;
-
         }
     }
 }
