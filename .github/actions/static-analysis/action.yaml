@@ -1,0 +1,16 @@
+---
+name: "PHPStan static analysis"
+author: "Karsten Lehmann <mail@kalehmann.de>"
+description: "Static analysis of PHP code with PHPStan"
+inputs:
+        source-directories:
+                description: "The directories containing the code"
+                required: true
+runs:
+        using: "docker"
+        image: "../../../Dockerfile"
+        entrypoint: "/bin/sh"
+        args:
+                - "-c"
+                - "php vendor/bin/phpstan --level max ${{ inputs.source-directories }}"
+...
