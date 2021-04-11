@@ -2,6 +2,16 @@
 on: ["push"]
 
 jobs:
+        style-check:
+                runs-on: "ubuntu-latest"
+                name: "PHP CodeSniffer analysis"
+                steps:
+                        - uses: "actions/checkout@v2"
+                        - uses: "php-actions/composer@v5"
+                        - name: "PHP CodeSniffer analysis"
+                          uses: "./.github/actions/code-sniffer"
+                          with:
+                                  source-directories: "src/ tests/"
         unit-tests:
                 runs-on: "ubuntu-latest"
                 name: "PHPUnit tests"
@@ -9,7 +19,6 @@ jobs:
                         - uses: "actions/checkout@v2"
                         - uses: "php-actions/composer@v5"
                         - name: "PHPUnit tests"
-                          id: "phpunit-tests"
                           uses: "./.github/actions/phpunit-tests"
                           with:
                                   path-to-tests: "tests/"
