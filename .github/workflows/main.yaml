@@ -2,6 +2,16 @@
 on: ["push"]
 
 jobs:
+        static-analysis:
+                runs-on: "ubuntu-latest"
+                name: "PHPStan static analysis"
+                steps:
+                        - uses: "actions/checkout@v2"
+                        - uses: "php-actions/composer@v5"
+                        - name: "PHPStan static analysis"
+                          uses: "./.github/actions/static-analysis"
+                          with:
+                                  source-directories: "src/ tests/"
         style-check:
                 runs-on: "ubuntu-latest"
                 name: "PHP CodeSniffer analysis"
