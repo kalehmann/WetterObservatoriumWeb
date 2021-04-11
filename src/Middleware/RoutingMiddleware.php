@@ -75,10 +75,6 @@ class RoutingMiddleware implements MiddlewareInterface
         );
 
         switch ($routeInfo[0]) {
-            case Dispatcher::NOT_FOUND:
-                $response = $this->psr17Factory->createResponse(404);
-
-                return $response;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $response = $this->psr17Factory->createResponse(405);
 
@@ -94,6 +90,12 @@ class RoutingMiddleware implements MiddlewareInterface
                         ->withAttribute('_action', $action)
                         ->withAttribute('_params', $params)
                 );
+            default:
+            case Dispatcher::NOT_FOUND:
+                $response = $this->psr17Factory->createResponse(404);
+
+                return $response;
+
         }
     }
 }
