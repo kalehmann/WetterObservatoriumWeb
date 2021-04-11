@@ -21,8 +21,27 @@
 
 declare(strict_types=1);
 
+use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
+use Narrowspark\HttpEmitter\SapiEmitter;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Relay\Relay;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$path = $_GET['_path'] ?? '';
 
-echo 'Path : ' . $path;
+$psr17Factory = new Psr17Factory();
+$serverRequestCreator = new ServerRequestCreator(
+    $psr17Factory,
+    $psr17Factory,
+    $psr17Factory,
+    $psr17Factory,
+);
+$request = $serverRequestCreator->fromGlobals();
+
+$queue[] = new RoutingMiddleware($psr17Factory);
+$relay = new Relay($queue);
+$response = $relay->handle($request);
+
+$emitter = new SapiEmitter();
+$emitter->emit($response);
