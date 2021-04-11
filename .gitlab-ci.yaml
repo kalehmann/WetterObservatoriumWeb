@@ -4,6 +4,14 @@ image: "lehmannka/wetterobservatoriumweb:testing"
 before_script:
         - "composer install"
 
+static-analysis:
+        script:
+                - "/usr/bin/env php vendor/bin/phpstan --level max src/ tests/"
+
+style-check:
+        script:
+                - "/usr/bin/env php vendor/bin/phpcs --standard=PSR2 src/ tests/"
+
 unit_tests:
         script:
                 - "/usr/bin/env php vendor/bin/phpunit tests/"
