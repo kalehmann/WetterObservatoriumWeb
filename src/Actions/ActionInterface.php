@@ -25,11 +25,12 @@ namespace KaLehmann\WetterObservatoriumWeb\Actions;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * A interface for a single action (e.g. an endpoint).
  */
-interface ActionInterface
+interface ActionInterface extends RequestHandlerInterface
 {
     /**
      * Determines whether the action can handle a request or not.
@@ -42,15 +43,4 @@ interface ActionInterface
      * @return bool whether the action can handle the request or not.
      */
     public static function matchesRequest(RequestInterface $request): bool;
-
-    /**
-     * Fulfill the purpose of the action.
-     *
-     * This method receives the request, handles it and return a response.
-     *
-     * @param RequestInterface $request is the request for the action.
-     *
-     * @return ResponseInterface
-     */
-    public function __invoke(RequestInterface $request): ResponseInterface;
 }

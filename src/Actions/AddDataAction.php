@@ -49,8 +49,7 @@ class AddDataAction implements ActionInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(RequestInterface $request): ResponseInterface
+    public function handle(RequestInterface $request): ResponseInterface
     {
-
     }
 }
