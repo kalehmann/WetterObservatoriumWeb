@@ -12,5 +12,5 @@ runs:
         entrypoint: "/bin/sh"
         args:
                 - "-c"
-                - "php vendor/bin/phpstan --level=max ${{ inputs.source-directories }}"
+                - "php vendor/bin/phpstan --level=max analyze ${{ inputs.source-directories }}"
 ...
