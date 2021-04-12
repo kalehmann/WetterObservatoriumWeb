@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Actions;
 
+use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -32,6 +33,7 @@ use Psr\Http\Message\ResponseInterface;
  * This action receives weatehr data from a client (usually an ESP8266),
  * verifies that the client is allowed to store data and persists it.
  */
+#[AuthorizationAttribute]
 class AddDataAction implements ActionInterface
 {
     /**
