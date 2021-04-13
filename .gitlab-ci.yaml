@@ -6,11 +6,15 @@ before_script:
 
 static-analysis:
         script:
-                - "/usr/bin/env php vendor/bin/phpstan --level max config.php public/ src/ tests/"
+                - >-
+                        /usr/bin/env php vendor/bin/phpstan
+                        --level max config.php public/ src/ tests/
 
 style-check:
         script:
-                - "/usr/bin/env php vendor/bin/phpcs --standard=PSR2 config.php public/ src/ tests/"
+                - >-
+                        /usr/bin/env php vendor/bin/phpcs
+                        --standard=PSR2 config.php public/ src/ tests/
 
 unit_tests:
         script:

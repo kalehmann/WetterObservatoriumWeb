@@ -1,5 +1,5 @@
 ---
-on: ["push"]
+on: "push"  # yamllint disable-line rule:truthy
 
 jobs:
         static-analysis:
@@ -11,7 +11,8 @@ jobs:
                         - name: "PHPStan static analysis"
                           uses: "./.github/actions/static-analysis"
                           with:
-                                  source-directories: "config.php public/ src/ tests/"
+                                  source-directories: >-
+                                          config.php public/ src/ tests/
         style-check:
                 runs-on: "ubuntu-latest"
                 name: "PHP CodeSniffer analysis"
@@ -21,7 +22,8 @@ jobs:
                         - name: "PHP CodeSniffer analysis"
                           uses: "./.github/actions/code-sniffer"
                           with:
-                                  source-directories: "config.php public/ src/ tests/"
+                                  source-directories: >-
+                                          config.php public/ src/ tests/
         unit-tests:
                 runs-on: "ubuntu-latest"
                 name: "PHPUnit tests"
