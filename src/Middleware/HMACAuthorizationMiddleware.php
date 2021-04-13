@@ -159,9 +159,10 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
      *  - a signature
      * in that order.
      *
-     * @return null|array if the header does not match the format `null` is
-     *                    returned, otherwise an array with the keys
-     *                    `algorithm`, `headers`, `signature` and `username`.
+     * @return null|array<string, mixed> if the header does not match the
+     *                                   format `null` is returned, otherwise
+     *                                   an array with the keys `algorithm`,
+     *                                   `headers`, `signature` and `username`.
      */
     private function getAuthorizationHeaderAttributes(
         ServerRequestInterface $request
@@ -208,6 +209,8 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
     /**
      * Checkes that the request has every header, that should be included in
      * the signed data.
+     *
+     * @param array<string> $headers
      */
     private function checkIncludedHeaders(
         ServerRequestInterface $request,
@@ -231,6 +234,8 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
     /**
      * HMAC verification of the signature for the request including the given
      * headers.
+     *
+     * @param array<string> $headers
      */
     private function checkHMACSignature(
         ServerRequestInterface $request,
@@ -247,8 +252,9 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
 
         $dataToSign .= (string) $request->getBody();
 
+        /** @var string|bool $expectedSignature */
         $expectedSignature = hash_hmac(
-            $alogrithm,
+            $algorithm,
             $dataToSign,
             $this->key,
         );
