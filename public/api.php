@@ -21,27 +21,31 @@
 
 declare(strict_types=1);
 
+use DI\ContainerBuilder;
+use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use Narrowspark\HttpEmitter\SapiEmitter;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Relay\Relay;
+use Symfony\Component\Dotenv\Dotenv;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../.env');
 
-$psr17Factory = new Psr17Factory();
-$serverRequestCreator = new ServerRequestCreator(
-    $psr17Factory,
-    $psr17Factory,
-    $psr17Factory,
-    $psr17Factory,
-);
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/../config.php');
+$builder->useAnnotations(false);
+$container = $builder->build();
+
+$serverRequestCreator = $container->get(ServerRequestCreator::class);
 $request = $serverRequestCreator->fromGlobals();
 
-$queue[] = new RoutingMiddleware($psr17Factory);
+$queue[] = $container->get(RoutingMiddleware::class);
+$queue[] = $container->get(HMACAuthorizationMiddleware::class);
 $relay = new Relay($queue);
 $response = $relay->handle($request);
 
-$emitter = new SapiEmitter();
+$emitter = $container->get(SapiEmitter::class);
 $emitter->emit($response);
