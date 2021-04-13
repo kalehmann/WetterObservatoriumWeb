@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\MiddleWare;
+namespace KaLehmann\WetterObservatoriumWeb\Middleware;
 
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
 use Nyholm\Psr7\Factory\Psr17Factory;
