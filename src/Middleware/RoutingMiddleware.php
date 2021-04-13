@@ -25,7 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Middleware;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use KaLehmann\WetterObservatoriumWeb\Actions\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

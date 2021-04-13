@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Actions;
+namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
 use Nyholm\Psr7\Response;

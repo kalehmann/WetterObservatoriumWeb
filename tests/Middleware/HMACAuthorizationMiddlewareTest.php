@@ -21,10 +21,10 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Actions;
+namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use DateTime;
-use KaLehmann\WetterObservatoriumWeb\Actions\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\ServerRequest;

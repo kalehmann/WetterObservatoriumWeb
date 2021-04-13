@@ -21,9 +21,9 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Actions;
+namespace KaLehmann\WetterObservatoriumWeb\Action;
 
-use KaLehmann\WetterObservatoriumWeb\Actions\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use Nyholm\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 
