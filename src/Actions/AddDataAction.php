@@ -57,7 +57,7 @@ class AddDataAction
         return new Response(
             200,
             [],
-            'Adding data at ' . location
+            'Adding data at ' . $location
         );
     }
 }

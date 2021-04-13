@@ -29,9 +29,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-
 /**
- *
+ * Middleware for invoking actions.
  */
 class ActionMiddleware implements MiddlewareInterface
 {
@@ -59,6 +58,6 @@ class ActionMiddleware implements MiddlewareInterface
 
         $action = $this->container->get($actionClass);
 
-        return $this->container->call($action, $params)
+        return $this->container->call($action, $params);
     }
 }
