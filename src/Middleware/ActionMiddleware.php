@@ -55,7 +55,7 @@ class ActionMiddleware implements MiddlewareInterface
                 'Request has no `_action` attribute.'
             );
         }
-        $params = $request->getAttribute('_params');
+        $params = $request->getAttribute('_params', []);
 
         $action = $this->container->get($actionClass);
 

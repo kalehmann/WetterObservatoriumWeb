@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Action;
+namespace KaLehmann\WetterObservatoriumWeb\Tests\Middleware;
 
 use DateTime;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
