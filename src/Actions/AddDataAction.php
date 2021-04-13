@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Actions;
 
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
+use Nyholm\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -34,7 +35,7 @@ use Psr\Http\Message\ResponseInterface;
  * verifies that the client is allowed to store data and persists it.
  */
 #[AuthorizationAttribute]
-class AddDataAction implements ActionInterface
+class AddDataAction
 {
     /**
      * {@inheritdoc}
@@ -49,9 +50,14 @@ class AddDataAction implements ActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Adds data for the specified locatiion.
      */
-    public function handle(RequestInterface $request): ResponseInterface
+    public function __invoke(RequestInterface $request, string $location): ResponseInterface
     {
+        return new Response(
+            200,
+            [],
+            'Adding data at ' . location
+        );
     }
 }

@@ -21,26 +21,44 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Actions;
+namespace KaLehmann\WetterObservatoriumWeb\Middleware;
 
-use Psr\Http\Message\RequestInterface;
+use DI\Container;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+
 /**
- * A interface for a single action (e.g. an endpoint).
+ *
  */
-interface ActionInterface extends RequestHandlerInterface
+class ActionMiddleware implements MiddlewareInterface
 {
+    private Container $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
-     * Determines whether the action can handle a request or not.
-     *
-     * This method is used to check whether the path and method of the request
-     * matches to the action or not.
-     *
-     * @param RequestInterface $request is the request in question.
-     *
-     * @return bool whether the action can handle the request or not.
+     * {@inheritdoc}
      */
-    public static function matchesRequest(RequestInterface $request): bool;
+    public function process(
+        ServerRequestInterface $request,
+        RequestHandlerInterface $handler
+    ): ResponseInterface {
+        $actionClass = $request->getAttribute('_action');
+        if ($actionClass === null) {
+            throw new RuntimeException(
+                'Request has no `_action` attribute.'
+            );
+        }
+        $params = $request->getAttribute('_params');
+
+        $action = $this->container->get($actionClass);
+
+        return $this->container->call($action, $params)
+    }
 }

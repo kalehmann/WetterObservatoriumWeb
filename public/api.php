@@ -22,6 +22,7 @@
 declare(strict_types=1);
 
 use DI\ContainerBuilder;
+use KaLehmann\WetterObservatoriumWeb\Middleware\ActionMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use Narrowspark\HttpEmitter\SapiEmitter;
@@ -44,6 +45,7 @@ $request = $serverRequestCreator->fromGlobals();
 
 $queue[] = $container->get(RoutingMiddleware::class);
 $queue[] = $container->get(HMACAuthorizationMiddleware::class);
+$queue[] = $container->get(ActionMiddleware::class);
 $relay = new Relay($queue);
 $response = $relay->handle($request);
 
