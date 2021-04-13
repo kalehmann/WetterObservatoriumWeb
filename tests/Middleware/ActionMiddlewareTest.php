@@ -54,7 +54,7 @@ class ActionMiddlewareTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $actionMiddleware->process($request, $handlerMock);
-     }
+    }
 
     /**
      * Tests that a request without the `_action` attribute, but without the
@@ -129,5 +129,5 @@ class ActionMiddlewareTest extends TestCase
         $actionMiddleware = new ActionMiddleware($containerMock);
 
         $actionMiddleware->process($request, $handlerMock);
-     }
+    }
 }
