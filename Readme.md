@@ -4,6 +4,10 @@
 [![GitLab pipeline status][gitlab_badge]][gitlab_pipeline]
 [![Drone CI deployment status][drone_badge]][drone_deployment]
 
+### Dokumentation
+
+* [Api](doc/api.md)
+
   [github_action]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/
   [github_badge]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/badge.svg
   [gitlab_badge]: https://gitlab.com/kalehmann/WetterObservatoriumWeb/badges/master/pipeline.svg
