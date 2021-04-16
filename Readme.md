@@ -7,6 +7,7 @@
 ### Dokumentation
 
 * [Api](doc/api.md)
+* [Persistenz](doc/persistenz.md)
 
   [github_action]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/
   [github_badge]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/badge.svg
