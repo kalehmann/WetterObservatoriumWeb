@@ -71,3 +71,18 @@ Format kodierten Unix-Zeitstempel.
 Dieser beschreibt die Zeit, zu der die Daten erhoben wurden.
 Die folgenden zwei Bytes enthalten einen signierten 16-Bit Integer mit den
 erhobenen Daten.
+
+### Ort der Speicherung
+
+Der Speicherort der Daten wird durch die Umgebungsvariable `DATA_DIR` bestimmt.
+Zusätzlich ist der Speicherort vom aktuellen Datum abhängig.
+Am 19.04.2021 würden Temperaturdaten vom Ort Aquarium zum Beispiel an den
+folgenden Orten persistiert werden:
+
+
+ Pfad                                       | Beschreibung
+--------------------------------------------|-----------------------------------------------------
+ `${DATA_DIR}/aquarium/temparature/24h.dat` | Der Ringpuffer mit den Daten der letzten 24 Stunden
+ `${DATA_DIR}/aquarium/temperature/31d.dat` | Der Ringpuffer mit den Daten der letzten 31 Tage
+ `${DATA_DIR}/aquarium/2021/data.dat`       | Die gesammelten Daten des Jahres 2021
+ `${DATA_DIR}/aquarium/2021/04.dat`         | Die gesammelten Daten des Aprils '21
