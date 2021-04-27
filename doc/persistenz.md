@@ -86,3 +86,14 @@ folgenden Orten persistiert werden:
  `${DATA_DIR}/aquarium/temperature/31d.dat` | Der Ringpuffer mit den Daten der letzten 31 Tage
  `${DATA_DIR}/aquarium/2021/data.dat`       | Die gesammelten Daten des Jahres 2021
  `${DATA_DIR}/aquarium/2021/04.dat`         | Die gesammelten Daten des Aprils '21
+
+### Zusammenfassung von Daten
+
+In den Daten eines Monats oder eines Jahres werden die Daten als Duchschnitt
+eines Intervalls zusammengfasst.
+Dazu wird beim Eingang eines neuen Datums geprüft, ob das letzte Datum der
+Messgröße im selben Intervall (selbe Stunde oder selber Tag) liegt.
+Ist dies der Fall, wird das neue Datum lediglich im Ringpuffer persistiert.
+Andernfalls wird aus allen Daten des letzten Intervalls (Stunde oder Tag)
+der Durchschnitt gebildet und persistiert.
+
