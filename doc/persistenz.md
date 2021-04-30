@@ -80,12 +80,12 @@ Am 19.04.2021 würden Temperaturdaten vom Ort Aquarium zum Beispiel an den
 folgenden Orten persistiert werden:
 
 
- Pfad                                             | Beschreibung
---------------------------------------------------|-----------------------------------------------------
- `${DATA_DIR}/aquarium/temparature/24h.dat`       | Der Ringpuffer mit den Daten der letzten 24 Stunden
- `${DATA_DIR}/aquarium/temperature/31d.dat`       | Der Ringpuffer mit den Daten der letzten 31 Tage
- `${DATA_DIR}/aquarium/temperature/2021/data.dat` | Die gesammelten Daten des Jahres 2021
- `${DATA_DIR}/aquarium/temperature/2021/04.dat`   | Die gesammelten Daten des Aprils '21
+ Pfad                                           | Beschreibung
+------------------------------------------------|-----------------------------------------------------
+ `${DATA_DIR}/aquarium/temparature/24h.dat`     | Der Ringpuffer mit den Daten der letzten 24 Stunden
+ `${DATA_DIR}/aquarium/temperature/31d.dat`     | Der Ringpuffer mit den Daten der letzten 31 Tage
+ `${DATA_DIR}/aquarium/temperature/2021.dat`    | Die gesammelten Daten des Jahres 2021
+ `${DATA_DIR}/aquarium/temperature/2021/04.dat` | Die gesammelten Daten des Aprils '21
 
 ### Zusammenfassung von Daten
 
