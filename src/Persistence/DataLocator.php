@@ -51,7 +51,7 @@ class DataLocator
         }
         if (false === is_dir($path)) {
             throw new RunTimeException(
-                $dataDir , ' is not a directory'
+                $dataDirectory . ' is not a directory'
             );
         }
         $this->dataDirectory = $path;
