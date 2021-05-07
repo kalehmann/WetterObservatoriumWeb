@@ -24,9 +24,9 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
 use \Countable;
+use \Generator;
 use \IteratorAggregate;
 use \Stringable;
-use \Traversable;
 use function array_filter;
 use function array_keys;
 use function array_key_exists;
@@ -45,6 +45,8 @@ use function str_split;
 
 /**
  * Implementation of a ring buffer with fixed size elements.
+ *
+ * @implements IteratorAggregate<int, array<int, int>>
  */
 class RingBuffer implements Countable, IteratorAggregate, Stringable
 {
@@ -60,6 +62,9 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
 
     private int $count;
 
+    /**
+     * @var array<array<int, int>>
+     */
     private array $data;
 
     private int $elementSize;
@@ -74,7 +79,7 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
      *
      * @param string $contents the packed data of the new ring buffer
      *                         including the headers.
-     * @param sring $format thu format describing the packed elements.
+     * @param string $format the format describing the packed elements.
      */
     public function __construct(string $contents, string $format)
     {
@@ -123,8 +128,8 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
     /**
      * Load a ring buffer from a existing file.
      *
-     * @param $path the path to the file with the ring buffer.
-     * @param $format the format describing the packed elements.
+     * @param string $path the path to the file with the ring buffer.
+     * @param string $format the format describing the packed elements.
      *                See the documentation of `pack` for more details.
      * @return self the ring buffer loaded from the file.
      */
@@ -144,13 +149,13 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
      * Open the ring buffer from the specified path and lock it for exclusive
      * access.
      *
-     * @param $ptah the path to the ring buffer (must exist already).
-     * @param $format the format describing the packed elements.
-     *                See the documentation of `pack` for more details.
-     * @param $callback a function accpting a {@see RingBuffer::class} as
-     *                  single parameter. All actions on the ring buffer are
-     *                  exclusive without concurrent access from paralell calls
-     *                  to this method.
+     * @param string $path the path to the ring buffer (must exist already).
+     * @param string $format the format describing the packed elements.
+     *                       See the documentation of `pack` for more details.
+     * @param callable $callback a function accpting a {@see RingBuffer::class}
+     *                           as single parameter. All actions on the ring
+     *                           buffer are exclusive without concurrent access
+     *                           from paralell calls to this method.
      */
     public static function operateExclusive(
         string $path,
@@ -165,8 +170,14 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
         }
 
         if (flock($stream, LOCK_EX)) {
+            $data = stream_get_contents($stream);
+            if (false === $data) {
+                throw new IOException(
+                    'Could not read data from ' . $path,
+                );
+            }
             $ringBuffer = new self(
-                stream_get_contents($stream),
+                $data,
                 $format,
             );
             ftruncate($stream, 0);
@@ -188,8 +199,8 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
      *
      * This method overwrites the oldest existing entry.
      *
-     * @param array $entry the data for the new entry. The number of elements
-     *                     must match the format.
+     * @param array<int> $entry the data for the new entry. The number of
+     *                          elements must match the format.
      */
     public function addEntry(array $entry): void
     {
@@ -221,8 +232,10 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
     /**
      * Returns an iterator over all elements form the ring buffer in the order
      * of insertion (the oldest element is the first).
+     *
+     * @return Generator<int, array<int, int>>
      */
-    public function getIterator(): Traversable
+    public function getIterator(): Generator
     {
         for ($i = 0; $i < $this->count; $i++) {
             yield $this->data[($this->index + $i) % $this->count];
@@ -286,6 +299,8 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
      *
      * Same as `unpack` except that it deos not need named elements and returns
      * a zero indexed array with all unpacked elemets.
+     *
+     * @return array<int, int>
      */
     private function unpack(string $format, string $packedData): array
     {
