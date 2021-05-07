@@ -26,6 +26,7 @@ namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
 use KaLehmann\WetterObservatoriumWeb\Persistence\InvalidPackFormatException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\RingBuffer;
+use \RunTimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -159,6 +160,11 @@ class RingBufferTest extends TestCase
             sys_get_temp_dir(),
             'testOperateExclusive',
         );
+        if (false === $tempFile) {
+            throw new RunTimeException(
+                'Could not get a temporary file name for a test',
+            );
+        }
 
         try {
             $ringBuffer = RingBuffer::createNew(4, 'qq');
