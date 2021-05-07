@@ -37,9 +37,9 @@ class DataPackerTest extends TestCase
      */
     public function testCheckFormatWithValidFormat(): void
     {
-        $firstValidFormat = 'cCsSnvlLNVqQJPxX';
+        $firstValidFormat = 'cCsSnvlLNVqQJPx';
         $secondValidFormat = 'QlSxx';
-        $thirdValidFormat = 'cX';
+        $thirdValidFormat = 'cL';
 
         $this->assertTrue(
             DataPacker::checkFormat($firstValidFormat)
@@ -62,7 +62,7 @@ class DataPackerTest extends TestCase
         $this->expectException(InvalidPackFormatException::class);
         $this->expectExceptionMessage(
             'A, a, B, b, D, d, E, e, F, f, G, g, H, h, I, i, j, K, k, M, m, ' .
-            'O, o, p, R, r, T, t, U, u, W, w, Y, y, Z, z',
+            'O, o, p, R, r, T, t, U, u, W, w, X, Y, y, Z, z',
         );
         DataPacker::checkFormat($invalidFormat);
     }
@@ -94,8 +94,8 @@ class DataPackerTest extends TestCase
         );
 
         $this->assertEquals(
-            4,
-            DataPacker::getElementSize('cXcX'),
+            10,
+            DataPacker::getElementSize('qcc'),
         );
         $this->assertEquals(
             strlen(
@@ -127,11 +127,11 @@ class DataPackerTest extends TestCase
     {
         $this->assertEquals(
             0,
-            DataPacker::getFormatElementCount('xxX'),
+            DataPacker::getFormatElementCount('xx'),
         );
         $this->assertEquals(
             14,
-            DataPacker::getFormatElementCount('cCsSnvlLNVqQJPxX'),
+            DataPacker::getFormatElementCount('cCsSnvlLNVqQJPx'),
         );
     }
 }

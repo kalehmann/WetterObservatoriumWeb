@@ -106,11 +106,6 @@ class DataPacker
     public const NULL_BYTE = 'x';
 
     /**
-     * Back up the last byte.
-     */
-    public const BACKUP_BYTE = 'X';
-
-    /**
      * Packed sizes of the formats.
      */
     public const FORMAT_SIZES = [
@@ -129,7 +124,6 @@ class DataPacker
         self::UNSIGNED_LONG_LONG_BE => 8,
         self::UNSIGNED_LONG_LONG_LE => 8,
         self::NULL_BYTE => 1,
-        self::BACKUP_BYTE => 1,
     ];
 
     /**
@@ -189,7 +183,7 @@ class DataPacker
         $count = 0;
         $formatCodes = str_split($format, 1);
         foreach ($formatCodes as $char) {
-            if ($char === self::BACKUP_BYTE || $char === self::NULL_BYTE) {
+            if ($char === self::NULL_BYTE) {
                 continue;
             }
             $count += 1;
