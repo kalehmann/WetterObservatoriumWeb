@@ -24,8 +24,6 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Middleware;
 
 use FastRoute\Dispatcher;
-use FastRoute\RouteCollector;
-use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,11 +45,19 @@ use function FastRoute\simpleDispatcher;
  */
 class RoutingMiddleware implements MiddlewareInterface
 {
+    /**
+     * @var callable
+     */
+    private $routeDefinitionCallback;
+
     private Psr17Factory $psr17Factory;
 
-    public function __construct(Psr17Factory $psr17Factory)
-    {
+    public function __construct(
+        Psr17Factory $psr17Factory,
+        callable $routeDefinitionCallback,
+    ) {
         $this->psr17Factory = $psr17Factory;
+        $this->routeDefinitionCallback = $routeDefinitionCallback;
     }
 
     /**
@@ -61,13 +67,9 @@ class RoutingMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
-            $routeCollector->addRoute(
-                'POST',
-                '/api/{location:[a-z]*}',
-                AddDataAction::class
-            );
-        });
+        $dispatcher = simpleDispatcher(
+            $this->routeDefinitionCallback,
+        );
 
         $routeInfo = $dispatcher->dispatch(
             $request->getMethod(),

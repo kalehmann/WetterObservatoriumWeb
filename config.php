@@ -21,7 +21,10 @@
 
 declare(strict_types=1);
 
+use FastRoute\RouteCollector;
+use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
+use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -48,6 +51,17 @@ return [
         ->method(
             'pushHandler',
             new StreamHandler('php://stdout', Logger::DEBUG)
+        ),
+    RoutingMiddleware::class => create()
+        ->constructor(
+            get(Psr17Factory::class),
+            function (RouteCollector $routeCollector) {
+                $routeCollector->addRoute(
+                    'POST',
+                    '/api/{location:[a-z]*}',
+                    AddDataAction::class,
+                );
+            },
         ),
     ServerRequestFactoryInterface::class => create(Psr17Factory::class),
     StreamFactoryInterface::class => create(Psr17Factory::class),
