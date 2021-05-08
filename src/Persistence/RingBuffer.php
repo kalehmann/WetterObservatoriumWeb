@@ -23,10 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \Countable;
 use \Generator;
 use \IteratorAggregate;
-use \Stringable;
 use function array_filter;
 use function array_keys;
 use function array_key_exists;
@@ -45,10 +43,8 @@ use function str_split;
 
 /**
  * Implementation of a ring buffer with fixed size elements.
- *
- * @implements IteratorAggregate<int, array<int, int>>
  */
-class RingBuffer implements Countable, IteratorAggregate, Stringable
+class RingBuffer implements BufferInterface
 {
     public const HEADER_FORMAT
         = DataPacker::UNSIGNED_LONG_LE . DataPacker::UNSIGNED_LONG_LE .
@@ -201,6 +197,8 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
      *
      * @param array<int> $entry the data for the new entry. The number of
      *                          elements must match the format.
+     *
+     * @throws IOException on failure.
      */
     public function addEntry(array $entry): void
     {
