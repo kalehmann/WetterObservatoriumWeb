@@ -195,7 +195,7 @@ class RingBuffer implements Countable, IteratorAggregate, Stringable
     }
 
     /**
-     * Add a new entr to the ring buffer.
+     * Add a new entry to the ring buffer.
      *
      * This method overwrites the oldest existing entry.
      *
