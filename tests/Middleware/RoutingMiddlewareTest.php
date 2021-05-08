@@ -41,7 +41,7 @@ class RoutingMiddlewareTest extends TestCase
      */
     public function testRoutingWithUnknownRoute(): void
     {
-        $routeDefinitionCallback = function(RouteCollector $routeCollector) {
+        $routeDefinitionCallback = function (RouteCollector $routeCollector) {
             $routeCollector->addRoute(
                 'POST',
                 '/api/{location:[a-z]*}',
@@ -76,7 +76,7 @@ class RoutingMiddlewareTest extends TestCase
      */
     public function testRoutingWithWrongMethod(): void
     {
-        $routeDefinitionCallback = function(RouteCollector $routeCollector) {
+        $routeDefinitionCallback = function (RouteCollector $routeCollector) {
             $routeCollector->addRoute(
                 'GET',
                 '/api/{location:[a-z]*}/classes',
@@ -110,7 +110,7 @@ class RoutingMiddlewareTest extends TestCase
      */
     public function testRoutingWithKnowRouteAndCorrectMethod(): void
     {
-        $routeDefinitionCallback = function(RouteCollector $routeCollector) {
+        $routeDefinitionCallback = function (RouteCollector $routeCollector) {
             $routeCollector->addRoute(
                 'POST',
                 '/api/{location:[a-z]*}',
