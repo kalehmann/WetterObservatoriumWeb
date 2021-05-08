@@ -25,6 +25,7 @@ namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
 
 use KaLehmann\WetterObservatoriumWeb\Persistence\DataPacker;
 use KaLehmann\WetterObservatoriumWeb\Persistence\InvalidPackFormatException;
+use KaLehmann\WetterObservatoriumWeb\Persistence\IOException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -132,6 +133,43 @@ class DataPackerTest extends TestCase
         $this->assertEquals(
             14,
             DataPacker::getFormatElementCount('cCsSnvlLNVqQJPx'),
+        );
+    }
+
+    /**
+     * Check that the unpack method throws an exception for an invalid format.
+     */
+    public function testUnpackWithInvalidFormat(): void
+    {
+        $invalidFormat = 'invalid';
+        $this->expectException(InvalidPackFormatException::class);
+        $this->expectExceptionMessage(
+            'i, a, d',
+        );
+
+        DataPacker::unpack($invalidFormat, '');
+    }
+
+    /**
+     * Check that the unpack methods unpacks valid data into a zero-indexed
+     * array.
+     */
+    public function testUnpackWithValidData(): void
+    {
+        $format = 'qlscx';
+        $data = hex2bin('04000000000000000300000002000100');
+        if (false === $data) {
+            throw new \RunTimeException('Could not parse hex string in test.');
+        }
+
+        $this->assertEquals(
+            [
+                0 => 4,
+                1 => 3,
+                2 => 2,
+                3 => 1,
+            ],
+            DataPacker::unpack($format, $data),
         );
     }
 }

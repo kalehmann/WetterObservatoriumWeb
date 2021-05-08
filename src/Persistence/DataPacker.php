@@ -191,4 +191,43 @@ class DataPacker
 
         return $count;
     }
+
+    /**
+     * Slightly modified version of the built in function `unpack`.
+     *
+     * Same as `unpack` except that it deos not need named elements and returns
+     * a zero indexed array with all unpacked elemets.
+     *
+     * @return array<int, int>
+     */
+    public static function unpack(string $format, string $packedData): array
+    {
+        self::checkFormat($format);
+
+        $namedFormat = '';
+        for ($i = 0; $i < strlen($format); $i++) {
+            if ($format[$i] === 'x') {
+                $namedFormat .= 'x';
+
+                continue;
+            }
+            $namedFormat .= $format[$i] . '_' . $i . '/';
+        }
+
+        $unpackedData = unpack($namedFormat, $packedData);
+        if (false === $unpackedData) {
+            throw new IOException(
+                'Could not unpack "' . bin2hex($packedData) .
+                '" with format "' . $format . '"',
+            );
+        }
+
+        return array_values(
+            array_filter(
+                $unpackedData,
+                fn ($value, string $key) => $key[0] !== 'd',
+                ARRAY_FILTER_USE_BOTH,
+            )
+        );
+    }
 }

@@ -267,7 +267,7 @@ class RingBuffer implements BufferInterface
         $data = substr($content, self::HEADER_SIZE, $dataSize);
         $elements = str_split($data, $this->elementSize);
         foreach ($elements as $index => $packedEntry) {
-            $unpackedData = $this->unpack($this->formatSpec, $packedEntry);
+            $unpackedData = DataPacker::unpack($this->formatSpec, $packedEntry);
             $this->addEntry($unpackedData);
         }
     }
@@ -286,47 +286,10 @@ class RingBuffer implements BufferInterface
     {
         $header = substr($content, 0, self::HEADER_SIZE);
 
-        $unpackedHeader = $this->unpack(self::HEADER_FORMAT, $header);
+        $unpackedHeader = DataPacker::unpack(self::HEADER_FORMAT, $header);
         [$count, $current] = $unpackedHeader;
 
         return [$count, $current];
-    }
-
-    /**
-     * Slightly modified version of the built in function `unpack`.
-     *
-     * Same as `unpack` except that it deos not need named elements and returns
-     * a zero indexed array with all unpacked elemets.
-     *
-     * @return array<int, int>
-     */
-    private function unpack(string $format, string $packedData): array
-    {
-        $namedFormat = '';
-        for ($i = 0; $i < strlen($format); $i++) {
-            if ($format[$i] === 'x') {
-                $namedFormat .= 'x';
-
-                continue;
-            }
-            $namedFormat .= $format[$i] . '_' . $i . '/';
-        }
-
-        $unpackedData = unpack($namedFormat, $packedData);
-        if (false === $unpackedData) {
-            throw new IOException(
-                'Could not unpack "' . bin2hex($packedData) .
-                '" with format "' . $format . '"',
-            );
-        }
-
-        return array_values(
-            array_filter(
-                $unpackedData,
-                fn ($value, string $key) => $key[0] !== 'd',
-                ARRAY_FILTER_USE_BOTH,
-            )
-        );
     }
 
     /**
