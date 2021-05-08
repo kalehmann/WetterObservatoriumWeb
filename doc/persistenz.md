@@ -62,7 +62,7 @@ Jeder Eintrag umfasst ebenfalls 10 Bytes.
 
 Der allererste Eintrag enthält 
 
-* 4 Bytes für die Zahl der Elemente des Ringpuffers als 32-Bit Integer
+* 4 Bytes für die Zahl der Elemente des Puffers als 32-Bit Integer
 * 6 Bytes als Padding
 
 Das Format der weiteren Einträge entspricht dem des Ringpuffers, die ersten
