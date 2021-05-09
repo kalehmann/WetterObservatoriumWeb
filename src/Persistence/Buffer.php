@@ -60,8 +60,7 @@ class Buffer implements BufferInterface
      */
     public static function createNew(
         string $format,
-    ): self
-    {
+    ): self {
         if (DataPacker::getFormatElementCount($format) < 1) {
             throw new IOException(
                 'The format does not contain a single element',
