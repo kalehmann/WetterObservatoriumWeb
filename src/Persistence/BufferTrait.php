@@ -132,6 +132,9 @@ trait BufferTrait
     private function readData(string $content): void
     {
         $dataSize = $this->count * $this->elementSize;
+        if (!$dataSize) {
+            return;
+        }
         $data = substr($content, self::getHeaderSize(), $dataSize);
         $elements = str_split($data, $this->elementSize);
         foreach ($elements as $index => $packedEntry) {

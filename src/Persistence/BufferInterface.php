@@ -33,19 +33,6 @@ use \Stringable;
 interface BufferInterface extends Countable, IteratorAggregate, Stringable
 {
     /**
-     * Create a new buffer with $numberOfElements elements.
-     *
-     * @param int $numberOfElements the number of elements in the buffer.
-     * @param string $format the format describing the packed elements.
-     *                       See the documentation of `pack` for more details.
-     * @return self the new buffer.
-     */
-    public static function createNew(
-        int $numberOfElements,
-        string $format,
-    ): self;
-
-    /**
      * Load a buffer from a existing file.
      *
      * @param string $path the path to the file with the buffer.

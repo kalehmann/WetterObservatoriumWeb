@@ -36,7 +36,7 @@ class RingBufferTest extends TestCase
 {
     /**
      * Check that an entry with two elements cannot be added to a ring
-     * buffer with on element per entry.
+     * buffer with one element per entry.
      */
     public function testAddEntryWithInvalidEntry(): void
     {
@@ -100,13 +100,13 @@ class RingBufferTest extends TestCase
     }
 
     /**
-     *
+     * Check that creating a ring buffer with a invalid format throws an
+     * exception.
      */
     public function testCreateNewWithInvalidFormat(): void
     {
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage('The format does not contain a single element');
-        RingBuffer::createNew(40, 'xx');
+        $this->expectException(InvalidPackFormatException::class);
+        RingBuffer::createNew(10, 'invalid');
     }
 
     /**
@@ -115,8 +115,11 @@ class RingBufferTest extends TestCase
      */
     public function testCreateNewWithFormatWithoutElements(): void
     {
-        $this->expectException(InvalidPackFormatException::class);
-        RingBuffer::createNew(10, 'invalid');
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage(
+            'The format does not contain a single element',
+        );
+        RingBuffer::createNew(40, 'xx');
     }
 
     /**
