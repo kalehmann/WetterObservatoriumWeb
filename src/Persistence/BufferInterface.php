@@ -33,6 +33,60 @@ use \Stringable;
 interface BufferInterface extends Countable, IteratorAggregate, Stringable
 {
     /**
+     * Create a new buffer with $numberOfElements elements.
+     *
+     * @param int $numberOfElements the number of elements in the buffer.
+     * @param string $format the format describing the packed elements.
+     *                       See the documentation of `pack` for more details.
+     * @return self the new buffer.
+     */
+    public static function createNew(
+        int $numberOfElements,
+        string $format,
+    ): self;
+
+    /**
+     * Load a buffer from a existing file.
+     *
+     * @param string $path the path to the file with the buffer.
+     * @param string $format the format describing the packed elements.
+     *                       See the documentation of `pack` for more details.
+     * @return self the buffer loaded from the file.
+     */
+    public static function fromFile(string $path, string $format): self;
+
+    /**
+     * Get the pack format describing the header of the buffer.
+     *
+     * @return string the format of the packed header.
+     */
+    public static function getHeaderFormat(): string;
+
+    /**
+     * Get the size of the packed header in bytes.
+     *
+     * @return int the size of the packed header in bytes.
+     */
+    public static function getHeaderSize(): int;
+
+    /**
+     * Open the buffer from the specified path and lock it for exclusive  access.
+     *
+     * @param string $path the path to the ring buffer (must exist already).
+     * @param string $format the format describing the packed elements.
+     *                       See the documentation of `pack` for more details.
+     * @param callable $callback a function accpting a {@see RingBuffer::class}
+     *                           as single parameter. All actions on the ring
+     *                           buffer are exclusive without concurrent access
+     *                           from paralell calls to this method.
+     */
+    public static function operateExclusive(
+        string $path,
+        string $format,
+        callable $callback
+    ): void;
+
+    /**
      * Add a new entry to the buffer.
      *
      * @param array<int> $entry the data for the new entry. The number of

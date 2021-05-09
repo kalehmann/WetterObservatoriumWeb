@@ -46,27 +46,11 @@ use function str_split;
  */
 class RingBuffer implements BufferInterface
 {
-    public const HEADER_FORMAT
-        = DataPacker::UNSIGNED_LONG_LE . DataPacker::UNSIGNED_LONG_LE .
-        DataPacker::NULL_BYTE . DataPacker::NULL_BYTE;
-
-    public const HEADER_SIZE
-        = DataPacker::FORMAT_SIZES[DataPacker::UNSIGNED_LONG_LE] +
-        DataPacker::FORMAT_SIZES[DataPacker::UNSIGNED_LONG_LE] +
-        DataPacker::FORMAT_SIZES[DataPacker::NULL_BYTE] +
-        DataPacker::FORMAT_SIZES[DataPacker::NULL_BYTE];
-
-    private int $count;
+    use BufferTrait;
 
     /**
-     * @var array<array<int, int>>
+     * The index of the newest element in the ring buffer.
      */
-    private array $data;
-
-    private int $elementSize;
-
-    private string $formatSpec;
-
     private int $index;
 
     /**
@@ -93,7 +77,7 @@ class RingBuffer implements BufferInterface
      * @param int $numberOfElements the number of elements in the ring buffer.
      * @param string $format the format describing the packed elements.
      *                       See the documentation of `pack` for more details.
-     * @return self the new RingBuffer.
+     * @return self the new ring buffer.
      */
     public static function createNew(int $numberOfElements, string $format): self
     {
@@ -110,7 +94,7 @@ class RingBuffer implements BufferInterface
         }
 
         $contents = pack(
-            self::HEADER_FORMAT,
+            self::getHeaderFormat(),
             $numberOfElements,
             0,
         ) . str_repeat(
@@ -122,72 +106,23 @@ class RingBuffer implements BufferInterface
     }
 
     /**
-     * Load a ring buffer from a existing file.
-     *
-     * @param string $path the path to the file with the ring buffer.
-     * @param string $format the format describing the packed elements.
-     *                See the documentation of `pack` for more details.
-     * @return self the ring buffer loaded from the file.
+     * {@inheritdoc}
      */
-    public static function fromFile(string $path, string $format): self
+    public static function getHeaderFormat(): string
     {
-        $contents = file_get_contents($path);
-        if (false === $contents) {
-            throw new IOException(
-                'Could not read data from ' . $path,
-            );
-        }
-
-        return new self($contents, $format);
+        return DataPacker::UNSIGNED_LONG_LE . DataPacker::UNSIGNED_LONG_LE .
+        DataPacker::NULL_BYTE . DataPacker::NULL_BYTE;
     }
 
     /**
-     * Open the ring buffer from the specified path and lock it for exclusive
-     * access.
-     *
-     * @param string $path the path to the ring buffer (must exist already).
-     * @param string $format the format describing the packed elements.
-     *                       See the documentation of `pack` for more details.
-     * @param callable $callback a function accpting a {@see RingBuffer::class}
-     *                           as single parameter. All actions on the ring
-     *                           buffer are exclusive without concurrent access
-     *                           from paralell calls to this method.
+     * {@inheritdoc}
      */
-    public static function operateExclusive(
-        string $path,
-        string $format,
-        callable $callback
-    ): void {
-        $stream = fopen($path, 'r+');
-        if (false === $stream) {
-            throw new IOException(
-                'Could not open ' . $path,
-            );
-        }
-
-        if (flock($stream, LOCK_EX)) {
-            $data = stream_get_contents($stream);
-            if (false === $data) {
-                throw new IOException(
-                    'Could not read data from ' . $path,
-                );
-            }
-            $ringBuffer = new self(
-                $data,
-                $format,
-            );
-            ftruncate($stream, 0);
-            rewind($stream);
-            $callback($ringBuffer);
-            fwrite($stream, (string)$ringBuffer);
-            fflush($stream);
-            flock($stream, LOCK_UN);
-            fclose($stream);
-
-            return;
-        }
-
-        throw new IOException('Could not aquire lock on ' . $path);
+    public static function getHeaderSize(): int
+    {
+        return DataPacker::FORMAT_SIZES[DataPacker::UNSIGNED_LONG_LE] +
+        DataPacker::FORMAT_SIZES[DataPacker::UNSIGNED_LONG_LE] +
+        DataPacker::FORMAT_SIZES[DataPacker::NULL_BYTE] +
+        DataPacker::FORMAT_SIZES[DataPacker::NULL_BYTE];
     }
 
     /**
@@ -220,14 +155,6 @@ class RingBuffer implements BufferInterface
     }
 
     /**
-     * Get the number of entries in the ring buffer.
-     */
-    public function count(): int
-    {
-        return $this->count;
-    }
-
-    /**
      * Returns an iterator over all elements form the ring buffer in the order
      * of insertion (the oldest element is the first).
      *
@@ -241,12 +168,12 @@ class RingBuffer implements BufferInterface
     }
 
     /**
-     * Converts the ring buffer to a binary string.
+     * Convert the ring buffer to a binary string.
      */
     public function __toString(): string
     {
         return pack(
-            self::HEADER_FORMAT,
+            self::getHeaderFormat(),
             $this->count,
             $this->index,
         ) . join(
@@ -256,20 +183,6 @@ class RingBuffer implements BufferInterface
                 $this->data
             ),
         );
-    }
-
-    /**
-     * Read the data form $content into the ring buffer.
-     */
-    private function readData(string $content): void
-    {
-        $dataSize = $this->count * $this->elementSize;
-        $data = substr($content, self::HEADER_SIZE, $dataSize);
-        $elements = str_split($data, $this->elementSize);
-        foreach ($elements as $index => $packedEntry) {
-            $unpackedData = DataPacker::unpack($this->formatSpec, $packedEntry);
-            $this->addEntry($unpackedData);
-        }
     }
 
     /**
@@ -284,29 +197,11 @@ class RingBuffer implements BufferInterface
      */
     private function readHeader(string $content): array
     {
-        $header = substr($content, 0, self::HEADER_SIZE);
+        $header = substr($content, 0, self::getHeaderSize());
 
-        $unpackedHeader = DataPacker::unpack(self::HEADER_FORMAT, $header);
+        $unpackedHeader = DataPacker::unpack(self::getHeaderFormat(), $header);
         [$count, $current] = $unpackedHeader;
 
         return [$count, $current];
-    }
-
-    /**
-     * Checks that $content matches the packed size of the ring buffer.
-     *
-     * @throws IOException if the size of $contents does not match the packed
-     * ring buffer.
-     */
-    private function validateBufferSize(string $content): void
-    {
-        $expectedSize = self::HEADER_SIZE + $this->count * $this->elementSize;
-        $actualSize = strlen($content);
-
-        if ($expectedSize !== $actualSize) {
-            throw new IOException(
-                'The file size of the ring buffer at does not add up.',
-            );
-        }
     }
 }
