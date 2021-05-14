@@ -156,7 +156,7 @@ class DataPackerTest extends TestCase
      */
     public function testUnpackWithValidData(): void
     {
-        $format = 'qlscx';
+        $format = 'PVvcx';
         $data = hex2bin('04000000000000000300000002000100');
         if (false === $data) {
             throw new \RunTimeException('Could not parse hex string in test.');
@@ -179,8 +179,8 @@ class DataPackerTest extends TestCase
      */
     public function testUnpackWithMultipleElementsOfTheSameType(): void
     {
-        $format = 'qxxqxx';
-        $data = hex2bin('ff000000000100000000');
+        $format = 'PxxPxx';
+        $data = hex2bin('ff00000000000000000001000000000000000000');
         if (false === $data) {
             throw new \RunTimeException('Could not parse hex string in test.');
         }
