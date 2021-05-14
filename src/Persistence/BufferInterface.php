@@ -82,4 +82,11 @@ interface BufferInterface extends Countable, IteratorAggregate, Stringable
      * @throws IOException on failure.
      */
     public function addEntry(array $entry): void;
+
+    /**
+     * Get the number of elements per entry in the buffer.
+     *
+     * @return the number of elements per entry.
+     */
+    public function elementsPerEntry(): int;
 }

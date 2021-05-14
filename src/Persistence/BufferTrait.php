@@ -119,6 +119,16 @@ trait BufferTrait
     }
 
     /**
+     * Get the number of elements per entry in the buffer.
+     *
+     * @return the number of elements per entry.
+     */
+    public function elementsPerEntry(): int
+    {
+        return DataPacker::getFormatElementCount($this->formatSpec);
+    }
+
+    /**
      * Get the number of entries in the ring buffer.
      */
     public function count(): int
