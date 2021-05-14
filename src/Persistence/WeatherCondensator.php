@@ -105,6 +105,14 @@ class WeatherCondensator
             fn (int ...$elements) => $startTimestamp < $elements[0]
                                     && $elements[0] > $endTimestamp,
         );
+        if (count($interval) === 0) {
+            throw new CondensationException(
+                'Cannot condensate the data between ' .
+                date('Y-m-d H:i:s', $startTimestamp) . ' and '.
+                date('Y-m-d H:i:s', $endTimestamp) . '. No data recorded in ' .
+                'this interval.',
+            );
+        }
 
         return array_sum(
             array_map(
