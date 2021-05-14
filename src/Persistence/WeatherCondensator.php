@@ -100,6 +100,13 @@ class WeatherCondensator
         int $startTimestamp,
         int $endTimestamp,
     ): int {
+        if ($buffer->elementsPerEntry() !== 2) {
+            throw new CondensationException(
+                'Condensation is only supported for a buffer with two ' .
+                'per entry. The first element should be a unix timestamp ' .
+                'and the second entry the measured datum.',
+            );
+        }
         $interval = array_filter(
             iterator_to_array($buffer),
             fn (int ...$elements) => $startTimestamp < $elements[0]
