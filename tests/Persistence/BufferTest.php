@@ -108,6 +108,19 @@ class BufferTest extends TestCase
     }
 
     /**
+     * Check that the number of elements per entry can be obtained from the
+     * buffer.
+     */
+    public function testElementsPerEntry(): void
+    {
+        $buffer1 = Buffer::createNew('qxxqxx');
+        $buffer2 = Buffer::createNew('ccc');
+
+        $this->assertEquals(2, $buffer1->elementsPerEntry());
+        $this->assertEquals(3, $buffer2->elementsPerEntry());
+    }
+
+    /**
      * Check that the buffer can be iterated.
      */
     public function testIteration(): void

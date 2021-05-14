@@ -134,6 +134,19 @@ class RingBufferTest extends TestCase
     }
 
     /**
+     * Check that the number of elements per entry can be obtained from the
+     * buffer.
+     */
+    public function testElementsPerEntry(): void
+    {
+        $buffer1 = RingBuffer::createNew(10, 'qxxqxx');
+        $buffer2 = RingBuffer::createNew(20, 'ccc');
+
+        $this->assertEquals(2, $buffer1->elementsPerEntry());
+        $this->assertEquals(3, $buffer2->elementsPerEntry());
+    }
+
+    /**
      * Check that the ring buffer can be iterated.
      */
     public function testIteration(): void
