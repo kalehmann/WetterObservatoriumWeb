@@ -205,13 +205,15 @@ class DataPacker
         self::checkFormat($format);
 
         $namedFormat = '';
+        $elementIndex = 0;
         for ($i = 0; $i < strlen($format); $i++) {
             if ($format[$i] === 'x') {
-                $namedFormat .= 'x';
+                $namedFormat .= 'x_/';
 
                 continue;
             }
-            $namedFormat .= $format[$i] . '_' . $i . '/';
+            $namedFormat .= $format[$i] . '_' . $elementIndex . '/';
+            $elementIndex += 1;
         }
 
         $unpackedData = unpack($namedFormat, $packedData);
