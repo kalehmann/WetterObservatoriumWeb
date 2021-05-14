@@ -172,4 +172,25 @@ class DataPackerTest extends TestCase
             DataPacker::unpack($format, $data),
         );
     }
+
+    /**
+     * Check that a format with multiple elements of the same type can be
+     * unpacked.
+     */
+    public function testUnpackWithMultipleElementsOfTheSameType(): void
+    {
+        $format = 'qxxqxx';
+        $data = hex2bin('ff000000000100000000');
+        if (false === $data) {
+            throw new \RunTimeException('Could not parse hex string in test.');
+        }
+
+        $this->assertEquals(
+            [
+                0 => 255,
+                1 => 1,
+            ],
+            DataPacker::unpack($format, $data),
+        );
+    }
 }
