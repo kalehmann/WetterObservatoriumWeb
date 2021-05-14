@@ -121,7 +121,7 @@ trait BufferTrait
     /**
      * Get the number of elements per entry in the buffer.
      *
-     * @return the number of elements per entry.
+     * @return int the number of elements per entry.
      */
     public function elementsPerEntry(): int
     {
