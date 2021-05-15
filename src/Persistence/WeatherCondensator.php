@@ -121,7 +121,7 @@ class WeatherCondensator
             );
         }
 
-        return array_sum(
+        return (int)array_sum(
             array_map(
                 fn (array $elements) => $elements[1],
                 $interval,
