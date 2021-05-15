@@ -109,7 +109,7 @@ class WeatherCondensator
         }
         $interval = array_filter(
             iterator_to_array($buffer),
-            fn (int ...$elements) => $startTimestamp < $elements[0]
+            fn (array $elements) => $startTimestamp < $elements[0]
                                     && $elements[0] > $endTimestamp,
         );
         if (count($interval) === 0) {
@@ -123,7 +123,7 @@ class WeatherCondensator
 
         return array_sum(
             array_map(
-                fn (int ...$elements) => $elements[0],
+                fn (array $elements) => $elements[1],
                 $interval,
             ),
         ) / count($interval);
