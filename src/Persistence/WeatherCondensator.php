@@ -110,7 +110,7 @@ class WeatherCondensator
         $interval = array_filter(
             iterator_to_array($buffer),
             fn (array $elements) => $startTimestamp < $elements[0]
-                                    && $elements[0] > $endTimestamp,
+                                    && $endTimestamp > $elements[0],
         );
         if (count($interval) === 0) {
             throw new CondensationException(
