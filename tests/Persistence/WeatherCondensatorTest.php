@@ -23,7 +23,6 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
 
-
 use KaLehmann\WetterObservatoriumWeb\Persistence\CondensationException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\RingBuffer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherCondensator;
