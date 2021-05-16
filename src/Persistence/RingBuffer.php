@@ -147,11 +147,11 @@ class RingBuffer implements BufferInterface
             );
         }
 
+        $this->index = ($this->index + 1) % $this->count;
         $this->data[$this->index] = array_map(
             fn ($value): int => (int)$value,
             $entry,
         );
-        $this->index = ($this->index + 1) % $this->count;
     }
 
     /**
@@ -162,7 +162,7 @@ class RingBuffer implements BufferInterface
      */
     public function getIterator(): Generator
     {
-        for ($i = 0; $i < $this->count; $i++) {
+        for ($i = 1; $i <= $this->count; $i++) {
             yield $this->data[($this->index + $i) % $this->count];
         }
     }
@@ -174,9 +174,7 @@ class RingBuffer implements BufferInterface
      */
     public function lastEntry(): array
     {
-        $index = ($this->index + $this->count - 1) % $this->count;
-
-        return $this->data[$index];
+        return $this->data[$this->index];
     }
 
     /**
