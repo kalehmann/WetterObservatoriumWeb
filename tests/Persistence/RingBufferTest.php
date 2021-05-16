@@ -168,6 +168,20 @@ class RingBufferTest extends TestCase
     }
 
     /**
+     * Check that the youngest entry from a ring buffer can be obtained.
+     */
+    public function testLastEntry(): void
+    {
+        $ringBuffer = RingBuffer::createNew(2, 'Pv');
+        $ringBuffer->addEntry([101, 1]);
+        $this->assertEquals([101, 1], $ringBuffer->lastEntry());
+        $ringBuffer->addEntry([102, 2]);
+        $this->assertEquals([102, 2], $ringBuffer->lastEntry());
+        $ringBuffer->addEntry([103, 3]);
+        $this->assertEquals([103, 3], $ringBuffer->lastEntry());
+    }
+
+    /**
      * Check that an exclusive operation on the ring buffer is possible.
      */
     public function testOperateExclusive(): void

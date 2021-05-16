@@ -168,6 +168,18 @@ class RingBuffer implements BufferInterface
     }
 
     /**
+     * Get the youngest entry from the ring buffer.
+     *
+     * @return array<int, int> the youngest entry in the ring buffer.
+     */
+    public function lastEntry(): array
+    {
+        $index = ($this->index + $this->count - 1) % $this->count;
+
+        return $this->data[$index];
+    }
+
+    /**
      * Convert the ring buffer to a binary string.
      */
     public function __toString(): string
