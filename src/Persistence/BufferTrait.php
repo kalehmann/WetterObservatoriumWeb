@@ -75,7 +75,7 @@ trait BufferTrait
      * @param string $path the path to the buffer (must exist already).
      * @param string $format the format describing the packed elements.
      *                       See the documentation of `pack` for more details.
-     * @param callable $callback a function accpting a
+     * @param callable $callback a function accepting a
      *                           {@see Bufferinterface::class} as single
      *                           parameter. All actions on the buffer are
      *                           exclusive without concurrent access
