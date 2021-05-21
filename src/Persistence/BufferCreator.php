@@ -65,6 +65,11 @@ class BufferCreator
             self::BUFFER_SIZE_24H,
             self::BUFFER_FORMAT,
         );
+
+        $dir = dirname($bufferPath);
+        if (!is_dir($dir) && false === mkdir(directory: $dir, recursive: true)) {
+            throw new IOException('Could not create directory ' . $dir);
+        }
         if (false === file_put_contents($bufferPath, (string)$ringBuffer)) {
             throw new IOException('Could not save buffer at ' . $bufferPath);
         }
@@ -92,6 +97,10 @@ class BufferCreator
             self::BUFFER_SIZE_31D,
             self::BUFFER_FORMAT,
         );
+        $dir = dirname($bufferPath);
+        if (!is_dir($dir) && false === mkdir(directory: $dir, recursive: true)) {
+            throw new IOException('Could not create directory ' . $dir);
+        }
         if (false === file_put_contents($bufferPath, (string)$ringBuffer)) {
             throw new IOException('Could not save buffer at ' . $bufferPath);
         }
@@ -120,6 +129,10 @@ class BufferCreator
         };
 
         $buffer = Buffer::createNew(self::BUFFER_FORMAT);
+        $dir = dirname($bufferPath);
+        if (!is_dir($dir) && false === mkdir(directory: $dir, recursive: true)) {
+            throw new IOException('Could not create directory ' . $dir);
+        }
         if (false === file_put_contents($bufferPath, (string)$buffer)) {
             throw new IOException('Could not save buffer at ' . $bufferPath);
         }
@@ -146,6 +159,10 @@ class BufferCreator
         }
 
         $buffer = Buffer::createNew(self::BUFFER_FORMAT);
+        $dir = dirname($bufferPath);
+        if (!is_dir($dir) && false === mkdir(directory: $dir, recursive: true)) {
+            throw new IOException('Could not create directory ' . $dir);
+        }
         if (false === file_put_contents($bufferPath, (string)$buffer)) {
             throw new IOException('Could not save buffer at ' . $bufferPath);
         }
