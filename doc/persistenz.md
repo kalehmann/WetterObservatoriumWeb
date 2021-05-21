@@ -50,10 +50,10 @@ Der allererste Eintrag teilt sich auf in
 * 2 Bytes als Padding
 
 Für alle folgenden Einträge enthalten die ersten 8 Bytes dabei einen
-signierten 64-Bit Integer im little-endian Format kodierten Unix-Zeitstempel.
+unsignierten 64-Bit Integer im little-endian Format kodierten Unix-Zeitstempel.
 Dieser beschreibt die Zeit, zu der die Daten erhoben wurden.
-Die folgenden zwei Bytes enthalten einen signierten 16-Bit Integer mit den
-erhobenen Daten.
+Die folgenden zwei Bytes enthalten einen unsignierten 16-Bit Integer im
+little-endian Format mit den erhobenen Daten.
 
 #### Format von permanenten Daten
 
@@ -66,11 +66,11 @@ Der allererste Eintrag enthält
 * 6 Bytes als Padding
 
 Das Format der weiteren Einträge entspricht dem des Ringpuffers, die ersten
-8 Bytes enthalten dabei jeweils einen signierten 64-Bit Integer im little-endian
-Format kodierten Unix-Zeitstempel.
+8 Bytes enthalten dabei jeweils einen unsignierten 64-Bit Integer im
+little-endian Format kodierten Unix-Zeitstempel.
 Dieser beschreibt die Zeit, zu der die Daten erhoben wurden.
-Die folgenden zwei Bytes enthalten einen signierten 16-Bit Integer mit den
-erhobenen Daten.
+Die folgenden zwei Bytes enthalten einen unsignierten 16-Bit Integer im
+little-endian Format mit den erhobenen Daten.
 
 ### Ort der Speicherung
 
