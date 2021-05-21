@@ -29,6 +29,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\RingBuffer;
 use PHPUnit\Framework\TestCase;
+use Exception;
 use RunTimeException;
 
 /**
@@ -61,8 +62,14 @@ class BufferCreatorTest extends TestCase
         $this->expectException(IOException::class);
         $this->expectExceptionMessage('file exists');
 
-        $bufferCreator = new BufferCreator($dataLocator);
-        $bufferCreator->create24hBuffer($location, $quantity);
+        try {
+            $bufferCreator = new BufferCreator($dataLocator);
+            $bufferCreator->create24hBuffer($location, $quantity);
+        } catch (Exception $e) {
+            unlink($bufferPath);
+
+            throw $e;
+        }
     }
 
     /**
@@ -73,8 +80,16 @@ class BufferCreatorTest extends TestCase
     {
         $location = 'test_location';
         $quantity = 'test_quantity';
-        $bufferPath = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8)) .
-                    '.bin';
+        $dataDir = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8));
+        $bufferPath =  join(
+            '/',
+            [
+                $dataDir,
+                $location,
+                $quantity,
+                '24h.bin',
+            ],
+        );
 
         $dataLocator = $this->createMock(DataLocator::class);
         $dataLocator->expects($this->once())
@@ -87,6 +102,10 @@ class BufferCreatorTest extends TestCase
 
         $ringBuffer = RingBuffer::fromFile($bufferPath, BufferCreator::BUFFER_FORMAT);
         $this->assertEquals(BufferCreator::BUFFER_SIZE_24H, count($ringBuffer));
+        unlink($bufferPath);
+        rmdir($dataDir . '/' . $location . '/' . $quantity);
+        rmdir($dataDir . '/' . $location);
+        rmdir($dataDir);
     }
 
     /**
@@ -114,8 +133,14 @@ class BufferCreatorTest extends TestCase
         $this->expectException(IOException::class);
         $this->expectExceptionMessage('file exists');
 
-        $bufferCreator = new BufferCreator($dataLocator);
-        $bufferCreator->create31dBuffer($location, $quantity);
+        try {
+            $bufferCreator = new BufferCreator($dataLocator);
+            $bufferCreator->create31dBuffer($location, $quantity);
+        } catch (Exception $e) {
+            unlink($bufferPath);
+
+            throw $e;
+        }
     }
 
     /**
@@ -126,8 +151,16 @@ class BufferCreatorTest extends TestCase
     {
         $location = 'test_location';
         $quantity = 'test_quantity';
-        $bufferPath = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8)) .
-                    '.bin';
+        $dataDir = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8));
+        $bufferPath =  join(
+            '/',
+            [
+                $dataDir,
+                $location,
+                $quantity,
+                '31d.bin',
+            ],
+        );
 
         $dataLocator = $this->createMock(DataLocator::class);
         $dataLocator->expects($this->once())
@@ -140,6 +173,10 @@ class BufferCreatorTest extends TestCase
 
         $ringBuffer = RingBuffer::fromFile($bufferPath, BufferCreator::BUFFER_FORMAT);
         $this->assertEquals(BufferCreator::BUFFER_SIZE_31D, count($ringBuffer));
+        unlink($bufferPath);
+        rmdir($dataDir . '/' . $location . '/' . $quantity);
+        rmdir($dataDir . '/' . $location);
+        rmdir($dataDir);
     }
 
     /**
@@ -169,8 +206,14 @@ class BufferCreatorTest extends TestCase
         $this->expectException(IOException::class);
         $this->expectExceptionMessage('file exists');
 
-        $bufferCreator = new BufferCreator($dataLocator);
-        $bufferCreator->createMonthBuffer($location, $quantity, $year, $month);
+        try {
+            $bufferCreator = new BufferCreator($dataLocator);
+            $bufferCreator->createMonthBuffer($location, $quantity, $year, $month);
+        } catch (Exception $e) {
+            unlink($bufferPath);
+
+            throw $e;
+        }
     }
 
     /**
@@ -183,8 +226,17 @@ class BufferCreatorTest extends TestCase
         $quantity = 'test_quantity';
         $month = 5;
         $year = 2021;
-        $bufferPath = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8)) .
-                    '.bin';
+        $dataDir = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8));
+        $bufferPath =  join(
+            '/',
+            [
+                $dataDir,
+                $location,
+                $quantity,
+                $year,
+                $month . '.bin',
+            ],
+        );
 
         $dataLocator = $this->createMock(DataLocator::class);
         $dataLocator->expects($this->once())
@@ -197,6 +249,11 @@ class BufferCreatorTest extends TestCase
 
         $buffer = Buffer::fromFile($bufferPath, BufferCreator::BUFFER_FORMAT);
         $this->assertEquals(0, count($buffer));
+        unlink($bufferPath);
+        rmdir($dataDir . '/' . $location . '/' . $quantity . '/' . $year);
+        rmdir($dataDir . '/' . $location . '/' . $quantity);
+        rmdir($dataDir . '/' . $location);
+        rmdir($dataDir);
     }
 
     /**
@@ -225,8 +282,14 @@ class BufferCreatorTest extends TestCase
         $this->expectException(IOException::class);
         $this->expectExceptionMessage('file exists');
 
-        $bufferCreator = new BufferCreator($dataLocator);
-        $bufferCreator->createYearBuffer($location, $quantity, $year);
+        try {
+            $bufferCreator = new BufferCreator($dataLocator);
+            $bufferCreator->createYearBuffer($location, $quantity, $year);
+        } catch (Exception $e) {
+            unlink($bufferPath);
+
+            throw $e;
+        }
     }
 
     /**
@@ -238,8 +301,16 @@ class BufferCreatorTest extends TestCase
         $location = 'test_location';
         $quantity = 'test_quantity';
         $year = 2021;
-        $bufferPath = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8)) .
-                    '.bin';
+        $dataDir = sys_get_temp_dir() . '/' . bin2hex(random_bytes(8));
+        $bufferPath =  join(
+            '/',
+            [
+                $dataDir,
+                $location,
+                $quantity,
+                $year . '.bin',
+            ],
+        );
 
         $dataLocator = $this->createMock(DataLocator::class);
         $dataLocator->expects($this->once())
@@ -252,5 +323,9 @@ class BufferCreatorTest extends TestCase
 
         $buffer = Buffer::fromFile($bufferPath, BufferCreator::BUFFER_FORMAT);
         $this->assertEquals(0, count($buffer));
+        unlink($bufferPath);
+        rmdir($dataDir . '/' . $location . '/' . $quantity);
+        rmdir($dataDir . '/' . $location);
+        rmdir($dataDir);
     }
 }
