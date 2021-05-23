@@ -38,18 +38,6 @@ use Psr\Http\Message\ResponseInterface;
 class AddDataAction
 {
     /**
-     * {@inheritdoc}
-     */
-    public static function matchesRequest(RequestInterface $request): bool
-    {
-        if ($request->getMethod() !== 'POST') {
-            return false;
-        }
-
-        return (bool)preg_match('/^\/api\/[a-z]+\/?$/', $request->getUri()->getPath());
-    }
-
-    /**
      * Adds data for the specified locatiion.
      */
     public function __invoke(RequestInterface $request, string $location): ResponseInterface
