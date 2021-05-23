@@ -58,6 +58,12 @@ trait BufferTrait
      */
     public static function fromFile(string $path, string $format): self
     {
+        if (!file_exists($path)) {
+            throw new IOException(
+                'Could not open buffer at '. $path.
+                '. File does not exist',
+            );
+        }
         $contents = file_get_contents($path);
         if (false === $contents) {
             throw new IOException(
