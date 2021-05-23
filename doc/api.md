@@ -28,7 +28,7 @@ Im der Tabelle der Endpunkte werden in den einzelnen Pfaden Parameter verwendet.
 
 ### Einspeisung von Daten
 
-Daten werden über den Pfad `/api/{lcoation}` eingespeist.
+Daten werden über den Pfad `/api/{location}` eingespeist.
 Um sicherzustellen, dass die Daten aus einer Vertrauenswürdigen Quellen stammen,
 werden Requests welche nicht den Anforderungen unter dem Punkt Authentifizierung
 genügen abgelehnt.
