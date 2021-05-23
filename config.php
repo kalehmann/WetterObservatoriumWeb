@@ -55,7 +55,7 @@ return [
     RoutingMiddleware::class => create()
         ->constructor(
             get(Psr17Factory::class),
-            function (RouteCollector $routeCollector) {
+            fn () => function (RouteCollector $routeCollector) {
                 $routeCollector->addRoute(
                     'POST',
                     '/api/{location:[a-z]*}',
