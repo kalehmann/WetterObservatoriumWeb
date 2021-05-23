@@ -266,7 +266,7 @@ class WeatherRepository
      *                         for.
      * @param string $quantity the collected quantity.
      * @param int $year the year the data was collected in.
-     * @return array<int, arary<int, int>> the data collected in the given year.
+     * @return array<int, array<int, int>> the data collected in the given year.
      */
     public function queryYear(
         string $location,
