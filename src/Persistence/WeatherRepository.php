@@ -63,7 +63,7 @@ class WeatherRepository
      *                         for.
      * @param string $quantity the collected quantity.
      * @param int $value the measured value.
-     * @param DateTimeImmutable the time when the value was measured.
+     * @param DateTimeImmutable $timestamp the time when the value was measured.
      */
     public function persist(
         string $location,
@@ -198,7 +198,7 @@ class WeatherRepository
      * @param string $location the location where the data should be queried
      *                         for.
      * @param string $quantity the collected quantity.
-     * @return array<int, int> the data collected in the given year.
+     * @return array<int, array<int, int>> the data collected in the given year.
      */
     public function query24h(
         string $location,
@@ -217,7 +217,8 @@ class WeatherRepository
      * @param string $location the location where the data should be queried
      *                         for.
      * @param string $quantity the collected quantity.
-     * @return array<int, int> the data collected in the given year.
+     * @return array<int, array<int, int>> the data collected in the given 31
+     *                                     days.
      */
     public function query31d(
         string $location,
@@ -238,7 +239,7 @@ class WeatherRepository
      * @param string $quantity the collected quantity.
      * @param int $year the year the data was collected in.
      * @param int $month the month the data was collected in.
-     * @return array<int, int> the data collected in the given year.
+     * @return array<int, array<int, int>> the data collected in the given month.
      */
     public function queryMonth(
         string $location,
@@ -265,7 +266,7 @@ class WeatherRepository
      *                         for.
      * @param string $quantity the collected quantity.
      * @param int $year the year the data was collected in.
-     * @return array<int, int> the data collected in the given year.
+     * @return array<int, arary<int, int>> the data collected in the given year.
      */
     public function queryYear(
         string $location,
@@ -311,7 +312,7 @@ class WeatherRepository
      * @param string $path the path to the ring buffer in the filesystem.
      * @param string $format the format of the ring buffer.
      *
-     * @return Buffer the ring buffer.
+     * @return RingBuffer the ring buffer.
      */
     private function openRingBuffer(string $path, string $format): RingBuffer
     {
