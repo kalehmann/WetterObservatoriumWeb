@@ -128,7 +128,7 @@ class WeatherRepository
         $this->operateExclusiveOnRingBuffer(
             $path24h,
             self::BUFFER_FORMAT,
-            function(RingBuffer $ringBuffer) use (
+            function (RingBuffer $ringBuffer) use (
                 $lastHour,
                 $lastMidnight,
                 $monthPath,
