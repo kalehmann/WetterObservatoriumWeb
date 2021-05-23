@@ -190,7 +190,7 @@ class RingBuffer implements BufferInterface
             '',
             array_map(
                 fn(array $element) => pack($this->formatSpec, ...$element),
-                $this->data
+                iterator_to_array($this),
             ),
         );
     }
