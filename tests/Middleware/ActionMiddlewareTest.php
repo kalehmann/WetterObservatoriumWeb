@@ -84,12 +84,10 @@ class ActionMiddlewareTest extends TestCase
         $containerMock->expects($this->once())
                       ->method('call')
                       ->with(
-                          $this->equalTo($actionInstance),
-                          $this->callback(
-                              function (array $params): bool {
-                                  return array_keys($params) === ['request'];
-                              },
-                          ),
+                          $actionInstance,
+                          [
+                              'request' => $request,
+                          ],
                       )
                       ->willReturn($this->createMock(ResponseInterface::class));
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
@@ -121,6 +119,7 @@ class ActionMiddlewareTest extends TestCase
                      '_params',
                      $params
                  );
+        $params['request'] = $request;
 
         $containerMock = $this->createMock(Container::class);
         $containerMock->expects($this->once())
@@ -131,18 +130,8 @@ class ActionMiddlewareTest extends TestCase
         $containerMock->expects($this->once())
                       ->method('call')
                       ->with(
-                          $this->equalTo($actionInstance),
-                          $this->callback(
-                              function (array $p) use ($params): bool {
-                                  $request = $p['request'] ?? null;
-                                  if (!$request) {
-                                      return false;
-                                  }
-                                  unset($p['request']);
-
-                                  return $p === $params;
-                              },
-                          ),
+                          $actionInstance,
+                          $params,
                       )
                       ->willReturn($this->createMock(ResponseInterface::class));
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
