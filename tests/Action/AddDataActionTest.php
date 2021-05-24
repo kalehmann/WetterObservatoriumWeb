@@ -24,7 +24,10 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
-use Nyholm\Psr7\Request;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
+use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,4 +35,87 @@ use PHPUnit\Framework\TestCase;
  */
 class AddDataActionTest extends TestCase
 {
+    /**
+     * Check that a request with a json body that does not contain an object
+     * results in a 400 response.
+     */
+    public function testWithInvalidRequest(): void
+    {
+        $psr17Factory = $this->createMock(Psr17Factory::class);
+        $psr17Factory->expects($this->once())
+                     ->method('createResponse')
+                     ->with(400)
+                     ->willReturn(new Response(400));
+        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $request = new ServerRequest(
+            'POST',
+            '/api/home',
+            [],
+            'true',
+        );
+
+        $action = new AddDataAction();
+        $response = ($action)(
+            $psr17Factory,
+            $request,
+            $weatherRepository,
+            'home',
+        );
+        $this->assertEquals(
+            400,
+            $response->getStatusCode(),
+        );
+    }
+
+     /**
+     * Check that a valid request results in calls to the persistence layer.
+     */
+    public function testWithValidRequest(): void
+    {
+        $psr17Factory = $this->createMock(Psr17Factory::class);
+        $psr17Factory->expects($this->once())
+                     ->method('createResponse')
+                     ->with(200)
+                     ->willReturn(new Response(200));
+        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository->expects($this->exactly(2))
+                          ->method('persist')
+                          ->withConsecutive(
+                              [
+                                  'home',
+                                  'humidity',
+                                  123,
+                                  $this->anything(),
+                              ],
+                              [
+                                  'home',
+                                  'temperature',
+                                  456,
+                                  $this->anything(),
+                              ],
+                          );
+        $request = new ServerRequest(
+            'POST',
+            '/api/home',
+            [],
+            json_encode(
+                [
+                    'humidity' => 123,
+                    'temperature' => 456,
+                ]
+            ),
+        );
+
+        $action = new AddDataAction();
+        $response = ($action)(
+            $psr17Factory,
+            $request,
+            $weatherRepository,
+            'home',
+        );
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+    }
 }
