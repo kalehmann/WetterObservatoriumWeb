@@ -56,6 +56,7 @@ class ActionMiddleware implements MiddlewareInterface
             );
         }
         $params = $request->getAttribute('_params', []);
+        $params['request'] = $request;
 
         $action = $this->container->get($actionClass);
 
