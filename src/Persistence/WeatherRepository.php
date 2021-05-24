@@ -240,6 +240,11 @@ class WeatherRepository
     {
         $dataDirectory = $this->dataLocator->getDataDirectory();
         $subDirectories = glob($dataDirectory . '/*', GLOB_ONLYDIR);
+        if (false === $subDirectories) {
+            throw new IOException(
+                'Cannot search for sub directories in ' , $dataDirectory,
+            );
+        }
 
         return array_map(
             fn (string $dir) => basename($dir),
