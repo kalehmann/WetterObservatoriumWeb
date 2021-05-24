@@ -25,6 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use RunTimeException;
 
 /**
  * Helper functions for creating responses in various formats.
@@ -35,7 +36,7 @@ trait FormatTrait
      * Returns a response with the payload encoded in the given format.
      * If the format is not supported, a 404 response is returned.
      *
-     * @param array $payload to payload for the response body
+     * @param array<int|string> $payload to payload for the response body
      * @param string $format the format of the response
      * @param int $status the status code of the response
      *
@@ -62,6 +63,12 @@ trait FormatTrait
             default:
                 $body = json_encode($payload);
                 $headers['Content-Type'] = 'application/json';
+        }
+
+        if (false === $body) {
+            throw new RunTimeException(
+                'Failed to encode payload',
+            );
         }
 
         return new Response(
