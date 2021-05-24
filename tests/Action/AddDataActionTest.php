@@ -29,6 +29,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
+use RunTimeException;
 
 /**
  * Test cases for the AddDataAction.
@@ -94,16 +95,22 @@ class AddDataActionTest extends TestCase
                                   $this->anything(),
                               ],
                           );
+        $payload = json_encode(
+            [
+                'humidity' => 123,
+                'temperature' => 456,
+            ],
+        );
+        if (false === $payload) {
+            throw new RunTimeException(
+                'Could not encode array to json for test.',
+            );
+        }
         $request = new ServerRequest(
             'POST',
             '/api/home',
             [],
-            json_encode(
-                [
-                    'humidity' => 123,
-                    'temperature' => 456,
-                ]
-            ),
+            $payload,
         );
 
         $action = new AddDataAction();
