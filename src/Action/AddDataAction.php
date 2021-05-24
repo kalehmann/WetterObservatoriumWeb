@@ -27,7 +27,6 @@ use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Nyholm\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
