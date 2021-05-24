@@ -23,7 +23,10 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
+use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -40,12 +43,27 @@ class AddDataAction
     /**
      * Adds data for the specified locatiion.
      */
-    public function __invoke(RequestInterface $request, string $location): ResponseInterface
-    {
-        return new Response(
-            200,
-            [],
-            'Adding data at ' . $location
-        );
+    public function __invoke(
+        Psr17Factory $psr17Factory,
+        RequestInterface $request,
+        WeatherRepository $weatherRepository,
+        string $location
+    ): ResponseInterface {
+        $payload = json_decode((string)$request->getBody(), true);
+        if (!is_array($payload)) {
+            return $psr17Factory->createResponse(400);
+        }
+
+        $now = new DateTimeImmutable();
+        foreach ($payload as $quantity => $value) {
+            $weatherRepository->persist(
+                $location,
+                $quantity,
+                $value,
+                $now,
+            );
+        }
+
+        return $psr17Factory->createResponse(200);
     }
 }
