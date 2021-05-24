@@ -24,28 +24,36 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
-use Psr\Http\Message\ResponseInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Action for storing weather date.
- *
- * This action receives weatehr data from a client (usually an ESP8266),
- * verifies that the client is allowed to store data and persists it.
+ * Test cases for the AddDataAction.
  */
-class ListLocationsAction
+class ListLocationsActionTest extends TestCase
 {
-    use FormatTrait;
-
     /**
-     * Adds data for the specified locatiion.
+     * Check that all locations where data was saved can be listed.
      */
-    public function __invoke(
-        WeatherRepository $weatherRepository,
-        string $format
-    ): ResponseInterface {
-        return $this->createResponse(
-            $weatherRepository->queryLocations(),
-            $format,
+    public function testListLocations(): void
+    {
+        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryLocations')
+                          ->willReturn(['home', 'outdoor']);
+
+        $action = new ListLocationsAction();
+        $response = ($action)(
+            $weatherRepository,
+            'json',
+        );
+
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEqualsCanonicalizing(
+            ['home', 'outdoor'],
+            json_decode((string)$response->getBody()),
         );
     }
 }
