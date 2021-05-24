@@ -554,6 +554,47 @@ class WeatherRepositoryTest extends TestCase
     }
 
     /**
+     * Check that all locations where data has been previously measured can be
+     * queried.
+     */
+    public function testQueryLocations(): void
+    {
+        $bufferCreator = new BufferCreator($this->dataLocator);
+        $bufferCreator->create24hBuffer(
+            'aquarium',
+            $this->quantity,
+        );
+        $bufferCreator->create24hBuffer(
+            'home',
+            $this->quantity,
+        );
+
+        $weatherRepository = new WeatherRepository(
+            $bufferCreator,
+            $this->dataLocator,
+        );
+        $this->assertEqualsCanonicalizing(
+            ['aquarium', 'home', $this->location],
+            $weatherRepository->queryLocations(),
+        );
+
+        $pathAquarium24h = $this->dataLocator->get24hPath(
+            'aquarium',
+            $this->quantity,
+        );
+        $pathHome24h = $this->dataLocator->get24hPath(
+            'home',
+            $this->quantity,
+        );
+        unlink($pathAquarium24h);
+        unlink($pathHome24h);
+        rmdir($this->dataDirectory . '/aquarium/' . $this->quantity);
+        rmdir($this->dataDirectory . '/home/' . $this->quantity);
+        rmdir($this->dataDirectory . '/aquarium');
+        rmdir($this->dataDirectory . '/home');
+    }
+
+    /**
      * Check that trying to query the data of a month without the buffer for
      * the month existing results in an exception.
      */
