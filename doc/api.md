@@ -41,8 +41,8 @@ Zur Abfrage von Daten stehen die folgenden Endpunkte zur verfügung:
 
  Pfad                                              | Methode | Beschreibung
 ---------------------------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------
- `/api/locations`                                  | `GET`   | Gibt eine Liste mit allen Orten, an denen jemals Werte aufgezeichnet wurden zurück.
- `/api/{location}/classes`                         | `GET`   | Gibt eine Liste mit allen Messgrößen, die jemals an einem Ort erhoben wurden zurück.
+ `/api/locations.{format}`                         | `GET`   | Gibt eine Liste mit allen Orten, an denen jemals Werte aufgezeichnet wurden zurück.
+ `/api/{location}/classes.{format}`                | `GET`   | Gibt eine Liste mit allen Messgrößen, die jemals an einem Ort erhoben wurden zurück.
  `/api/{location}.{format}`                        | `GET`   | Gibt maximal im Minutentakt alle Messgrößen der letzten 24 Stunden für einen Ort zurück.
  `/api/{location}/31d.{format}`                    | `GET`   | Gibt maximal im Stundentakt alle Messgrößen des letzten Monats mit Durchschnitt, Maximum und Minimum für einen Ort zurück.
  `/api/{location}/31d/{class}.{format}`            | `GET`   | Gibt maximal im Stundentakt eine Messgröße des letzten Monats mit Durchschnitt, Maximum und Minimum für einen Ort zurück.
