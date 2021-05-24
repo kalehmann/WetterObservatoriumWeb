@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 use FastRoute\RouteCollector;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
@@ -65,6 +66,11 @@ return [
                     'POST',
                     '/api/{location:[a-z]*}',
                     AddDataAction::class,
+                );
+                $routeCollector->addRoute(
+                    'GET',
+                    '/api/locations.{format}',
+                    ListLocationsAction::class,
                 );
             },
         ),
