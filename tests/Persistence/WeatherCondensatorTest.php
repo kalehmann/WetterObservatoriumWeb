@@ -95,6 +95,22 @@ class WeatherCondensatorTest extends TestCase
     }
 
     /**
+     * Check that the value returned by condensateHour
+     */
+    public function testCondensationAlwaysReturnsAnInteger(): void
+    {
+        $timestamp = time();
+        $buffer = RingBuffer::createNew(10, 'Pv');
+        $buffer->addEntry([$timestamp - 2000, 2]);
+        $buffer->addEntry([$timestamp - 1000, 1]);
+        // (1 + 2) / 2 = 1.5
+        $this->assertEquals(
+            2,
+            WeatherCondensator::condensateHour($buffer, $timestamp),
+        );
+    }
+
+    /**
      * Check that a call to the condensateDay method with a buffer a number of
      * elements per entry not equal to two fails with an exception.
      */
