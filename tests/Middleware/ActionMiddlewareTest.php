@@ -83,7 +83,14 @@ class ActionMiddlewareTest extends TestCase
 
         $containerMock->expects($this->once())
                       ->method('call')
-                      ->with($actionInstance, [])
+                      ->with(
+                          $this->equalTo($actionInstance),
+                          $this->callback(
+                              function (array $params): bool {
+                                  return array_keys($params) === ['request'];
+                              },
+                          ),
+                      )
                       ->willReturn($this->createMock(ResponseInterface::class));
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
         $actionMiddleware = new ActionMiddleware($containerMock);
@@ -123,7 +130,20 @@ class ActionMiddlewareTest extends TestCase
 
         $containerMock->expects($this->once())
                       ->method('call')
-                      ->with($actionInstance, $params)
+                      ->with(
+                          $this->equalTo($actionInstance),
+                          $this->callback(
+                              function (array $p) use ($params): bool {
+                                  $request = $p['request'] ?? null;
+                                  if (!$request) {
+                                      return false;
+                                  }
+                                  unset($p['request']);
+
+                                  return $p === $params;
+                              },
+                          ),
+                      )
                       ->willReturn($this->createMock(ResponseInterface::class));
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
         $actionMiddleware = new ActionMiddleware($containerMock);
