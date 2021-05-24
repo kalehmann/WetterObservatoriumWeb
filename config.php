@@ -25,6 +25,7 @@ use FastRoute\RouteCollector;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
+use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -40,6 +41,10 @@ use function DI\env;
 use function DI\get;
 
 return [
+    DataLocator::class => create()
+        ->constructor(
+            env('DATA_DIR'),
+        ),
     HMACAuthorizationMiddleware::class => create()
         ->constructor(
             env('HMAC_SECRET'),
