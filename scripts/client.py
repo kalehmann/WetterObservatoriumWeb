@@ -22,6 +22,7 @@
 import argparse
 import hashlib
 import hmac
+import json
 
 from wsgiref.handlers import format_date_time
 from time import time
@@ -40,12 +41,13 @@ def send_data(host: str, location: str, payload: dict, secret: str) -> None:
     # Always add and sign date header
     date = format_date_time(time())
     headers = {
-        'date': date,
+        'Date': date,
+        'Content-Type': 'application/json',
     }
     request = requests.Request(
         'POST',
         f'{host}/api/{location}',
-        data=payload,
+        data=json.dumps(payload),
         headers=headers
     )
     prepped = request.prepare()
@@ -62,6 +64,7 @@ def send_data(host: str, location: str, payload: dict, secret: str) -> None:
 
     with requests.Session() as session:
         response = session.send(prepped)
+        print(response.text)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Send Data to the WetterQbservatorium')
