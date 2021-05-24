@@ -121,11 +121,13 @@ class WeatherCondensator
             );
         }
 
-        return (int)array_sum(
+        $avg = array_sum(
             array_map(
                 fn (array $elements) => $elements[1],
                 $interval,
             ),
         ) / count($interval);
+
+        return (int)round($avg);
     }
 }
