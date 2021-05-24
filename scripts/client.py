@@ -17,16 +17,18 @@
 #  along with WetterObservatoriumWeb. If not, see
 #  <https://www.gnu.org/licenses/>.
 
+"""Helper script to send data to the WetterObservatorium"""
+
 import argparse
 import hashlib
 import hmac
-import requests
 
-from datetime import datetime
 from wsgiref.handlers import format_date_time
 from time import time
 
-def send_data(host: str, location: str, data: dict, secret: str) -> None:
+import requests
+
+def send_data(host: str, location: str, payload: dict, secret: str) -> None:
     """Sends signed data to the WetterObservatorium.
 
     :param str host: the host of the WetterObservatorium with protocoll and port
@@ -43,14 +45,14 @@ def send_data(host: str, location: str, data: dict, secret: str) -> None:
     request = requests.Request(
         'POST',
         f'{host}/api/{location}',
-        data=data,
+        data=payload,
         headers=headers
     )
     prepped = request.prepare()
-    dataToSign = f'date: {date}\n{prepped.body}'
+    data_to_sign = f'date: {date}\n{prepped.body}'
     signature = hmac.new(
         secret.encode('utf-8'),
-        dataToSign.encode('utf-8'),
+        data_to_sign.encode('utf-8'),
         digestmod=hashlib.sha512
     )
     prepped.headers['Authorization'] = 'hmac username="pyclient", ' \
