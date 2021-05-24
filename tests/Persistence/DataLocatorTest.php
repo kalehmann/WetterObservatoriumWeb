@@ -81,6 +81,20 @@ class DataLocatorTest extends TestCase
     }
 
     /**
+     * Tests that the data directory can be obtained from the data locator.
+     */
+    public function testGetDataDirectory(): void
+    {
+        $dataDir = sys_get_temp_dir();
+        $dataLocator = new DataLocator($dataDir);
+
+        $this->assertEquals(
+            $dataDir,
+            $dataLocator->getDataDirectory(),
+        );
+    }
+
+    /**
      * Tests that the file with the data of a specific year of a quantity on a
      * specific location is located.
      */
