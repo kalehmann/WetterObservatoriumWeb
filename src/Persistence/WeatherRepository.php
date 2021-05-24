@@ -231,6 +231,23 @@ class WeatherRepository
     }
 
     /**
+     * Returns all locations where data was previously measured.
+     *
+     * @return array<int, string> the array of location names where data was
+     *                            measured.
+     */
+    public function queryLocations(): array
+    {
+        $dataDirectory = $this->dataLocator->getDataDirectory();
+        $subDirectories = glob($dataDirectory . '/*', GLOB_ONLYDIR);
+
+        return array_map(
+            fn (string $dir) => basename($dir),
+            $subDirectories,
+        );
+    }
+
+    /**
      * Returns the all the data collected for a quantity on a specific location
      * in the given month of the given year.
      *
