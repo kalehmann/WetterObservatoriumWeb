@@ -92,6 +92,14 @@ class DataLocator
     }
 
     /**
+     * Returns the directory where all data is stored.
+     */
+    public function getDataDirectory(): string
+    {
+        return $this->dataDirectory;
+    }
+
+    /**
      * Returns the path to the file with the data for the given year for a
      * quantity on a specific location.
      */
