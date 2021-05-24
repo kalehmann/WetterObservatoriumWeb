@@ -13,6 +13,6 @@ runs:
         args:
                 - "-c"
                 - >-
-                        php vendor/bin/phpstan --level=max
+                        php -dmemory_limit=-1 vendor/bin/phpstan --level=max
                         analyze ${{ inputs.source-directories }}
 ...
