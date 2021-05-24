@@ -31,9 +31,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Action for storing weather date.
+ * Action for storing weather data.
  *
- * This action receives weatehr data from a client (usually an ESP8266),
+ * This action receives weather data from a client (usually an ESP8266),
  * verifies that the client is allowed to store data and persists it.
  */
 #[AuthorizationAttribute]
