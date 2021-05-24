@@ -58,10 +58,10 @@ trait FormatTrait
         $body = '';
         $headers = [];
         switch ($format) {
-        case 'json':
-        default:
-            $body = json_encode($payload);
-            $headers['Content-Type'] = 'application/json';
+            case 'json':
+            default:
+                $body = json_encode($payload);
+                $headers['Content-Type'] = 'application/json';
         }
 
         return new Response(
