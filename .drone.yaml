@@ -17,8 +17,13 @@ steps:
                       open -u $${USER},$${PASSWORD} $${SERVER};
                       mirror
                         --delete
+                        --exclude=^.dockerignore
+                        --exclude=^.drone.yaml
                         --exclude=^.git
+                        --exclude=^doc
                         --exclude=^docker
+                        --exclude=^Dockerfile
+                        --exclude=^scripts
                         --exclude=^tests
                         --parallel=20
                         --reverse
