@@ -11,7 +11,7 @@ steps:
         - name: "Deploy the website"
           image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
           commands:
-                  - 'echo $${ENV_FILE} > .env'
+                  - 'echo "$${ENV_FILE}" | tr " " "\n" > .env'
                   - 'lftp -e "
                       set ftp:ssl-force true;
                       set ssl:verify-certificate yes;
