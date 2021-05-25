@@ -23,6 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
+use Exception;
+
 /**
  * Helper methods for implementing buffers.
  */
@@ -102,6 +104,8 @@ trait BufferTrait
         if (flock($stream, LOCK_EX)) {
             $data = stream_get_contents($stream);
             if (false === $data) {
+                flock($stream, LOCK_UN);
+                fclose($stream);
                 throw new IOException(
                     'Could not read data from ' . $path,
                 );
@@ -110,10 +114,20 @@ trait BufferTrait
                 $data,
                 $format,
             );
+            try {
+                // First operate on the buffer.
+                $callback($buffer);
+                $data = (string)$buffer;
+            } catch (Exception $e) {
+                flock($stream, LOCK_UN);
+                fclose($stream);
+
+                throw $e;
+            }
+            // Then save the buffer.
             ftruncate($stream, 0);
             rewind($stream);
-            $callback($buffer);
-            fwrite($stream, (string)$buffer);
+            fwrite($stream, $data);
             fflush($stream);
             flock($stream, LOCK_UN);
             fclose($stream);

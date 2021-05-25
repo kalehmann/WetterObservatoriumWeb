@@ -182,6 +182,67 @@ class RingBufferTest extends TestCase
     }
 
     /**
+     * Check that an exclusive operation on the ring buffer does not shred the
+     * buffer if an exception occurs.
+     */
+    public function testOperateExclusiveDoesNotShredTheBufferOnException(): void
+    {
+        $tempFile = tempnam(
+            sys_get_temp_dir(),
+            'testOperateExclusive',
+        );
+        if (false === $tempFile) {
+            throw new RunTimeException(
+                'Could not get a temporary file name for a test',
+            );
+        }
+
+        $this->expectException(RunTimeException::class);
+        $this->expectExceptionMessage('lulz');
+        try {
+            $ringBuffer = RingBuffer::createNew(4, 'qq');
+            file_put_contents($tempFile, (string)$ringBuffer);
+
+            RingBuffer::operateExclusive(
+                $tempFile,
+                'qq',
+                function (RingBuffer $ringBuffer): void {
+                    $ringBuffer->addEntry([1, 2]);
+                    $ringBuffer->addEntry([3, 4]);
+                    $ringBuffer->addEntry([5, 6]);
+                    $ringBuffer->addEntry([7, 8]);
+
+                    $this->assertEquals(
+                        [[1, 2], [3, 4], [5, 6], [7, 8]],
+                        iterator_to_array($ringBuffer),
+                    );
+                },
+            );
+
+            RingBuffer::operateExclusive(
+                $tempFile,
+                'qq',
+                function (RingBuffer $ringBuffer): void {
+                    $ringBuffer->addEntry([9, 10]);
+
+                    throw new RunTimeException('lulz');
+                },
+            );
+        } catch (RunTimeException $e) {
+            $this->assertEquals(
+                [[1, 2], [3, 4], [5, 6], [7, 8]],
+                iterator_to_array(
+                    RingBuffer::fromFile($tempFile, 'qq'),
+                ),
+            );
+
+            throw $e;
+        } finally {
+            unlink($tempFile);
+        }
+    }
+
+    /**
      * Check that an exclusive operation on the ring buffer is possible.
      */
     public function testOperateExclusive(): void
