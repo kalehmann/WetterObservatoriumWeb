@@ -7,8 +7,8 @@ before_script:
 static-analysis:
         script:
                 - >-
-                        /usr/bin/env php vendor/bin/phpstan --level=max
-                        analyze config.php public/ src/ tests/
+                        /usr/bin/env php -dmemory_limit=-1 vendor/bin/phpstan
+                        --level=max analyze config.php public/ src/ tests/
 
 style-check:
         script:
