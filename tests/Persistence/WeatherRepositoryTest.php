@@ -674,6 +674,46 @@ class WeatherRepositoryTest extends TestCase
     }
 
     /**
+     * Check that all locations where data has been previously measured can be
+     * queried.
+     */
+    public function testQueryQuantities(): void
+    {
+        $bufferCreator = new BufferCreator($this->dataLocator);
+        $bufferCreator->create24hBuffer(
+            'home',
+            'quantity01',
+        );
+        $bufferCreator->create24hBuffer(
+            'home',
+            'quantity02',
+        );
+
+        $weatherRepository = new WeatherRepository(
+            $bufferCreator,
+            $this->dataLocator,
+        );
+        $this->assertEqualsCanonicalizing(
+            ['quantity01', 'quantity02'],
+            $weatherRepository->queryQuantities('home'),
+        );
+
+        $pathQ1_24h = $this->dataLocator->get24hPath(
+            'home',
+            'quantity01',
+        );
+        $pathQ2_24h = $this->dataLocator->get24hPath(
+            'home',
+            'quantity02',
+        );
+        unlink($pathQ1_24h);
+        unlink($pathQ2_24h);
+        rmdir($this->dataDirectory . '/home/quantity01');
+        rmdir($this->dataDirectory . '/home/quantity02');
+        rmdir($this->dataDirectory . '/home');
+    }
+
+    /**
      * Check that trying to query the data of a year without the buffer for
      * the year existing results in an exception.
      */
