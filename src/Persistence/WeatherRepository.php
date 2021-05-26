@@ -279,6 +279,39 @@ class WeatherRepository
     }
 
     /**
+     * Queries all quantities ever measured at a location.
+     *
+     * @param string $location the location to query quantities for.
+     * @return array<int, string> the array with all quantities measured at
+     *                            the location.
+     */
+    public function queryQuantities(string $location): array
+    {
+        $dataDirectory = $this->dataLocator->getDataDirectory();
+        $subDirectories = glob(
+            $dataDirectory . '/' . $location . '/*',
+            GLOB_ONLYDIR,
+        );
+        if (false === $subDirectories) {
+            return [];
+        }
+        $quantities = [];
+        foreach ($subDirectories as $directory) {
+            $quantity = basename($directory);
+            $path24h = $this->dataLocator->get24hPath(
+                $location,
+                $quantity,
+            );
+            if (false === file_exists($path24h)) {
+                continue;
+            }
+            $quantities[] = $quantity;
+        }
+
+        return $quantities;
+    }
+
+    /**
      * Returns the all the data collected for a quantity on a specific location
      * in the given year.
      *
