@@ -27,10 +27,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Action for storing weather date.
- *
- * This action receives weatehr data from a client (usually an ESP8266),
- * verifies that the client is allowed to store data and persists it.
+ * Action for listing all locations where data was measured.
  */
 class ListLocationsAction
 {
