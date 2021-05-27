@@ -45,16 +45,21 @@ class QueryContinuousDataAction
     ): ResponseInterface {
         switch ($timespan) {
             case '31d':
-                $data = $weatherRepository->query31d(
-                    $location,
-                    $quantity,
+                return $this->createResponse(
+                    $weatherRepository->query31d(
+                        $location,
+                        $quantity,
+                    ),
+                    $format,
                 );
             default:
-                $data = $weatherRepository->query24h(
-                    $location,
-                    $quantity,
+                return $this->createResponse(
+                    $weatherRepository->query24h(
+                        $location,
+                        $quantity,
+                    ),
+                    $format,
                 );
         }
-        return $this->createResponse($data, $format);
     }
 }
