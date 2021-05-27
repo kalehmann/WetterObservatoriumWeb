@@ -25,6 +25,7 @@ use FastRoute\RouteCollector;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListQuantitiesAction;
+use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
@@ -77,6 +78,21 @@ return [
                     'GET',
                     '/api/{location}/quantities.{format}',
                     ListQuantitiesAction::class,
+                );
+                $routeCollector->addGroup(
+                    '/api/{location:[a-z]*}/{quantity:[a-z]*}',
+                    function (RouteCollector $routeCollector) {
+                        $routeCollector->addRoute(
+                            'GET',
+                            '.{format}',
+                            QueryContinuousDataAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{timespan:24h|31d}.{format}',
+                            QueryContinuousDataAction::class,
+                        );
+                    }
                 );
             },
         ),
