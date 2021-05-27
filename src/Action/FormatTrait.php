@@ -36,7 +36,7 @@ trait FormatTrait
      * Returns a response with the payload encoded in the given format.
      * If the format is not supported, a 404 response is returned.
      *
-     * @param array<int|string> $payload to payload for the response body
+     * @param array<int|string|array> $payload to payload for the response body
      * @param string $format the format of the response
      * @param int $status the status code of the response
      *
