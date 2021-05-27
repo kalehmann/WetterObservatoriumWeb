@@ -148,15 +148,20 @@ class WeatherRepository
                             $lastMidnight,
                             $ringBuffer,
                         ) {
-                            $yearBuffer->addEntry(
-                                [
-                                    $lastEntryTime,
-                                    WeatherCondensator::condensateDay(
-                                        $ringBuffer,
-                                        $lastMidnight,
-                                    ),
-                                ],
-                            );
+                            try {
+                                $yearBuffer->addEntry(
+                                    [
+                                        $lastEntryTime,
+                                        WeatherCondensator::condensateDay(
+                                            $ringBuffer,
+                                            $lastMidnight,
+                                        ),
+                                    ],
+                                );
+                            } catch (CondensationException $e) {
+                                // It's okay. If the client fails, no data will
+                                // be reported over a longer period.
+                            }
                         },
                     );
                 }
@@ -171,15 +176,20 @@ class WeatherRepository
                             $lastHour,
                             $ringBuffer,
                         ) {
-                            $monthBuffer->addEntry(
-                                [
-                                    $lastEntryTime,
-                                    WeatherCondensator::condensateHour(
-                                        $ringBuffer,
-                                        $lastHour,
-                                    ),
-                                ],
-                            );
+                            try {
+                                $monthBuffer->addEntry(
+                                    [
+                                        $lastEntryTime,
+                                        WeatherCondensator::condensateHour(
+                                            $ringBuffer,
+                                            $lastHour,
+                                        ),
+                                    ],
+                                );
+                            } catch (CondensationException $e) {
+                                // It's okay. If the client fails, no data will
+                                // be reported over a longer period.
+                            }
                         },
                     );
                 }
