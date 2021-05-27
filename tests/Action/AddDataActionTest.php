@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Action;
+namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;

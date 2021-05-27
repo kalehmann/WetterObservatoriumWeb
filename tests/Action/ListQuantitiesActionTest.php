@@ -21,8 +21,9 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Action;
+namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
+use KaLehmann\WetterObservatoriumWeb\Action\ListQuantitiesAction;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
 use PHPUnit\Framework\TestCase;
 
