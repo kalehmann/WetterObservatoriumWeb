@@ -110,7 +110,6 @@ return [
                         );
                     }
                 );
-
             },
         ),
     ServerRequestFactoryInterface::class => create(Psr17Factory::class),
