@@ -186,7 +186,7 @@ trait BufferTrait
 
         if ($expectedSize !== $actualSize) {
             throw new IOException(
-                'The file size of the ring buffer at does not add up.',
+                'The file size of the buffer at does not add up.',
             );
         }
     }
