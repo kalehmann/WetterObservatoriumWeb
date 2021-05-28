@@ -28,7 +28,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases for the ListQuantitiesAction.
+ * Test cases for the QueryContinuousDataAction.
  */
 class QueryContinuousDataActionTest extends TestCase
 {
