@@ -26,6 +26,7 @@ use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListQuantitiesAction;
 use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
@@ -94,6 +95,22 @@ return [
                         );
                     }
                 );
+                $routeCollector->addGroup(
+                    '/api/{location:[a-z]*}/{quantity:[a-z]*}/{year:\d{4}}',
+                    function (RouteCollector $routeCollector) {
+                        $routeCollector->addRoute(
+                            'GET',
+                            '.{format}',
+                            QueryFixedDataAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{month:\d{2}}.{format}',
+                            QueryContinuousDataAction::class,
+                        );
+                    }
+                );
+
             },
         ),
     ServerRequestFactoryInterface::class => create(Psr17Factory::class),
