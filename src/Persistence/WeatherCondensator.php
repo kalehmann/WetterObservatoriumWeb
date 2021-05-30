@@ -83,7 +83,7 @@ class WeatherCondensator
     }
 
     /**
-     * Condensates the weather data in the buffer on a given interval.
+     * Condensates the weather data in the iterator on a given interval.
      *
      * @param Traversable<int, int> $data the iterable containing the data of the
      *                                    interval that should be condensated

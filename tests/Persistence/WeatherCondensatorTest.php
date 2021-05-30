@@ -34,8 +34,8 @@ use PHPUnit\Framework\TestCase;
 class WeatherCondensatorTest extends TestCase
 {
     /**
-     * Check that a call to the condensateHour method with a buffer without any
-     * data for the last hour fails with an exception.
+     * Check that a call to the condensateHour method with an iterator without
+     * any data for the last hour fails with an exception.
      */
     public function testCondensateHourWithoutDataInTheLastHour(): void
     {
@@ -102,7 +102,7 @@ class WeatherCondensatorTest extends TestCase
     }
 
     /**
-     * Check that a call to the condensateDay method with a buffer without any
+     * Check that a call to the condensateDay method with an iterator without any
      * data for the last dday fails with an exception.
      */
     public function testCondensateDayWithoutDataInTheLastDay(): void
