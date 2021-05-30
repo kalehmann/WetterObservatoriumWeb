@@ -23,8 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
 
+use ArrayIterator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\CondensationException;
-use KaLehmann\WetterObservatoriumWeb\Persistence\RingBuffer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherCondensator;
 use PHPUnit\Framework\TestCase;
 
@@ -34,40 +34,25 @@ use PHPUnit\Framework\TestCase;
 class WeatherCondensatorTest extends TestCase
 {
     /**
-     * Check that a call to the condensateHour method with a buffer a number of
-     * elements per entry not equal to two fails with an exception.
-     */
-    public function testCondensateHourWithInvalidBuffer(): void
-    {
-        $timestamp = time();
-        $buffer = RingBuffer::createNew(2, 'cx');
-
-        $this->expectException(CondensationException::class);
-        $this->expectExceptionMessage(
-            'Condensation is only supported for a buffer with two ' .
-            'per entry.',
-        );
-
-        WeatherCondensator::condensateHour($buffer, $timestamp);
-    }
-
-    /**
      * Check that a call to the condensateHour method with a buffer without any
      * data for the last hour fails with an exception.
      */
     public function testCondensateHourWithoutDataInTheLastHour(): void
     {
         $timestamp = time();
-        $buffer = RingBuffer::createNew(2, 'Pv');
-        // Add two hour old data
-        $buffer->addEntry([$timestamp - 60 * 60 * 2, 12]);
+        $data = new ArrayIterator(
+            [
+                // Add two hour old data
+                $timestamp - 60 * 60 * 2 => 12,
+            ],
+        );
 
         $this->expectException(CondensationException::class);
         $this->expectExceptionMessage(
             'No data recorded in this interval.',
         );
 
-        WeatherCondensator::condensateHour($buffer, $timestamp);
+        WeatherCondensator::condensateHour($data, $timestamp);
     }
 
     /**
@@ -77,20 +62,23 @@ class WeatherCondensatorTest extends TestCase
     public function testCondensateHour(): void
     {
         $timestamp = time();
-        $buffer = RingBuffer::createNew(10, 'Pv');
-        // The following two entries are older than a hour
-        $buffer->addEntry([$timestamp - 60 * 70, 12]);
-        $buffer->addEntry([$timestamp - 60 * 80, 99]);
-        // The next 3 entries are within the last hour
-        $buffer->addEntry([$timestamp - 3000, 1]);
-        $buffer->addEntry([$timestamp - 2000, 4]);
-        $buffer->addEntry([$timestamp - 1000, 1]);
-        // The next entry is in the future
-        $buffer->addEntry([$timestamp + 1000, 33]);
+        $data = new ArrayIterator(
+            [
+                // The following two entries are older than a hour
+                $timestamp - 60 * 70 => 12,
+                $timestamp - 60 * 80 => 99,
+                // The next 3 entries are within the last hour
+                $timestamp - 3000 => 1,
+                $timestamp - 2000 => 4,
+                $timestamp - 1000 => 1,
+                // The next entry is in the future
+                $timestamp + 1000 => 33,
+            ],
+        );
 
         $this->assertEquals(
             2,
-            WeatherCondensator::condensateHour($buffer, $timestamp),
+            WeatherCondensator::condensateHour($data, $timestamp),
         );
     }
 
@@ -100,32 +88,17 @@ class WeatherCondensatorTest extends TestCase
     public function testCondensationAlwaysReturnsAnInteger(): void
     {
         $timestamp = time();
-        $buffer = RingBuffer::createNew(10, 'Pv');
-        $buffer->addEntry([$timestamp - 2000, 2]);
-        $buffer->addEntry([$timestamp - 1000, 1]);
+        $data = new ArrayIterator(
+            [
+                $timestamp - 2000 => 2,
+                $timestamp - 1000 => 1,
+            ],
+        );
         // (1 + 2) / 2 = 1.5
         $this->assertEquals(
             2,
-            WeatherCondensator::condensateHour($buffer, $timestamp),
+            WeatherCondensator::condensateHour($data, $timestamp),
         );
-    }
-
-    /**
-     * Check that a call to the condensateDay method with a buffer a number of
-     * elements per entry not equal to two fails with an exception.
-     */
-    public function testCondensateDayWithInvalidBuffer(): void
-    {
-        $timestamp = time();
-        $buffer = RingBuffer::createNew(2, 'qqq');
-
-        $this->expectException(CondensationException::class);
-        $this->expectExceptionMessage(
-            'Condensation is only supported for a buffer with two ' .
-            'per entry.',
-        );
-
-        WeatherCondensator::condensateDay($buffer, $timestamp);
     }
 
     /**
@@ -135,16 +108,19 @@ class WeatherCondensatorTest extends TestCase
     public function testCondensateDayWithoutDataInTheLastDay(): void
     {
         $timestamp = time();
-        $buffer = RingBuffer::createNew(2, 'Pv');
-        // Add 30 hour old data
-        $buffer->addEntry([$timestamp - 60 * 60 * 30, 12]);
+        $data = new ArrayIterator(
+            [
+                // Add 30 hour old data
+                $timestamp - 60 * 60 * 30 => 12,
+            ],
+        );  
 
         $this->expectException(CondensationException::class);
         $this->expectExceptionMessage(
             'No data recorded in this interval.',
         );
 
-        WeatherCondensator::condensateDay($buffer, $timestamp);
+        WeatherCondensator::condensateDay($data, $timestamp);
     }
 
     /**
@@ -154,20 +130,23 @@ class WeatherCondensatorTest extends TestCase
     public function testCondensateDay(): void
     {
         $timestamp = time();
-        $buffer = RingBuffer::createNew(10, 'Pv');
-        // The following two entries are older than a day
-        $buffer->addEntry([$timestamp - 60 * 60 * 36, 12]);
-        $buffer->addEntry([$timestamp - 60 * 60 * 30, 99]);
-        // The next 3 entries are within the last day
-        $buffer->addEntry([$timestamp - 60 * 60 * 20, 10]);
-        $buffer->addEntry([$timestamp - 60 * 60 * 16, 20]);
-        $buffer->addEntry([$timestamp - 1000, 30]);
-        // The next entry is in the future
-        $buffer->addEntry([$timestamp + 1000, 33]);
+        $data = new ArrayIterator(
+            [
+                // The following two entries are older than a day
+                $timestamp - 60 * 60 * 36 => 12,
+                $timestamp - 60 * 60 * 30 => 99,
+                // The next 3 entries are within the last day
+                $timestamp - 60 * 60 * 20 => 10,
+                $timestamp - 60 * 60 * 16 => 20,
+                $timestamp - 1000 => 30,
+                // The next entry is in the future
+                $timestamp + 1000 => 33,
+            ],
+        );
 
         $this->assertEquals(
             20,
-            WeatherCondensator::condensateDay($buffer, $timestamp),
+            WeatherCondensator::condensateDay($data, $timestamp),
         );
     }
 }
