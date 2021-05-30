@@ -23,8 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \DateTimeImmutable;
-use \DateTimeInterface;
+use \Traversable;
 
 /**
  * Helper functions for condensating data on given intervals (60 minutes,
@@ -37,47 +36,47 @@ class WeatherCondensator
     public const SECONDS_PER_DAY = self::SECONDS_PER_HOUR * 24;
 
     /**
-     * Condensates the weather data in the buffer for the hour ending with
-     * $endTimestamp.
+     * Condensates the weather data for the hour ending with $endTimestamp.
      *
-     * @param RingBuffer $buffer the buffer containing the data of the last
-     *                           60 minutes.
+     * @param Traversable<int, int> $data the iterable containing the data of the
+     *                                    last 60 minutes with the timestamps as
+     *                                    keys and the measured data as values.
      * @param int $endTimestamp the end of the hour that should be condensated.
      *
      * @return int the average value for the hour.
      */
     public static function condensateHour(
-        RingBuffer $buffer,
+        Traversable $data,
         int $endTimestamp,
     ): int {
         $startTimestamp = $endTimestamp - self::SECONDS_PER_HOUR;
 
         return self::condensateData(
-            $buffer,
+            $data,
             $startTimestamp,
             $endTimestamp,
         );
     }
 
     /**
-     * Condensates the weather data in the buffer for the 24 hours ending with
-     * $endTimestamp.
+     * Condensates the weather data for the 24 hours ending with $endTimestamp.
      *
-     * @param RingBuffer $buffer the buffer containing the data of the last
-     *                           24 hours.
+     * @param Traversable<int, int> $data the iterable containing the data of the
+     *                                    last 24 hours with the timestamps as
+     *                                    keys and the measured data as values.
      * @param int $endTimestamp the end of the 24 hours that should be
      *                          condensated.
      *
      * @return int the average value for the 24 hours.
      */
     public static function condensateDay(
-        RingBuffer $buffer,
+        Traversable $data,
         int $endTimestamp,
     ): int {
         $startTimestamp = $endTimestamp - self::SECONDS_PER_DAY;
 
         return self::condensateData(
-            $buffer,
+            $data,
             $startTimestamp,
             $endTimestamp,
         );
@@ -86,8 +85,10 @@ class WeatherCondensator
     /**
      * Condensates the weather data in the buffer on a given interval.
      *
-     * @param RingBuffer $buffer the buffer containing the data for the interval
-     *                           that should be condensated.
+     * @param Traversable<int, int> $data the iterable containing the data of the
+     *                                    interval that should be condensated
+     *                                    with the timestamps as keys and the
+     *                                    measured data as values.
      * @param int $startTimestamp the start of the interval that should be
      *                            condensated.
      * @param int $endTimestamp the end of the interval that should be
@@ -96,21 +97,15 @@ class WeatherCondensator
      * @return int the average value for the interval.
      */
     private static function condensateData(
-        RingBuffer $buffer,
+        Traversable $data,
         int $startTimestamp,
         int $endTimestamp,
     ): int {
-        if ($buffer->elementsPerEntry() !== 2) {
-            throw new CondensationException(
-                'Condensation is only supported for a buffer with two ' .
-                'per entry. The first element should be a unix timestamp ' .
-                'and the second entry the measured datum.',
-            );
-        }
         $interval = array_filter(
-            iterator_to_array($buffer),
-            fn (array $elements) => $startTimestamp < $elements[0]
-                                    && $endTimestamp > $elements[0],
+            iterator_to_array($data),
+            fn (int $value, int $timestamp) => $startTimestamp < $timestamp
+                                               && $endTimestamp > $timestamp,
+            ARRAY_FILTER_USE_BOTH,
         );
         if (count($interval) === 0) {
             throw new CondensationException(
@@ -121,12 +116,7 @@ class WeatherCondensator
             );
         }
 
-        $avg = array_sum(
-            array_map(
-                fn (array $elements) => $elements[1],
-                $interval,
-            ),
-        ) / count($interval);
+        $avg = array_sum($interval) / count($interval);
 
         return (int)round($avg);
     }
