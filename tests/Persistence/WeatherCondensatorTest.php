@@ -113,7 +113,7 @@ class WeatherCondensatorTest extends TestCase
                 // Add 30 hour old data
                 $timestamp - 60 * 60 * 30 => 12,
             ],
-        );  
+        );
 
         $this->expectException(CondensationException::class);
         $this->expectExceptionMessage(
