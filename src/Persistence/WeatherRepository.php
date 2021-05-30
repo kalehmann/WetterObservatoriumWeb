@@ -23,7 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \DateTimeImmutable;
+use ArrayIterator;
+use DateTimeImmutable;
 
 /**
  * Repository for all weather related data.
@@ -137,6 +138,10 @@ class WeatherRepository
                 $yearPath,
             ) {
                 [0 => $lastEntryTime, 1 => $_ ] = $ringBuffer->lastEntry();
+                $data = [];
+                foreach ($ringBuffer as $element) {
+                    $data[$element[0]] = $element[1];
+                }
                 // First check if last entry time is not zero, to avoid
                 // working on a fresh buffer.
                 if ($lastEntryTime !== 0 && $lastEntryTime < $lastMidnight) {
@@ -144,16 +149,16 @@ class WeatherRepository
                         $yearPath,
                         self::BUFFER_FORMAT,
                         function (Buffer $yearBuffer) use (
+                            $data,
                             $lastEntryTime,
                             $lastMidnight,
-                            $ringBuffer,
                         ) {
                             try {
                                 $yearBuffer->addEntry(
                                     [
                                         $lastEntryTime,
                                         WeatherCondensator::condensateDay(
-                                            $ringBuffer,
+                                            new ArrayIterator($data),
                                             $lastMidnight,
                                         ),
                                     ],
@@ -172,16 +177,16 @@ class WeatherRepository
                         $monthPath,
                         self::BUFFER_FORMAT,
                         function (Buffer $monthBuffer) use (
+                            $data,
                             $lastEntryTime,
                             $lastHour,
-                            $ringBuffer,
                         ) {
                             try {
                                 $monthBuffer->addEntry(
                                     [
                                         $lastEntryTime,
                                         WeatherCondensator::condensateHour(
-                                            $ringBuffer,
+                                            new ArrayIterator($data),
                                             $lastHour,
                                         ),
                                     ],
