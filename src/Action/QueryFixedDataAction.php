@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -37,31 +37,69 @@ class QueryFixedDataAction
      * {@inheritdoc}
      */
     public function __invoke(
-        WeatherRepository $weatherRepository,
+        WeatherRepositoryInterface $weatherRepository,
         string $location,
         string $quantity,
         int $year,
         string $format,
         ?int $month = null,
     ): ResponseInterface {
-        if ($month !== null) {
-            return $this->createResponse(
-                $weatherRepository->queryMonth(
-                    $location,
-                    $quantity,
-                    $year,
-                    $month,
-                ),
-                $format,
-            );
-        }
+        $data = $this->getData(
+            $weatherRepository,
+            $location,
+            $quantity,
+            $year,
+            $month,
+        );
+
+        // Map the associative array to a list of tuples with the timestamp and
+        // the value.
+        array_walk(
+            $data,
+            fn(int &$value, int $timestamp) => $value = [$timestamp, $value],
+        );
+
         return $this->createResponse(
-            $weatherRepository->queryYear(
+            array_values($data),
+            $format,
+        );
+    }
+
+    /**
+     * Query the weather data of $quantity measured at $location in the $month
+     * or $year.
+     *
+     * @param WeatherRepositoryInterface $weatherRepository the repository with
+     *                                                      the weather data.
+     * @param string $location filter by the location where the data was
+     *                         measured.
+     * @param string $quantity filter by the measured quantity.
+     * @param int $year filter by the year
+     * @param int|null $month filter by the month. If the month is null, the data
+     *                        for the whole year will be returned.
+     * @return array<int, int> an array with the timestamps as key and the
+     *                         data measured in the given interval as values.
+     */
+    private function getData(
+        WeatherRepositoryInterface $weatherRepository,
+        string $location,
+        string $quantity,
+        int $year,
+        ?int $month,
+    ): array {
+        if ($month !== null) {
+            return $weatherRepository->queryMonth(
                 $location,
                 $quantity,
                 $year,
-            ),
-            $format,
+                $month,
+            );
+        }
+
+        return $weatherRepository->queryYear(
+            $location,
+            $quantity,
+            $year,
         );
     }
 }

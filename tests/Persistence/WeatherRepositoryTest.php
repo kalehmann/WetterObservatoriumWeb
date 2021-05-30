@@ -461,9 +461,9 @@ class WeatherRepositoryTest extends TestCase
         );
         $this->assertEquals(
             [
-                [$unixtime, 10],
-                [$unixtime + 200, 12],
-                [$unixtime + 400, 11],
+                $unixtime => 10,
+                $unixtime + 200 => 12,
+                $unixtime + 400 => 11,
             ],
             array_slice(
                 $weatherRepository->query24h(
@@ -472,6 +472,7 @@ class WeatherRepositoryTest extends TestCase
                 ),
                 -3,
                 3,
+                true,
             ),
         );
     }
@@ -538,9 +539,9 @@ class WeatherRepositoryTest extends TestCase
         );
         $this->assertEquals(
             [
-                [$unixtime, 10],
-                [$unixtime + 3600 * 24, 12],
-                [$unixtime + 3600 * 48, 11],
+                $unixtime =>  10,
+                $unixtime + 3600 * 24 => 12,
+                $unixtime + 3600 * 48 => 11,
             ],
             array_slice(
                 $weatherRepository->query31d(
@@ -549,6 +550,7 @@ class WeatherRepositoryTest extends TestCase
                 ),
                 -3,
                 3,
+                true,
             ),
         );
     }
@@ -660,9 +662,9 @@ class WeatherRepositoryTest extends TestCase
         );
         $this->assertEquals(
             [
-                [$unixtime, 10],
-                [$unixtime + 3600 * 24, 12],
-                [$unixtime + 3600 * 48, 11],
+                $unixtime => 10,
+                $unixtime + 3600 * 24 => 12,
+                $unixtime + 3600 * 48 => 11,
             ],
             $weatherRepository->queryMonth(
                 $this->location,
@@ -777,9 +779,9 @@ class WeatherRepositoryTest extends TestCase
         );
         $this->assertEquals(
             [
-                [$unixtime, 10],
-                [$unixtime + 3600 * 24, 12],
-                [$unixtime + 3600 * 48, 11],
+                $unixtime => 10,
+                $unixtime + 3600 * 24 => 12,
+                $unixtime + 3600 * 48 => 11,
             ],
             $weatherRepository->queryYear(
                 $this->location,

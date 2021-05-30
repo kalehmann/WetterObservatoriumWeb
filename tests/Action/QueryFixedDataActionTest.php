@@ -41,7 +41,12 @@ class QueryFixedDataActionTest extends TestCase
         $weatherRepository->expects($this->once())
                           ->method('queryMonth')
                           ->with('aquarium', 'temperature', 2021, 05)
-                          ->willReturn([[1, 1], [2, 2]]);
+                          ->willReturn(
+                              [
+                                  1 => 1,
+                                  2 => 2,
+                              ],
+                          );
 
         $action = new QueryFixedDataAction();
         $response = ($action)(
@@ -72,7 +77,12 @@ class QueryFixedDataActionTest extends TestCase
         $weatherRepository->expects($this->once())
                           ->method('queryYear')
                           ->with('aquarium', 'temperature', 2021)
-                          ->willReturn([[1, 2], [3, 4]]);
+                          ->willReturn(
+                              [
+                                  1 => 2,
+                                  3 => 4,
+                              ],
+                          );
 
         $action = new QueryFixedDataAction();
         $response = ($action)(

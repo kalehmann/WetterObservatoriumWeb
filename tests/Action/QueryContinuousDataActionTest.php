@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 class QueryContinuousDataActionTest extends TestCase
 {
     /**
-     * Check that all measured quantities for a location can be listed.
+     * Check that the data measured in the last 24 hours can be queried.
      */
     public function testQueryTheDataOfTheLast24Hours(): void
     {
@@ -41,7 +41,13 @@ class QueryContinuousDataActionTest extends TestCase
         $weatherRepository->expects($this->exactly(2))
                           ->method('query24h')
                           ->with('aquarium', 'temperature')
-                          ->willReturn([]);
+                          ->willReturn(
+                              [
+                                  1 => 2,
+                                  3 => 4,
+                                  5 => 6,
+                              ]
+                          );
 
         $action = new QueryContinuousDataAction();
         $response = ($action)(
@@ -54,6 +60,10 @@ class QueryContinuousDataActionTest extends TestCase
         $this->assertEquals(
             200,
             $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [[1, 2], [3, 4], [5, 6]],
+            json_decode((string)$response->getBody()),
         );
 
         $response = ($action)(
@@ -68,10 +78,14 @@ class QueryContinuousDataActionTest extends TestCase
             200,
             $response->getStatusCode(),
         );
+        $this->assertEquals(
+            [[1, 2], [3, 4], [5, 6]],
+            json_decode((string)$response->getBody()),
+        );
     }
 
     /**
-     * Check that all measured quantities for a location can be listed.
+     * Check that the data measured in the last 31 days can be queried.
      */
     public function testQueryTheDataOfTheLast31Days(): void
     {
@@ -79,7 +93,12 @@ class QueryContinuousDataActionTest extends TestCase
         $weatherRepository->expects($this->once())
                           ->method('query31d')
                           ->with('aquarium', 'temperature')
-                          ->willReturn([]);
+                          ->willReturn(
+                              [
+                                  10 => 11,
+                                  20 => 21,
+                              ]
+                          );
 
         $action = new QueryContinuousDataAction();
         $response = ($action)(
@@ -93,6 +112,10 @@ class QueryContinuousDataActionTest extends TestCase
         $this->assertEquals(
             200,
             $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [[10, 11], [20, 21]],
+            json_decode((string)$response->getBody()),
         );
     }
 }

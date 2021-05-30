@@ -30,6 +30,8 @@ use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -116,4 +118,5 @@ return [
     StreamFactoryInterface::class => create(Psr17Factory::class),
     UploadedFileFactoryInterface::class => create(Psr17Factory::class),
     UriFactoryInterface::class => create(Psr17Factory::class),
+    WeatherRepositoryInterface::class => get(WeatherRepository::class),
 ];

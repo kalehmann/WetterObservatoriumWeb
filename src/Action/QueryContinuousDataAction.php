@@ -23,11 +23,11 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Action for query weather data stored in ring buffers.
+ * Action for querying the weather data stored continuously in a period.
  */
 class QueryContinuousDataAction
 {
@@ -37,28 +37,62 @@ class QueryContinuousDataAction
      * {@inheritdoc}
      */
     public function __invoke(
-        WeatherRepository $weatherRepository,
+        WeatherRepositoryInterface $weatherRepository,
         string $location,
         string $quantity,
         string $format,
         ?string $timespan = null,
     ): ResponseInterface {
+        $data = $this->getData(
+            $weatherRepository,
+            $location,
+            $quantity,
+            $timespan,
+        );
+
+        // Map the associative array to a list of tuples with the timestamp and
+        // the value.
+        array_walk(
+            $data,
+            fn(int &$value, int $timestamp) => $value = [$timestamp, $value],
+        );
+
+        return $this->createResponse(
+            array_values($data),
+            $format,
+        );
+    }
+
+    /**
+     * Query the weather data of $quantity measured at $location in $timespan.
+     *
+     * @param WeatherRepositoryInterface $weatherRepository the repository with
+     *                                                      the weather data.
+     * @param string $location filter by the location where the data was
+     *                         measured.
+     * @param string $quantity filter by the measured quantity.
+     * @param string|null $timespan the timespan that should be queried.
+     *                              If no value is given, the data of the last
+     *                              24 hours will be returned.
+     * @return array<int, int> an array with the timestamps as key and the
+     *                         data measured in the $timespan as values.
+     */
+    private function getData(
+        WeatherRepositoryInterface $weatherRepository,
+        string $location,
+        string $quantity,
+        ?string $timespan = null,
+    ): array {
         switch ($timespan) {
             case '31d':
-                return $this->createResponse(
-                    $weatherRepository->query31d(
-                        $location,
-                        $quantity,
-                    ),
-                    $format,
+                return $weatherRepository->query31d(
+                    $location,
+                    $quantity,
                 );
             default:
-                return $this->createResponse(
-                    $weatherRepository->query24h(
-                        $location,
-                        $quantity,
-                    ),
-                    $format,
+                return $weatherRepository->query24h(
+                    $location,
+                    $quantity,
                 );
         }
     }

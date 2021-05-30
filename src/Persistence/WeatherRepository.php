@@ -29,7 +29,7 @@ use DateTimeImmutable;
 /**
  * Repository for all weather related data.
  */
-class WeatherRepository
+class WeatherRepository implements WeatherRepositoryInterface
 {
     private const BUFFER_FORMAT
         = DataPacker::UNSIGNED_LONG_LONG_LE . DataPacker::UNSIGNED_SHORT_LE;
@@ -57,14 +57,7 @@ class WeatherRepository
     }
 
     /**
-     * Persist data of a specific quantity collected on a specific location in
-     * the file system.
-     *
-     * @param string $location the location where the data should be queried
-     *                         for.
-     * @param string $quantity the collected quantity.
-     * @param int $value the measured value.
-     * @param DateTimeImmutable $timestamp the time when the value was measured.
+     * {@inheritdoc}
      */
     public function persist(
         string $location,
@@ -207,13 +200,7 @@ class WeatherRepository
     }
 
     /**
-     * Returns the all the data collected for a quantity on a specific location
-     * in the given month of the last 24 hours.
-     *
-     * @param string $location the location where the data should be queried
-     *                         for.
-     * @param string $quantity the collected quantity.
-     * @return array<int, array<int, int>> the data collected in the given year.
+     * {@inheritdoc}
      */
     public function query24h(
         string $location,
@@ -221,19 +208,16 @@ class WeatherRepository
     ): array {
         $path24h = $this->dataLocator->get24hPath($location, $quantity);
         $buffer24h = $this->openRingBuffer($path24h, self::BUFFER_FORMAT);
+        $data = [];
+        foreach ($buffer24h as $elements) {
+            $data[$elements[0]] = $elements[1];
+        }
 
-        return iterator_to_array($buffer24h);
+        return $data;
     }
 
     /**
-     * Returns the all the data collected for a quantity on a specific location
-     * in the given month of the last 31 days.
-     *
-     * @param string $location the location where the data should be queried
-     *                         for.
-     * @param string $quantity the collected quantity.
-     * @return array<int, array<int, int>> the data collected in the given 31
-     *                                     days.
+     * {@inheritdoc}
      */
     public function query31d(
         string $location,
@@ -241,15 +225,16 @@ class WeatherRepository
     ): array {
         $path31d = $this->dataLocator->get31dPath($location, $quantity);
         $buffer31d = $this->openRingBuffer($path31d, self::BUFFER_FORMAT);
+        $data = [];
+        foreach ($buffer31d as $elements) {
+            $data[$elements[0]] = $elements[1];
+        }
 
-        return iterator_to_array($buffer31d);
+        return $data;
     }
 
     /**
-     * Returns all locations where data was previously measured.
-     *
-     * @return array<int, string> the array of location names where data was
-     *                            measured.
+     * {@inheritdoc}
      */
     public function queryLocations(): array
     {
@@ -266,15 +251,7 @@ class WeatherRepository
     }
 
     /**
-     * Returns the all the data collected for a quantity on a specific location
-     * in the given month of the given year.
-     *
-     * @param string $location the location where the data should be queried
-     *                         for.
-     * @param string $quantity the collected quantity.
-     * @param int $year the year the data was collected in.
-     * @param int $month the month the data was collected in.
-     * @return array<int, array<int, int>> the data collected in the given month.
+     * {@location}
      */
     public function queryMonth(
         string $location,
@@ -289,16 +266,16 @@ class WeatherRepository
             $month,
         );
         $buffer = $this->openBuffer($monthPath, self::BUFFER_FORMAT);
+        $data = [];
+        foreach ($buffer as $elements) {
+            $data[$elements[0]] = $elements[1];
+        }
 
-        return iterator_to_array($buffer);
+        return $data;
     }
 
     /**
-     * Queries all quantities ever measured at a location.
-     *
-     * @param string $location the location to query quantities for.
-     * @return array<int, string> the array with all quantities measured at
-     *                            the location.
+     * {@inheritdoc}
      */
     public function queryQuantities(string $location): array
     {
@@ -327,14 +304,7 @@ class WeatherRepository
     }
 
     /**
-     * Returns the all the data collected for a quantity on a specific location
-     * in the given year.
-     *
-     * @param string $location the location where the data should be queried
-     *                         for.
-     * @param string $quantity the collected quantity.
-     * @param int $year the year the data was collected in.
-     * @return array<int, array<int, int>> the data collected in the given year.
+     * {@inheritdoc}
      */
     public function queryYear(
         string $location,
@@ -347,8 +317,12 @@ class WeatherRepository
             $year,
         );
         $buffer = $this->openBuffer($yearPath, self::BUFFER_FORMAT);
+        $data = [];
+        foreach ($buffer as $elements) {
+            $data[$elements[0]] = $elements[1];
+        }
 
-        return iterator_to_array($buffer);
+        return $data;
     }
 
     /**
