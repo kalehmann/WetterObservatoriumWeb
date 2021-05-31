@@ -21,13 +21,13 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
+namespace KaLehmann\WetterObservatoriumWeb\Tests\Persistence\Filesystem;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\Buffer;
-use KaLehmann\WetterObservatoriumWeb\Persistence\BufferCreator;
-use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
-use KaLehmann\WetterObservatoriumWeb\Persistence\IOException;
-use KaLehmann\WetterObservatoriumWeb\Persistence\RingBuffer;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\Buffer;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\BufferCreator;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\RingBuffer;
 use PHPUnit\Framework\TestCase;
 use Exception;
 use RunTimeException;

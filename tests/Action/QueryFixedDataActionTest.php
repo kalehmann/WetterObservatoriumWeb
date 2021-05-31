@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +37,7 @@ class QueryFixedDataActionTest extends TestCase
      */
     public function testQueryTheDataOfAMonth(): void
     {
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('queryMonth')
                           ->with('aquarium', 'temperature', 2021, 05)
@@ -73,7 +73,7 @@ class QueryFixedDataActionTest extends TestCase
      */
     public function testQueryTheDataOfAYear(): void
     {
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('queryYear')
                           ->with('aquarium', 'temperature', 2021)

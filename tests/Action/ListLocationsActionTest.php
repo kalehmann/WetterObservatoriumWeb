@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +37,7 @@ class ListLocationsActionTest extends TestCase
      */
     public function testListLocations(): void
     {
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('queryLocations')
                           ->willReturn(['home', 'outdoor']);

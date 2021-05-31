@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -37,7 +37,7 @@ class ListLocationsAction
      * Adds data for the specified locatiion.
      */
     public function __invoke(
-        WeatherRepository $weatherRepository,
+        WeatherRepositoryInterface $weatherRepository,
         string $format
     ): ResponseInterface {
         return $this->createResponse(

@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +37,7 @@ class QueryContinuousDataActionTest extends TestCase
      */
     public function testQueryTheDataOfTheLast24Hours(): void
     {
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->exactly(2))
                           ->method('query24h')
                           ->with('aquarium', 'temperature')
@@ -89,7 +89,7 @@ class QueryContinuousDataActionTest extends TestCase
      */
     public function testQueryTheDataOfTheLast31Days(): void
     {
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('query31d')
                           ->with('aquarium', 'temperature')

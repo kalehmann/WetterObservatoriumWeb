@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
@@ -47,7 +47,7 @@ class AddDataActionTest extends TestCase
                      ->method('createResponse')
                      ->with(400)
                      ->willReturn(new Response(400));
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $request = new ServerRequest(
             'POST',
             '/api/home',
@@ -78,7 +78,7 @@ class AddDataActionTest extends TestCase
                      ->method('createResponse')
                      ->with(200)
                      ->willReturn(new Response(200));
-        $weatherRepository = $this->createMock(WeatherRepository::class);
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->exactly(2))
                           ->method('persist')
                           ->withConsecutive(

@@ -21,9 +21,9 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
+namespace KaLehmann\WetterObservatoriumWeb\Tests\Persistence\Filesystem;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\DataLocator;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
 use PHPUnit\Framework\TestCase;
 use function sys_get_temp_dir;
 

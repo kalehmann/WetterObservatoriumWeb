@@ -21,29 +21,14 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Action;
+namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
-use Psr\Http\Message\ResponseInterface;
+use \Exception;
 
 /**
- * Action for listing quantities measured at a location.
+ *
  */
-class ListQuantitiesAction
+class PackFormatValidator
 {
-    use FormatTrait;
-
-    /**
-     * Adds data for the specified locatiion.
-     */
-    public function __invoke(
-        WeatherRepositoryInterface $weatherRepository,
-        string $location,
-        string $format
-    ): ResponseInterface {
-        return $this->createResponse(
-            $weatherRepository->queryQuantities($location),
-            $format,
-        );
-    }
+    
 }

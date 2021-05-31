@@ -25,7 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
-use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepository;
+use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -45,7 +45,7 @@ class AddDataAction
     public function __invoke(
         Psr17Factory $psr17Factory,
         RequestInterface $request,
-        WeatherRepository $weatherRepository,
+        WeatherRepositoryInterface $weatherRepository,
         string $location
     ): ResponseInterface {
         $payload = json_decode((string)$request->getBody(), true);

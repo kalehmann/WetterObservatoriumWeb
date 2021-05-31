@@ -21,11 +21,11 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWebP\Tests\Persistence;
+namespace KaLehmann\WetterObservatoriumWeb\Tests\Persistence\Filesystem;
 
-use KaLehmann\WetterObservatoriumWeb\Persistence\InvalidPackFormatException;
-use KaLehmann\WetterObservatoriumWeb\Persistence\IOException;
-use KaLehmann\WetterObservatoriumWeb\Persistence\Buffer;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\InvalidPackFormatException;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
+use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\Buffer;
 use PHPUnit\Framework\TestCase;
 use \RunTimeException;
 

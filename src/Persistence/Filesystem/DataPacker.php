@@ -21,7 +21,7 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Persistence;
+namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
 /**
  * Helper class for the `pack` and `unpack` methods.

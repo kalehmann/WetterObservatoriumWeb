@@ -21,13 +21,28 @@
 
 declare(strict_types=1);
 
-namespace KaLehmann\WetterObservatoriumWeb\Persistence;
+namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
 use \Exception;
+use function array_unique;
+use function join;
 
 /**
  * Exception for anything related to reading and writing data.
  */
-class IOException extends Exception
+class InvalidPackFormatException extends Exception
 {
+    public function __construct(string ...$codes)
+    {
+        parent::__construct(
+            'Only pack formats with a known length are supported. ' .
+            'See ' . DataPacker::class . '::ALLOWED_FORMATS for a full list ' .
+            'of the allowed formats. The following unknown/non-fixed-length ' .
+            'format codes were detected : ' .
+            join(
+                ', ',
+                array_unique($codes),
+            ),
+        );
+    }
 }
