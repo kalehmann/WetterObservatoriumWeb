@@ -271,7 +271,7 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
             return true;
         }
         $this->logger->warning(
-            'The provide signature could not be reproduced.',
+            'The provided signature could not be reproduced.',
         );
 
         return false;
