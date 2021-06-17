@@ -134,6 +134,11 @@ class WeatherRepository implements WeatherRepositoryInterface
                 $yearPath,
             ) {
                 [0 => $lastEntryTime, 1 => $_ ] = $ringBuffer->lastEntry();
+                if ($timestamp->getTimestamp() - $lastEntryTime < 60 * 4) {
+                    // Minimal difference between two entries should be 4
+                    // minutes.
+                    return;
+                }
                 $data = [];
                 foreach ($ringBuffer as $element) {
                     $data[$element[0]] = $element[1];

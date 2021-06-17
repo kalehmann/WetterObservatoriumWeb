@@ -400,6 +400,47 @@ class WeatherRepositoryTest extends TestCase
     }
 
     /**
+     * Check that a second call to persist within 4 minutes does nothing.
+     */
+    public function testPersistRequiresAMinimalIntervalOf4Minutes(): void
+    {
+        $path24h = $this->dataLocator->get24hPath(
+            $this->location,
+            $this->quantity,
+        );
+        $hour = new DateTimeImmutable('2021-05-18T01:00:00');
+        $unixtime = $hour->getTimestamp();
+
+        $bufferCreator = new BufferCreator($this->dataLocator);
+        $weatherRepository = new WeatherRepository(
+            $bufferCreator,
+            $this->dataLocator,
+        );
+
+        $weatherRepository->persist(
+            $this->location,
+            $this->quantity,
+            123,
+            $hour,
+        );
+        $weatherRepository->persist(
+            $this->location,
+            $this->quantity,
+            123,
+            $hour->add(new DateInterval('PT3M')),
+        );
+        $this->assertEquals(
+            [
+                $unixtime => 123,
+            ],
+            $weatherRepository->query24h(
+                $this->location,
+                $this->quantity,
+            ),
+        );
+    }
+
+    /**
      * Check that trying to query the data of the last 24 hours without
      * the 24h ring buffer results in an exception.
      */
