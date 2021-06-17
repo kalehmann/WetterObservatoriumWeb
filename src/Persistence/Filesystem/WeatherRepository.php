@@ -213,7 +213,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         $buffer24h = $this->openRingBuffer($path24h, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer24h as $elements) {
-            $data[$elements[0]] = $elements[1];
+            if ($elements[0] !== 0) {
+                $data[$elements[0]] = $elements[1];
+            }
         }
 
         return $data;
@@ -230,7 +232,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         $buffer31d = $this->openRingBuffer($path31d, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer31d as $elements) {
-            $data[$elements[0]] = $elements[1];
+            if ($elements[0] !== 0) {
+                $data[$elements[0]] = $elements[1];
+            }
         }
 
         return $data;
@@ -271,7 +275,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         $buffer = $this->openBuffer($monthPath, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer as $elements) {
-            $data[$elements[0]] = $elements[1];
+            if ($elements[0] !== 0) {
+                $data[$elements[0]] = $elements[1];
+            }
         }
 
         return $data;
@@ -322,7 +328,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         $buffer = $this->openBuffer($yearPath, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer as $elements) {
-            $data[$elements[0]] = $elements[1];
+            if ($elements[0] !== 0) {
+                $data[$elements[0]] = $elements[1];
+            }
         }
 
         return $data;

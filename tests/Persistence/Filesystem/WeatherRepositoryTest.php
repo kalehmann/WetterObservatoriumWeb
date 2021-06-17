@@ -465,14 +465,9 @@ class WeatherRepositoryTest extends TestCase
                 $unixtime + 200 => 12,
                 $unixtime + 400 => 11,
             ],
-            array_slice(
-                $weatherRepository->query24h(
-                    $this->location,
-                    $this->quantity,
-                ),
-                -3,
-                3,
-                true,
+            $weatherRepository->query24h(
+                $this->location,
+                $this->quantity,
             ),
         );
     }
@@ -543,14 +538,9 @@ class WeatherRepositoryTest extends TestCase
                 $unixtime + 3600 * 24 => 12,
                 $unixtime + 3600 * 48 => 11,
             ],
-            array_slice(
-                $weatherRepository->query31d(
-                    $this->location,
-                    $this->quantity,
-                ),
-                -3,
-                3,
-                true,
+            $weatherRepository->query31d(
+                $this->location,
+                $this->quantity,
             ),
         );
     }
