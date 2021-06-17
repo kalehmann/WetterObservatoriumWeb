@@ -267,7 +267,7 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
             return false;
         }
 
-        if ($expectedSignature === $signature) {
+        if ($expectedSignature === strtolower($signature)) {
             return true;
         }
         $this->logger->warning(
