@@ -240,10 +240,6 @@ class WeatherRepositoryTest extends TestCase
                 );
             },
         );
-        $ringBuffer = RingBuffer::fromFile(
-            $path24h,
-            BufferCreator::BUFFER_FORMAT,
-        );
 
         $bufferCreator = new BufferCreator($this->dataLocator);
         $weatherRepository = new WeatherRepository(
@@ -347,10 +343,6 @@ class WeatherRepositoryTest extends TestCase
                     ],
                 );
             },
-        );
-        $ringBuffer = RingBuffer::fromFile(
-            $path24h,
-            BufferCreator::BUFFER_FORMAT,
         );
 
         $bufferCreator = new BufferCreator($this->dataLocator);
