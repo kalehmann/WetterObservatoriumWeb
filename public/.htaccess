@@ -4,5 +4,5 @@
     # Enforce https for every path except '/api.php' and '/api/{location}'
     RewriteCond %{HTTPS} off
     RewriteRule !^/?api(\.php|/([a-z]*))$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    RewriteRule ^/?api(?:/(.*))?$ /api.php [L,P]
+    RewriteRule ^/?api(?:/(.*))?$ /api.php [L]
 </IfModule>
