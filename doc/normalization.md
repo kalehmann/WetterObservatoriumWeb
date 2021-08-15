@@ -6,7 +6,7 @@ als Dezimalzahl erfasst und können durchaus negativ werden.
 Damit die tatsächlich gemessenen Daten in dem System persistiert werden können,
 müssen diese vorher in eine ganze Zahl umgewandelt werden.
 
-### Normalisiernug von Temperaturdaten
+### Normalisierung von Temperaturdaten
 
 Eigenhende Temperaturdaten in Grad Celsius werden zuerst durch Addition von
 `273.15` in Grad Kelvin umgewandelt.
