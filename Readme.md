@@ -7,6 +7,7 @@
 ### Dokumentation
 
 * [Api](doc/api.md)
+- [Normalisierung der Daten](doc/normalization.md)
 * [Persistenz](doc/persistenz.md)
 
   [github_action]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/
