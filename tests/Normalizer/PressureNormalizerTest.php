@@ -54,13 +54,11 @@ class PressureNormalizerTest extends TestCase
     {
         $normalizer = new PressureNormalizer();
 
-        // (0 + 273.15) * 10
         $this->assertEquals(
             1013,
             $normalizer->normalizeValue(1013.25),
         );
 
-        // (22.5 + 273.15) * 10)
         $this->assertEquals(
             1000,
             $normalizer->normalizeValue(999.99),
