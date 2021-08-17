@@ -26,7 +26,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Normalizer;
 /**
  * Rounds a float to the nearest integer for normalization.
  */
-abstract class TemperatureNormalizer implements QuantityNormalizerInterface
+abstract class DummyNormalizer implements QuantityNormalizerInterface
 {
     /**
      * {@inheritdoc}
