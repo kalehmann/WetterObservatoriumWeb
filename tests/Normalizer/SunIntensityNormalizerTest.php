@@ -37,7 +37,7 @@ class SunIntensityNormalizerTest extends TestCase
      */
     public function testSupports(): void
     {
-        $normalizer = new PressureNormalizer();
+        $normalizer = new SunIntensityNormalizer();
         $this->assertTrue(
             $normalizer->supportsQuantity('sun'),
         );
@@ -52,7 +52,7 @@ class SunIntensityNormalizerTest extends TestCase
      */
     public function testNormalizeValue(): void
     {
-        $normalizer = new PressureNormalizer();
+        $normalizer = new SunIntensityNormalizer();
 
         $this->assertEquals(
             15000,
@@ -66,7 +66,7 @@ class SunIntensityNormalizerTest extends TestCase
      */
     public function testDenormalizeValue(): void
     {
-        $normalizer = new PressureNormalizer();
+        $normalizer = new SunIntensityNormalizer();
         $this->assertEquals(
             42,
             $normalizer->denormalizeValue(42),
