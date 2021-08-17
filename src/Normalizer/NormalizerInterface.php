@@ -40,7 +40,7 @@ interface NormalizerInterface
      * Converts a measured value of a quantity into an unsigned integer for safe
      * persisting.
      *
-     * @param string quantity the name of the measured quantity
+     * @param string $quantity the name of the measured quantity
      * @param float|int $value the measured value
      * @return int the unsigned integer the should be persisted
      */
@@ -51,7 +51,7 @@ interface NormalizerInterface
      * quantity.
      *
      * @param string $quantity the name of the quantity
-     * @param int the normalized value (an unsigned integer)
+     * @param int $value the normalized value (an unsigned integer)
      * @return float|int the real/measured value
      */
     public function denormalizeValue(string $quantity, int $value): float|int;
