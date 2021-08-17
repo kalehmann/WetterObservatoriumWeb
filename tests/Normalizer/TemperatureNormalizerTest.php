@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 class TemperatureNormalizerTest extends TestCase
 {
     /**
-     * Check that the TemperaturNormalizer only supports the quantity
+     * Check that the TemperatureNormalizer only supports the quantity
      * `temperature`.
      */
     public function testSupports(): void
@@ -68,7 +68,7 @@ class TemperatureNormalizerTest extends TestCase
     }
 
     /**
-     * Check, that a normalized temperature value can be converted back into the
+     * Check that a normalized temperature value can be converted back into the
      * measured value.
      */
     public function testDenormalizeValue(): void
