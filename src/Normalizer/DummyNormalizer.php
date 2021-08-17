@@ -24,16 +24,23 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Normalizer;
 
 /**
- * Converts measured pressure values (hecto-Pascal) into unsigned integers
- * and back.
+ * Rounds a float to the nearest integer for normalization.
  */
-class PressureNormalizer extends DummyNormalizer
+abstract class TemperatureNormalizer implements QuantityNormalizerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsQuantity(string $quantity): bool
+    public function normalizeValue(float|int $value): int
     {
-        return $quantity === 'pressure';
+        return (int) round($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalizeValue(int $value): float|int
+    {
+        return $value;
     }
 }

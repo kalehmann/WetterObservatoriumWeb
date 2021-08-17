@@ -24,16 +24,16 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Normalizer;
 
 /**
- * Converts measured pressure values (hecto-Pascal) into unsigned integers
+ * Converts measured sun intensity values (Lux) into unsigned integers
  * and back.
  */
-class PressureNormalizer extends DummyNormalizer
+class SunIntensityNormalizer extends DummyNormalizer
 {
     /**
      * {@inheritdoc}
      */
     public function supportsQuantity(string $quantity): bool
     {
-        return $quantity === 'pressure';
+        return $quantity === 'sun';
     }
 }
