@@ -29,6 +29,12 @@ use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
 use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\Normalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\HumidityNormalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\PressureNormalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\SunIntensityNormalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\TemperatureNormalizer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\WeatherRepository;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
@@ -69,6 +75,16 @@ return [
         ->method(
             'pushHandler',
             new StreamHandler('php://stdout', Logger::DEBUG)
+        ),
+    NormalizerInterface::class => create(Normalizer::class)
+        ->method(
+            'setQuantityNormalizers',
+            [
+                create(HumidityNormalizer::class),
+                create(PressureNormalizer::class),
+                create(SunIntensityNormalizer::class),
+                create(TemperatureNormalizer::class),
+            ],
         ),
     RoutingMiddleware::class => create()
         ->constructor(
