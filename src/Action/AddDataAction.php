@@ -25,6 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Attribute\AuthorizationAttribute;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\RequestInterface;
@@ -43,6 +44,7 @@ class AddDataAction
      * Adds data for the specified location.
      */
     public function __invoke(
+        NormalizerInterface $normalizer,
         Psr17Factory $psr17Factory,
         RequestInterface $request,
         WeatherRepositoryInterface $weatherRepository,
@@ -58,7 +60,7 @@ class AddDataAction
             $weatherRepository->persist(
                 $location,
                 $quantity,
-                $value,
+                $normalizer->normalizeValue($quantity, $value),
                 $now,
             );
         }

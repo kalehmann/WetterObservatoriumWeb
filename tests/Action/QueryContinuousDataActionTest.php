@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,25 @@ class QueryContinuousDataActionTest extends TestCase
      */
     public function testQueryTheDataOfTheLast24Hours(): void
     {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(6))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['temperature', 2],
+                           ['temperature', 4],
+                           ['temperature', 6],
+                           ['temperature', 2],
+                           ['temperature', 4],
+                           ['temperature', 6],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           20,
+                           40,
+                           60,
+                           20,
+                           40,
+                           60,
+                       );
         $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->exactly(2))
                           ->method('query24h')
@@ -51,6 +71,7 @@ class QueryContinuousDataActionTest extends TestCase
 
         $action = new QueryContinuousDataAction();
         $response = ($action)(
+            $normalizerMock,
             $weatherRepository,
             'aquarium',
             'temperature',
@@ -62,11 +83,12 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[1, 2], [3, 4], [5, 6]],
+            [[1, 20], [3, 40], [5, 60]],
             json_decode((string)$response->getBody()),
         );
 
         $response = ($action)(
+            $normalizerMock,
             $weatherRepository,
             'aquarium',
             'temperature',
@@ -79,7 +101,7 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[1, 2], [3, 4], [5, 6]],
+            [[1, 20], [3, 40], [5, 60]],
             json_decode((string)$response->getBody()),
         );
     }
@@ -89,6 +111,17 @@ class QueryContinuousDataActionTest extends TestCase
      */
     public function testQueryTheDataOfTheLast31Days(): void
     {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(2))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['temperature', 11],
+                           ['temperature', 21],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           110,
+                           210,
+                       );
         $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('query31d')
@@ -102,6 +135,7 @@ class QueryContinuousDataActionTest extends TestCase
 
         $action = new QueryContinuousDataAction();
         $response = ($action)(
+            $normalizerMock,
             $weatherRepository,
             'aquarium',
             'temperature',
@@ -114,7 +148,7 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[10, 11], [20, 21]],
+            [[10, 110], [20, 210]],
             json_decode((string)$response->getBody()),
         );
     }

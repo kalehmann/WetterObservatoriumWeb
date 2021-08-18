@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,17 @@ class QueryFixedDataActionTest extends TestCase
      */
     public function testQueryTheDataOfAMonth(): void
     {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(2))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['temperature', 1],
+                           ['temperature', 2],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           10,
+                           20,
+                       );
         $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('queryMonth')
@@ -50,6 +62,7 @@ class QueryFixedDataActionTest extends TestCase
 
         $action = new QueryFixedDataAction();
         $response = ($action)(
+            $normalizerMock,
             $weatherRepository,
             'aquarium',
             'temperature',
@@ -63,7 +76,7 @@ class QueryFixedDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEqualsCanonicalizing(
-            [[1, 1], [2, 2]],
+            [[1, 10], [2, 20]],
             json_decode((string)$response->getBody()),
         );
     }
@@ -73,6 +86,17 @@ class QueryFixedDataActionTest extends TestCase
      */
     public function testQueryTheDataOfAYear(): void
     {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(2))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['temperature', 2],
+                           ['temperature', 4],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           20,
+                           40,
+                       );
         $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepository->expects($this->once())
                           ->method('queryYear')
@@ -86,6 +110,7 @@ class QueryFixedDataActionTest extends TestCase
 
         $action = new QueryFixedDataAction();
         $response = ($action)(
+            $normalizerMock,
             $weatherRepository,
             'aquarium',
             'temperature',
@@ -98,7 +123,7 @@ class QueryFixedDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEqualsCanonicalizing(
-            [[1, 2], [3, 4]],
+            [[1, 20], [3, 40]],
             json_decode((string)$response->getBody()),
         );
     }

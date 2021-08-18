@@ -24,6 +24,8 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\tests\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\Normalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
@@ -42,6 +44,7 @@ class AddDataActionTest extends TestCase
      */
     public function testWithInvalidRequest(): void
     {
+        $normalizer = new Normalizer();
         $psr17Factory = $this->createMock(Psr17Factory::class);
         $psr17Factory->expects($this->once())
                      ->method('createResponse')
@@ -57,6 +60,7 @@ class AddDataActionTest extends TestCase
 
         $action = new AddDataAction();
         $response = ($action)(
+            $normalizer,
             $psr17Factory,
             $request,
             $weatherRepository,
@@ -73,6 +77,17 @@ class AddDataActionTest extends TestCase
      */
     public function testWithValidRequest(): void
     {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(2))
+                       ->method('normalizeValue')
+                       ->withConsecutive(
+                           ['humidity', 123],
+                           ['temperature', 456],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           1230,
+                           4560,
+                       );
         $psr17Factory = $this->createMock(Psr17Factory::class);
         $psr17Factory->expects($this->once())
                      ->method('createResponse')
@@ -85,13 +100,13 @@ class AddDataActionTest extends TestCase
                               [
                                   'home',
                                   'humidity',
-                                  123,
+                                  1230,
                                   $this->anything(),
                               ],
                               [
                                   'home',
                                   'temperature',
-                                  456,
+                                  4560,
                                   $this->anything(),
                               ],
                           );
@@ -115,6 +130,7 @@ class AddDataActionTest extends TestCase
 
         $action = new AddDataAction();
         $response = ($action)(
+            $normalizerMock,
             $psr17Factory,
             $request,
             $weatherRepository,

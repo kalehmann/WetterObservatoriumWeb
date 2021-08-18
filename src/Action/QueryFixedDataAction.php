@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -37,6 +38,7 @@ class QueryFixedDataAction
      * {@inheritdoc}
      */
     public function __invoke(
+        NormalizerInterface $normalizer,
         WeatherRepositoryInterface $weatherRepository,
         string $location,
         string $quantity,
@@ -56,7 +58,13 @@ class QueryFixedDataAction
         // the value.
         array_walk(
             $data,
-            fn(int &$value, int $timestamp) => $value = [$timestamp, $value],
+            fn(int &$value, int $timestamp) => $value = [
+                $timestamp,
+                $normalizer->denormalizeValue(
+                    $quantity,
+                    $value,
+                ),
+            ],
         );
 
         return $this->createResponse(
