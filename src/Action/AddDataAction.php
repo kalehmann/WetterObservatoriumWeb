@@ -40,7 +40,7 @@ use Psr\Http\Message\ResponseInterface;
 class AddDataAction
 {
     /**
-     * Adds data for the specified locatiion.
+     * Adds data for the specified location.
      */
     public function __invoke(
         Psr17Factory $psr17Factory,
