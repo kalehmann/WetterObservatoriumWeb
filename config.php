@@ -41,6 +41,7 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Twig\Environment;
 
 use function DI\create;
 use function DI\env;
@@ -50,6 +51,12 @@ return [
     DataLocator::class => create()
         ->constructor(
             env('DATA_DIR'),
+        ),
+    Environment::class => create()
+        ->constructor(
+            [
+                __DIR__ . '/templates',
+            ],
         ),
     HMACAuthorizationMiddleware::class => create()
         ->constructor(
