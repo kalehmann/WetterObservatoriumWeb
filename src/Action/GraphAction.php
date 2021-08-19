@@ -131,11 +131,11 @@ class GraphAction
             }
 
             foreach ($quantities as $q) {
-                    $data[$quantity] = $weatherRepository->query24h(
-                        $location,
-                        $q,
-                    );
-                }
+                $data[$quantity] = $weatherRepository->query24h(
+                    $location,
+                    $q,
+                );
+            }
 
             return $data;
         }
