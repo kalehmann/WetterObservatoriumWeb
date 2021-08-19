@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 use FastRoute\RouteCollector;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\GraphAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListQuantitiesAction;
 use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
@@ -110,6 +111,16 @@ return [
                     function (RouteCollector $routeCollector) {
                         $routeCollector->addRoute(
                             'GET',
+                            '.svg',
+                            GraphAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{timespan:24h|31d}.svg',
+                            GraphAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
                             '.{format}',
                             QueryContinuousDataAction::class,
                         );
@@ -123,6 +134,16 @@ return [
                 $routeCollector->addGroup(
                     '/api/{location:[a-z]*}/{quantity:[a-z]*}/{year:\d{4}}',
                     function (RouteCollector $routeCollector) {
+                        $routeCollector->addRoute(
+                            'GET',
+                            '.svg',
+                            GraphAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{month:\d{2}}.svg',
+                            GraphAction::class,
+                        );
                         $routeCollector->addRoute(
                             'GET',
                             '.{format}',
