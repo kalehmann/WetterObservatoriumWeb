@@ -49,6 +49,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 use function DI\create;
 use function DI\env;
@@ -61,8 +62,12 @@ return [
         ),
     Environment::class => create()
         ->constructor(
+            create(FilesystemLoader::class)
+                ->constructor(
+                    __DIR__ . '/templates',
+                ),
             [
-                __DIR__ . '/templates',
+                'cache' => __DIR__ . 'cache/twig',
             ],
         ),
     HMACAuthorizationMiddleware::class => create()
