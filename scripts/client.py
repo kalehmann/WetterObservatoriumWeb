@@ -87,12 +87,12 @@ if __name__ == '__main__':
     parser.add_argument(
         '--temperature',
         help='The measured temperature converted to natural numbers',
-        type=int,
+        type=float,
     )
     parser.add_argument(
         '--humidity',
         help='The measured humidity converted to natural numbers',
-        type=int,
+        type=float,
     )
     args = parser.parse_args()
 
