@@ -67,7 +67,7 @@ return [
                     __DIR__ . '/templates',
                 ),
             [
-                'cache' => __DIR__ . 'cache/twig',
+                'cache' => __DIR__ . '/cache/twig',
             ],
         ),
     HMACAuthorizationMiddleware::class => create()
