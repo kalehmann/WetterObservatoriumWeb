@@ -53,6 +53,7 @@ use Twig\Loader\FilesystemLoader;
 
 use function DI\create;
 use function DI\env;
+use function DI\factory;
 use function DI\get;
 
 return [
@@ -67,7 +68,21 @@ return [
                     __DIR__ . '/templates',
                 ),
             [
-                'cache' => __DIR__ . '/cache/twig',
+                'cache' => factory(
+                    function (ContainerInterface $container) {
+                        $cachePath = getenv('TWIG_CACHE');
+                        if (false === $cachePath) {
+                            return false;
+                        }
+
+                        if (strlen($cachePath)
+                            && $cachePath[0] === DIRECTORY_SEPARATOR) {
+                            return $cachePath;
+                        }
+
+                        return __DIR__ . DIRECTORY_SEPARATOR . $cachePath;
+                    },
+                ),
             ],
         ),
     HMACAuthorizationMiddleware::class => create()
