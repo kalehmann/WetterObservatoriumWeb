@@ -1,0 +1,36 @@
+{% extends 'graphs/graph.svg.twig' %}
+
+{% set dataCount = data["temperature"]|length %}
+{% set sepWidth = frameSize / (dataCount + 1) %}
+{% set tMax = 60 %}
+{% set tMin = -30 %}
+{% set timeMax = max(data["temperature"]|keys) %}
+{% set timeMin = min(data["temperature"]|keys) %}
+
+{% block graph %}
+   {% for timestamp, value in data["temperature"] %}
+        <rect
+            x="{{ timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) }}"
+            y="{{ value|mapRange(tMin, tMax, frameSize - 40, 0) }}"
+            width="10"
+            height="10"
+        ></rect>
+    {% endfor %}
+{% endblock %}
+
+{% block xticks %}
+    {% for i in 1..5 %}
+        <g transform="translate({{ i|mapRange(1, 5, 20, frameSize - 40) }}, 0)">
+            <text transform="rotate(45)" stroke="black">{{ (timeMin + (timeMax - timeMin) / 5 * i)|round|date("H:i") }}</text>
+            <text transform="rotate(45)" stroke="black" x="-10" y="20">{{ (timeMin + (timeMax - timeMin) / 5 * i)|round|date("d.m.y") }}</text>
+        </g>
+    {% endfor %}
+{% endblock %}
+{% block yticks %}
+    {% for i in (tMin..tMax)|filter(v => v is divisible by(5)) %}
+        <g>
+            <text stroke="black" size="2px" x="70" y="{{ i|mapRange(tMin, tMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} °C</text>
+            <rect x="90" y="{{ i|mapRange(tMin, tMax, frameSize - 40, 0) - 6 }}" width="10" height="3"></rect>
+        </g>
+    {% endfor %}
+{% endblock %}

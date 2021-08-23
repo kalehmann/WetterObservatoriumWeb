@@ -24,9 +24,11 @@ declare(strict_types=1);
 namespace KaLehmann\WetterObservatoriumWeb\Action;
 
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use RunTimeException;
+use Twig\Environment;
 
 /**
  * Action for generating graphs from the measured data.
@@ -57,6 +59,8 @@ class GraphAction
      * @return ResponseInterface the response with the svg data.
      */
     public function __invoke(
+        Environment $twig,
+        NormalizerInterface $normalizer,
         WeatherRepositoryInterface $weatherRepository,
         string $location,
         ?string $quantity = null,
@@ -72,8 +76,44 @@ class GraphAction
             $year,
             $month,
         );
+        array_walk(
+            $data,
+            function (array &$values, string $quantity) use ($normalizer) {
+                $values = array_map(
+                    fn (int $measuredData) => $normalizer->denormalizeValue(
+                        $quantity,
+                        $measuredData,
+                    ),
+                    $values,
+                );
+            },
+        );
+        $headers = [
+            'Content-Type' => 'image/svg+xml',
+        ];
 
-        return new Response(body: '');
+        if ($quantity) {
+            $templateName = 'graphs/' . $quantity . '.svg.twig';
+            if ($twig->getLoader()->exists($templateName)) {
+                return new Response(
+                    body: $twig->render(
+                        $templateName,
+                        [
+                            'data' => $data,
+                            'location' => $location,
+                        ],
+                    ),
+                    headers: $headers,
+                    status: 200,
+                );
+            }
+        }
+
+        return new Response(
+            body: '',
+            headers: $headers,
+            status: 200,
+        );
     }
 
     /**
@@ -118,12 +158,15 @@ class GraphAction
         if (null === $quantity) {
             $quantities = $weatherRepository->queryQuantities($location);
         }
-        if ($timespan) {
-            if ($timespan === '31d') {
+
+        if ($year) {
+            if ($month) {
                 foreach ($quantities as $q) {
-                    $data[$quantity] = $weatherRepository->query31d(
+                    $data[$quantity] = $weatherRepository->queryMonth(
                         $location,
                         $q,
+                        $year,
+                        $month,
                     );
                 }
 
@@ -131,29 +174,21 @@ class GraphAction
             }
 
             foreach ($quantities as $q) {
-                $data[$quantity] = $weatherRepository->query24h(
+                $data[$quantity] = $weatherRepository->queryYear(
                     $location,
                     $q,
+                    $year,
                 );
             }
 
             return $data;
         }
 
-        if (null === $year) {
-            throw new RunTimeException(
-                __CLASS__ . '::' . __METHOD__ . ' expects either $timespan or ' .
-                '$year to be provided.'
-            );
-        }
-
-        if ($month) {
+        if ($timespan === '31d') {
             foreach ($quantities as $q) {
-                $data[$quantity] = $weatherRepository->queryMonth(
+                $data[$quantity] = $weatherRepository->query31d(
                     $location,
                     $q,
-                    $year,
-                    $month,
                 );
             }
 
@@ -161,10 +196,9 @@ class GraphAction
         }
 
         foreach ($quantities as $q) {
-            $data[$quantity] = $weatherRepository->queryYear(
+            $data[$quantity] = $weatherRepository->query24h(
                 $location,
                 $q,
-                $year,
             );
         }
 

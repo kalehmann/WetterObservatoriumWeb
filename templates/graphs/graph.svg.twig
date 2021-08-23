@@ -1,0 +1,33 @@
+<svg version="1.1"
+    viewBox="0 0 1000 1000"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg">
+    {% set frameSize = 800 %}
+    {% block contents %}
+        {% block frame %}
+            <rect
+                x="100"
+                y="80"
+                stroke="black"
+                width="{{ frameSize }}"
+                height="{{ frameSize }}"
+                fill="none"
+            ></rect>
+        {% endblock %}
+        <g transform="translate(100, 100)">
+            {% block graph %}
+
+            {% endblock %}
+        </g>
+        <g transform="translate(0, 100)">
+	    {% block yticks %}
+
+            {% endblock %}
+        </g>
+        <g transform="translate(100, {{ 100 + frameSize}})">
+            {% block xticks %}
+
+            {% endblock %}
+        </g>
+    {% endblock %}
+</svg>
