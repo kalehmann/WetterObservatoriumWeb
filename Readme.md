@@ -10,6 +10,30 @@
 - [Normalisierung der Daten](doc/normalization.md)
 * [Persistenz](doc/persistenz.md)
 
+### Entwicklung
+
+Zur Entwicklung der Anwendung wird eine Umgebung als [Dockerfile][dockerfile]
+definiert.
+Zusätzliche Dienste werden in der Datei [`docker-compose.yaml`][dockercompose]
+konfiguriert.
+Die Umgebung wird mittels
+```
+docker-compose up
+```
+gestartet.
+Anschließend ist die Anwendung durch einen Nginx-Webserver unter
+[`http://localhost:8080`](http://localhost:8080) und durch einen
+Apache-Webserver unter
+[`http://localhost:8081`](http://localhost:8081) erreichbar.
+
+Um Tests auszuführen kann eine Shell in Docker gestartet werden:
+```
+$ docker-compose run php sh
+# php vendor/bin/phpunit tests
+```
+
+  [dockerfile]: Dockerfile
+  [dockercompose]: docker-compose.yaml
   [github_action]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/
   [github_badge]: https://github.com/kalehmann/WetterObservatoriumWeb/actions/workflows/main.yaml/badge.svg
   [gitlab_badge]: https://gitlab.com/kalehmann/WetterObservatoriumWeb/badges/master/pipeline.svg
