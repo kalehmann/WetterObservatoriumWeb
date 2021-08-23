@@ -65,6 +65,11 @@ class MapRangeExtension extends AbstractExtension
         float $minOut,
         float $maxOut,
     ): float {
+        if ($maxIn === $minIn) {
+            // Avoid division by zero
+            return ($minOut + $maxOut) / 2;
+        }
+
         return ($value - $minIn) * ($maxOut - $minOut)
             / ($maxIn - $minIn) + $minOut;
     }

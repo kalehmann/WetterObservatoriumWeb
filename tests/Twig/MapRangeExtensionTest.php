@@ -45,4 +45,15 @@ class MapRangeExtensionTest extends TestCase
             MapRangeExtension::mapRange(10, 5, 30, 10, 60),
         );
     }
+
+    /**
+     * Check that mapping works with a zero width input range.
+     */
+    public function testMapRangeWithZeroWidthInputRange(): void
+    {
+        $this->assertEquals(
+            40,
+            MapRangeExtension::mapRange(1, 1, 1, 0, 80),
+        );
+    }
 }
