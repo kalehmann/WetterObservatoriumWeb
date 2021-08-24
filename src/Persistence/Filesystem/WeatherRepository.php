@@ -129,6 +129,7 @@ class WeatherRepository implements WeatherRepositoryInterface
                 $lastHour,
                 $lastMidnight,
                 $monthPath,
+                $path31d,
                 $timestamp,
                 $value,
                 $yearPath,
@@ -185,7 +186,31 @@ class WeatherRepository implements WeatherRepositoryInterface
                             try {
                                 $monthBuffer->addEntry(
                                     [
-                                        $lastEntryTime,
+                                        $lastHour,
+                                        WeatherCondensator::condensateHour(
+                                            new ArrayIterator($data),
+                                            $lastHour,
+                                        ),
+                                    ],
+                                );
+                            } catch (CondensationException $e) {
+                                // It's okay. If the client fails, no data will
+                                // be reported over a longer period.
+                            }
+                        },
+                    );
+                    $this->operateExclusiveOnRingBuffer(
+                        $path31d,
+                        self::BUFFER_FORMAT,
+                        function (RingBuffer $ringBuffer) use (
+                            $data,
+                            $lastEntryTime,
+                            $lastHour,
+                        ) {
+                            try {
+                                $ringBuffer->addEntry(
+                                    [
+                                        $lastHour,
                                         WeatherCondensator::condensateHour(
                                             new ArrayIterator($data),
                                             $lastHour,

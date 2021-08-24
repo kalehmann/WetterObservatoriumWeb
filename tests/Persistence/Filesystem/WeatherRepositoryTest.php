@@ -358,7 +358,7 @@ class WeatherRepositoryTest extends TestCase
             $hour->add(new DateInterval('PT30M')),
         );
 
-        $ringBuffer = RingBuffer::fromFile(
+        $ringBuffer24h = RingBuffer::fromFile(
             $path24h,
             BufferCreator::BUFFER_FORMAT,
         );
@@ -373,9 +373,24 @@ class WeatherRepositoryTest extends TestCase
 
             ],
             array_slice(
-                iterator_to_array($ringBuffer),
+                iterator_to_array($ringBuffer24h),
                 -6,
                 6,
+            ),
+        );
+
+        $ringBuffer31d = RingBuffer::fromFile(
+            $path31d,
+            BufferCreator::BUFFER_FORMAT,
+        );
+        $this->assertEquals(
+            [
+                [$unixtime - $unixtime % 3600, 42]
+            ],
+            array_slice(
+                iterator_to_array($ringBuffer31d),
+                -1,
+                1,
             ),
         );
 
@@ -386,7 +401,7 @@ class WeatherRepositoryTest extends TestCase
         [$timestamp, $value] = iterator_to_array($monthBuffer)[0];
         $this->assertEquals(42, $value);
         $this->assertEquals(
-            '2021-05-30 09',
+            '2021-05-30 10',
             date('Y-m-d H', $timestamp),
         );
     }
