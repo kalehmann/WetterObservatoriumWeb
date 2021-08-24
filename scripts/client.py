@@ -85,22 +85,29 @@ if __name__ == '__main__':
         type=str,
     )
     parser.add_argument(
-        '--temperature',
-        help='The measured temperature',
+        '--humidity',
+        help='The measured humidity',
         type=float,
     )
     parser.add_argument(
-        '--humidity',
-        help='The measured humidity',
+        '--pressure',
+        help='The measured athmospheric pressure in hPa',
+        type=float,
+    )
+    parser.add_argument(
+        '--temperature',
+        help='The measured temperature',
         type=float,
     )
     args = parser.parse_args()
 
     data = {}
-    if args.temperature is not None:
-        data['temperature'] = args.temperature
     if args.humidity is not None:
         data['humidity'] = args.humidity
+    if args.pressure is not None:
+        data['pressure'] = args.pressure
+    if args.temperature is not None:
+        data['temperature'] = args.temperature
     if not data:
         raise Exception(
             'No data provided',
