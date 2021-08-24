@@ -21,6 +21,7 @@ steps:
                         --exclude=^.dockerignore
                         --exclude=^.drone.yaml
                         --exclude=^.git
+                        --exclude=^data
                         --exclude=^doc
                         --exclude=^docker
                         --exclude=^Dockerfile
