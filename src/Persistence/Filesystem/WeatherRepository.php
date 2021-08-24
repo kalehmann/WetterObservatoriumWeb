@@ -180,7 +180,6 @@ class WeatherRepository implements WeatherRepositoryInterface
                         self::BUFFER_FORMAT,
                         function (Buffer $monthBuffer) use (
                             $data,
-                            $lastEntryTime,
                             $lastHour,
                         ) {
                             try {
@@ -204,7 +203,6 @@ class WeatherRepository implements WeatherRepositoryInterface
                         self::BUFFER_FORMAT,
                         function (RingBuffer $ringBuffer) use (
                             $data,
-                            $lastEntryTime,
                             $lastHour,
                         ) {
                             try {
