@@ -73,7 +73,14 @@ trait BufferTrait
             );
         }
 
-        return new self($contents, $format);
+        try {
+            return new self($contents, $format);
+        } catch(IOException $e) {
+            throw new IOException(
+                'Error while opening buffer at ' . $path .
+                ' : ' . $e->getMessage(),
+            );
+        }
     }
 
     /**
@@ -110,10 +117,17 @@ trait BufferTrait
                     'Could not read data from ' . $path,
                 );
             }
-            $buffer = new self(
-                $data,
-                $format,
-            );
+            try {
+                $buffer = new self(
+                    $data,
+                    $format,
+                );
+            } catch(IOException $e) {
+                throw new IOException(
+                    'Error while opening buffer at ' . $path .
+                    ' : ' . $e->getMessage(),
+                );
+            }
             try {
                 // First operate on the buffer.
                 $callback($buffer);
@@ -186,7 +200,7 @@ trait BufferTrait
 
         if ($expectedSize !== $actualSize) {
             throw new IOException(
-                'The file size of the buffer at does not add up.',
+                'The file size of the buffer does not add up.',
             );
         }
     }
