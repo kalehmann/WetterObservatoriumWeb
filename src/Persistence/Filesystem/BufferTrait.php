@@ -75,7 +75,7 @@ trait BufferTrait
 
         try {
             return new self($contents, $format);
-        } catch(IOException $e) {
+        } catch (IOException $e) {
             throw new IOException(
                 'Error while opening buffer at ' . $path .
                 ' : ' . $e->getMessage(),
@@ -122,7 +122,7 @@ trait BufferTrait
                     $data,
                     $format,
                 );
-            } catch(IOException $e) {
+            } catch (IOException $e) {
                 throw new IOException(
                     'Error while opening buffer at ' . $path .
                     ' : ' . $e->getMessage(),
