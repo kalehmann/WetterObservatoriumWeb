@@ -30,6 +30,9 @@
         "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
+	"files": [
+	    "src/functions.php"
+	],
 	"psr-4": {
 	    "KaLehmann\\WetterObservatoriumWeb\\": "src/"
 	}

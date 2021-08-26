@@ -56,25 +56,7 @@ use function DI\create;
 use function DI\env;
 use function DI\factory;
 use function DI\get;
-
-if (!function_exists('env_var')) {
-    function env_var(
-        string $name,
-        ?string $default = null,
-    ): ?string {
-        $var = $_ENV[$name] ?? $_SERVER[$name];
-        if ($var) {
-            return $var;
-        }
-
-        $var = getenv($name);
-        if ($var) {
-            return $var;
-        }
-
-        return $default;
-    }
-}
+use function KaLehmann\WetterObservatoriumWeb\env_var;
 
 return [
     DataLocator::class => create()
