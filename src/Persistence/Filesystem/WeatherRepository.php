@@ -28,6 +28,7 @@ use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Persistence\CondensationException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherCondensator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Repository for all weather related data.
@@ -46,6 +47,8 @@ class WeatherRepository implements WeatherRepositoryInterface
 
     private DataLocator $dataLocator;
 
+    private LoggerInterface $logger;
+
     /**
      * @var array<string, RingBuffer>
      */
@@ -54,9 +57,11 @@ class WeatherRepository implements WeatherRepositoryInterface
     public function __construct(
         BufferCreator $bufferCreator,
         DataLocator $dataLocator,
+        LoggerInterface $logger,
     ) {
         $this->bufferCreator = $bufferCreator;
         $this->dataLocator = $dataLocator;
+        $this->logger = $logger;
     }
 
     /**

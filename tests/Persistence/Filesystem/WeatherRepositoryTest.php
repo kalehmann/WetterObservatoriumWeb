@@ -32,6 +32,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\RingBuffer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\WeatherRepository;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RunTimeException;
 
 /**
@@ -166,10 +167,12 @@ class WeatherRepositoryTest extends TestCase
                     ->willReturn($pathYear);
 
         $bufferCreator = new BufferCreator($dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $dataLocator,
+            $loggerMock,
         );
         $this->assertFileDoesNotExist($path24h);
         $this->assertFileDoesNotExist($path31d);
@@ -242,9 +245,11 @@ class WeatherRepositoryTest extends TestCase
         );
 
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $weatherRepository->persist(
@@ -346,9 +351,11 @@ class WeatherRepositoryTest extends TestCase
         );
 
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $weatherRepository->persist(
@@ -419,9 +426,11 @@ class WeatherRepositoryTest extends TestCase
         $unixtime = $hour->getTimestamp();
 
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $weatherRepository->persist(
@@ -454,9 +463,11 @@ class WeatherRepositoryTest extends TestCase
     public function testQuery24hWithoutBuffer(): void
     {
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $this->expectException(IOException::class);
@@ -503,9 +514,11 @@ class WeatherRepositoryTest extends TestCase
             },
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             new BufferCreator($this->dataLocator),
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEquals(
             [
@@ -527,9 +540,11 @@ class WeatherRepositoryTest extends TestCase
     public function testQuery31dWithoutBuffer(): void
     {
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $this->expectException(IOException::class);
@@ -576,9 +591,11 @@ class WeatherRepositoryTest extends TestCase
             },
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             new BufferCreator($this->dataLocator),
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEquals(
             [
@@ -609,9 +626,11 @@ class WeatherRepositoryTest extends TestCase
             $this->quantity,
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEqualsCanonicalizing(
             ['aquarium', 'home', $this->location],
@@ -641,9 +660,11 @@ class WeatherRepositoryTest extends TestCase
     public function testQueryMonthWithoutBuffer(): void
     {
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $this->expectException(IOException::class);
@@ -694,9 +715,11 @@ class WeatherRepositoryTest extends TestCase
             },
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             new BufferCreator($this->dataLocator),
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEquals(
             [
@@ -729,9 +752,11 @@ class WeatherRepositoryTest extends TestCase
             'quantity02',
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEqualsCanonicalizing(
             ['quantity01', 'quantity02'],
@@ -760,9 +785,11 @@ class WeatherRepositoryTest extends TestCase
     public function testQueryYearWithoutBuffer(): void
     {
         $bufferCreator = new BufferCreator($this->dataLocator);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             $bufferCreator,
             $this->dataLocator,
+            $loggerMock,
         );
 
         $this->expectException(IOException::class);
@@ -811,9 +838,11 @@ class WeatherRepositoryTest extends TestCase
             },
         );
 
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $weatherRepository = new WeatherRepository(
             new BufferCreator($this->dataLocator),
             $this->dataLocator,
+            $loggerMock,
         );
         $this->assertEquals(
             [
