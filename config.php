@@ -58,7 +58,10 @@ use function DI\factory;
 use function DI\get;
 
 if (!function_exists('env_var')) {
-    function env_var(string $name, string|bool|null $default = false): ?string {
+    function env_var(
+        string $name,
+        ?string $default = null,
+    ): ?string {
         $var = $_ENV[$name] ?? $_SERVER[$name];
         if ($var) {
             return $var;
@@ -88,7 +91,7 @@ return [
                 'cache' => factory(
                     function (ContainerInterface $container): false|string {
                         $cachePath = env_var('TWIG_CACHE');
-                        if (false === $cachePath) {
+                        if (null === $cachePath) {
                             return false;
                         }
 
@@ -119,7 +122,7 @@ return [
                 new StreamHandler('php://stdout', Logger::DEBUG),
             );
             $logFile = env_var('LOG_FILE');
-            if (false === $logFile) {
+            if (null === $logFile) {
                 return $logger;
             }
 
