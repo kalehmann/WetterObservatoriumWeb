@@ -57,6 +57,12 @@ use function DI\env;
 use function DI\factory;
 use function DI\get;
 
+if (!function_exists('env_var')) {
+    function env_var(string $name, $default = false): ?string {
+        return $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name, false, $default);
+    }
+}
+
 return [
     DataLocator::class => create()
         ->constructor(
@@ -70,8 +76,8 @@ return [
                 ),
             [
                 'cache' => factory(
-                    function (ContainerInterface $container) {
-                        $cachePath = getenv('TWIG_CACHE');
+                    function (ContainerInterface $container): false|string {
+                        $cachePath = env_var('TWIG_CACHE');
                         if (false === $cachePath) {
                             return false;
                         }
