@@ -27,6 +27,7 @@ use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use Narrowspark\HttpEmitter\SapiEmitter;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Log\LoggerInterface;
 use Relay\Relay;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -39,6 +40,18 @@ $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/../config.php');
 $builder->useAnnotations(false);
 $container = $builder->build();
+$logger = $container->get(LoggerInterface::class);
+
+set_exception_handler(
+    function (Throwable $exception) use ($logger): bool {
+        $logger->error(
+            $exception::class . ' in ' . $exception->getFile() . ':' .
+            $exception->getLine() .' : ' . $exception->getMessage(),
+        );
+
+        return true;
+    },
+);
 
 $serverRequestCreator = $container->get(ServerRequestCreator::class);
 $request = $serverRequestCreator->fromGlobals();
