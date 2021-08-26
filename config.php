@@ -102,12 +102,36 @@ return [
             get(LoggerInterface::class),
             get(Psr17Factory::class)
         ),
-    LoggerInterface::class => create(Logger::class)
-        ->constructor('WetterObservatoriumWeb')
-        ->method(
-            'pushHandler',
-            new StreamHandler('php://stdout', Logger::DEBUG)
-        ),
+    LoggerInterface::class => factory(
+        function (ContainerInterface $container): LoggerInterface {
+            $logger = new Logger('WetterObservatoriumWeb');
+            $logger->pushHandler(
+                new StreamHandler('php://stdout', Logger::DEBUG),
+            );
+            $logFile = env_var('LOG_FILE');
+            if (false === $logFile) {
+                return $logger;
+            }
+
+            if (strlen($logFile) &&
+                $logFile[0] === DIRECTORY_SEPARATOR) {
+                $logger->pushHandler(
+                    new StreamHandler($logFile, Logger::DEBUG),
+                );
+
+                return $logger;
+            }
+
+            $logger->pushHandler(
+                new StreamHandler(
+                    __DIR__ . DIRECTORY_SEPARATOR . $logFile,
+                    Logger::DEBUG,
+                ),
+            );
+
+            return $logger;
+        }
+    ),
     NormalizerInterface::class => create(Normalizer::class)
         ->method(
             'setQuantityNormalizers',
