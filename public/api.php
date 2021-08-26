@@ -43,13 +43,11 @@ $container = $builder->build();
 $logger = $container->get(LoggerInterface::class);
 
 set_exception_handler(
-    function (Throwable $exception) use ($logger): bool {
+    function (Throwable $exception) use ($logger): void {
         $logger->error(
             $exception::class . ' in ' . $exception->getFile() . ':' .
             $exception->getLine() .' : ' . $exception->getMessage(),
         );
-
-        return true;
     },
 );
 
