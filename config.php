@@ -58,8 +58,18 @@ use function DI\factory;
 use function DI\get;
 
 if (!function_exists('env_var')) {
-    function env_var(string $name, $default = false): ?string {
-        return $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name, false, $default);
+    function env_var(string $name, string|bool|null $default = false): ?string {
+        $var = $_ENV[$name] ?? $_SERVER[$name];
+        if ($var) {
+            return $var;
+        }
+
+        $var = getenv($name);
+        if ($var) {
+            return $var;
+        }
+
+        return $default;
     }
 }
 
