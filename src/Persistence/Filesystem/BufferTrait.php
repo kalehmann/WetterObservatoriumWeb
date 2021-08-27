@@ -173,7 +173,7 @@ trait BufferTrait
     /**
      * Read the data form $content into the buffer.
      *
-     * @param string $contents the binary contents of the buffer.
+     * @param string $content the binary contents of the buffer.
      * @param int $elementCount the number of elements in the buffer.
      */
     private function readData(string $content, int $elementCount): void
