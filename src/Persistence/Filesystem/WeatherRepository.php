@@ -449,7 +449,7 @@ class WeatherRepository implements WeatherRepositoryInterface
      *                           {@see Bufferinterface::class} as single
      *                           parameter. All actions on the buffer are
      *                           exclusive without concurrent access
-     *                           from paralell calls to this method.
+     *                           from parallel calls to this method.
      */
     private function operateExclusiveOnBuffer(
         string $path,
