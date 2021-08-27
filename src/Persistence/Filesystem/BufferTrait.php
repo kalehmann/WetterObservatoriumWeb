@@ -167,15 +167,18 @@ trait BufferTrait
      */
     public function count(): int
     {
-        return $this->count;
+        return count($this->data);
     }
 
     /**
      * Read the data form $content into the buffer.
+     *
+     * @param string $contents the binary contents of the buffer.
+     * @param int $elementCount the number of elements in the buffer.
      */
-    private function readData(string $content): void
+    private function readData(string $content, int $elementCount): void
     {
-        $dataSize = $this->count * $this->elementSize;
+        $dataSize = $elementCount * $this->elementSize;
         if (!$dataSize) {
             return;
         }
@@ -190,12 +193,15 @@ trait BufferTrait
     /**
      * Checks that $content matches the packed size of the buffer.
      *
+     * @param string $content the content of the buffer.
+     * @param int $elementCount the expected number of elements.
+     *
      * @throws IOException if the size of $contents does not match the packed
      * buffer.
      */
-    private function validateBufferSize(string $content): void
+    private function validateBufferSize(string $content, int $elementCount): void
     {
-        $expectedSize = self::getHeaderSize() + $this->count * $this->elementSize;
+        $expectedSize = self::getHeaderSize() + $elementCount * $this->elementSize;
         $actualSize = strlen($content);
 
         if ($expectedSize !== $actualSize) {

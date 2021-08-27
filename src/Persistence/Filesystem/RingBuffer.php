@@ -66,9 +66,11 @@ class RingBuffer implements BufferInterface
         $this->elementSize = DataPacker::getElementSize($format);
         $this->formatSpec = $format;
 
-        [$this->count, $this->index] = $this->readHeader($contents);
-        $this->validateBufferSize($contents);
-        $this->readData($contents);
+        [$elementCount, $this->index] = $this->readHeader($contents);
+        $this->validateBufferSize($contents, $elementCount);
+        // Fill ring buffer with zeros.
+        $this->data = array_fill(0, $elementCount, 0);
+        $this->readData($contents, $elementCount);
     }
 
     /**
@@ -163,7 +165,7 @@ class RingBuffer implements BufferInterface
     public function getIterator(): Generator
     {
         for ($i = 1; $i <= $this->count(); $i++) {
-            yield $this->data[($this->index + $i) % $this->count];
+            yield $this->data[($this->index + $i) % $this->count()];
         }
     }
 
@@ -184,7 +186,7 @@ class RingBuffer implements BufferInterface
     {
         return pack(
             self::getHeaderFormat(),
-            $this->count,
+            $this->count(),
             $this->index,
         ) . join(
             '',

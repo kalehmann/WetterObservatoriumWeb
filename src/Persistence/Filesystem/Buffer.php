@@ -45,10 +45,10 @@ class Buffer implements BufferInterface
         $this->elementSize = DataPacker::getElementSize($format);
         $this->formatSpec = $format;
 
-        $this->count = $this->readHeader($contents);
+        $elementCount = $this->readHeader($contents);
         $this->data = [];
-        $this->validateBufferSize($contents);
-        $this->readData($contents);
+        $this->validateBufferSize($contents, $elementCount);
+        $this->readData($contents, $elementCount);
     }
 
     /**
@@ -119,7 +119,6 @@ class Buffer implements BufferInterface
             );
         }
 
-        $this->count += 1;
         $this->data[] = $entry;
     }
 

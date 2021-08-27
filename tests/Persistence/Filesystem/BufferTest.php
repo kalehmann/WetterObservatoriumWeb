@@ -139,12 +139,12 @@ class BufferTest extends TestCase
 
             $buffer = Buffer::fromFile($tempFile, 'q');
             $this->assertEquals(
-                4,
-                count($buffer),
-            );
-            $this->assertEquals(
                 [[1], [2], [3], [4]],
                 iterator_to_array($buffer),
+            );
+            $this->assertEquals(
+                4,
+                count($buffer),
             );
         } finally {
             unlink($tempFile);
