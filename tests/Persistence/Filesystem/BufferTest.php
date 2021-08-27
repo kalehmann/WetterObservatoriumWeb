@@ -129,6 +129,12 @@ class BufferTest extends TestCase
             sys_get_temp_dir(),
             'testFromFile',
         );
+        if (false === $tempFile) {
+            throw new RunTimeException(
+                'Could not get a temporary file name for a test',
+            );
+        }
+
         try {
             $buffer = Buffer::createNew('q');
             $buffer->addEntry([1]);
