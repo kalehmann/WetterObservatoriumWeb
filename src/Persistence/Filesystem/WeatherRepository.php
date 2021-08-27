@@ -200,7 +200,7 @@ class WeatherRepository implements WeatherRepositoryInterface
                             $quantity,
                             $yearPath,
                         ) {
-                             $this->logger->debug(
+                            $this->logger->debug(
                                 'Condensating data of the hour before ' .
                                 gmdate('H:i d.m.Y', $lastHour) .
                                 ' for the ' . $quantity . ' at ' . $location .
