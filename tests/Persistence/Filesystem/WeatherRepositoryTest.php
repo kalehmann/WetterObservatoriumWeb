@@ -285,7 +285,7 @@ class WeatherRepositoryTest extends TestCase
         [$timestamp, $value] = iterator_to_array($yearBuffer)[0];
         $this->assertEquals(2, $value);
         $this->assertEquals(
-            '2021-05-22',
+            '2021-05-23',
             date('Y-m-d', $timestamp),
         );
     }
