@@ -121,6 +121,37 @@ class BufferTest extends TestCase
     }
 
     /**
+     * Check that a buffer can be loaded from a file.
+     */
+    public function testFromFile(): void
+    {
+        $tempFile = tempnam(
+            sys_get_temp_dir(),
+            'testFromFile',
+        );
+        try {
+            $buffer = Buffer::createNew('q');
+            $buffer->addEntry([1]);
+            $buffer->addEntry([2]);
+            $buffer->addEntry([3]);
+            $buffer->addEntry([4]);
+            file_put_contents($tempFile, (string)$buffer);
+
+            $buffer = Buffer::fromFile($tempFile, 'q');
+            $this->assertEquals(
+                4,
+                count($buffer),
+            );
+            $this->assertEquals(
+                [[1], [2], [3], [4]],
+                iterator_to_array($buffer),
+            );
+        } finally {
+            unlink($tempFile);
+        }
+    }
+
+    /**
      * Check that the buffer can be iterated.
      */
     public function testIteration(): void
