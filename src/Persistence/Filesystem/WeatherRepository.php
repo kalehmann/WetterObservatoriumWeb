@@ -145,7 +145,7 @@ class WeatherRepository implements WeatherRepositoryInterface
                 if ($timestamp->getTimestamp() - $lastEntryTime < 60 * 4) {
                     // Minimal difference between two entries should be 4
                     // minutes.
-                    $logger->debug(
+                    $this->logger->debug(
                         'Do not add new data at ' .
                         $timestamp->format('H:i d.m.Y') .
                         ', the last data was added at ' .
@@ -475,7 +475,7 @@ class WeatherRepository implements WeatherRepositoryInterface
      *                           {@see Bufferinterface::class} as single
      *                           parameter. All actions on the buffer are
      *                           exclusive without concurrent access
-     *                           from paralell calls to this method.
+     *                           from parallel calls to this method.
      */
     private function operateExclusiveOnRingBuffer(
         string $path,
