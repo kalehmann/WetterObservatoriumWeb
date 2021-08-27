@@ -69,7 +69,7 @@ class RingBuffer implements BufferInterface
         [$elementCount, $this->index] = $this->readHeader($contents);
         $this->validateBufferSize($contents, $elementCount);
         // Fill ring buffer with zeros.
-        $this->data = array_fill(0, $elementCount, 0);
+        $this->data = array_fill(0, $elementCount, [0 => 0]);
         $this->readData($contents, $elementCount);
     }
 
