@@ -133,8 +133,10 @@ class WeatherRepository implements WeatherRepositoryInterface
             function (RingBuffer $ringBuffer) use (
                 $lastHour,
                 $lastMidnight,
+                $location,
                 $monthPath,
                 $path31d,
+                $quantity,
                 $timestamp,
                 $value,
                 $yearPath,
@@ -157,13 +159,21 @@ class WeatherRepository implements WeatherRepositoryInterface
                         self::BUFFER_FORMAT,
                         function (Buffer $yearBuffer) use (
                             $data,
-                            $lastEntryTime,
                             $lastMidnight,
+                            $location,
+                            $quantity,
+                            $yearPath,
                         ) {
+                            $this->logger->debug(
+                                'Condensating data of the day before ' .
+                                gmdate('H:i d.m.Y', $lastMidnight) .
+                                ' for the ' . $quantity . ' at ' . $location .
+                                ' into the buffer at ' . $yearPath,
+                            );
                             try {
                                 $yearBuffer->addEntry(
                                     [
-                                        $lastEntryTime,
+                                        $lastMidnight,
                                         WeatherCondensator::condensateDay(
                                             new ArrayIterator($data),
                                             $lastMidnight,
@@ -186,7 +196,16 @@ class WeatherRepository implements WeatherRepositoryInterface
                         function (Buffer $monthBuffer) use (
                             $data,
                             $lastHour,
+                            $location,
+                            $quantity,
+                            $yearPath,
                         ) {
+                             $this->logger->debug(
+                                'Condensating data of the hour before ' .
+                                gmdate('H:i d.m.Y', $lastHour) .
+                                ' for the ' . $quantity . ' at ' . $location .
+                                ' into the buffer at ' . $yearPath,
+                            );
                             try {
                                 $monthBuffer->addEntry(
                                     [
