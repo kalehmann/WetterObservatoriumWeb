@@ -142,7 +142,7 @@ class Buffer implements BufferInterface
     {
         return pack(
             self::getHeaderFormat(),
-            $this->count,
+            $this->count(),
         ) . join(
             '',
             array_map(
