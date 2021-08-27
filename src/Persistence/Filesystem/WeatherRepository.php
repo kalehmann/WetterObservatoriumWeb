@@ -145,6 +145,14 @@ class WeatherRepository implements WeatherRepositoryInterface
                 if ($timestamp->getTimestamp() - $lastEntryTime < 60 * 4) {
                     // Minimal difference between two entries should be 4
                     // minutes.
+                    $logger->debug(
+                        'Do not add new data at ' .
+                        $timestamp->format('H:i d.m.Y') .
+                        ', the last data was added at ' .
+                        gmdate('H:i d.m.Y', $lastEntryTime) .
+                        ' - less than 4 minutes ago.',
+                    );
+
                     return;
                 }
                 $data = [];
