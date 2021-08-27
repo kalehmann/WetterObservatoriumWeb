@@ -163,7 +163,7 @@ trait BufferTrait
     }
 
     /**
-     * Get the number of entries in the ring buffer.
+     * Get the number of entries in the buffer.
      */
     public function count(): int
     {
