@@ -30,6 +30,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Action for storing weather data.
@@ -44,6 +45,7 @@ class AddDataAction
      * Adds data for the specified location.
      */
     public function __invoke(
+        LoggerInterface $logger,
         NormalizerInterface $normalizer,
         Psr17Factory $psr17Factory,
         RequestInterface $request,
@@ -56,6 +58,11 @@ class AddDataAction
         }
 
         $now = new DateTimeImmutable();
+        $logger->debug(
+            'Adding measured values for timestamp ' .
+            $now->format('H:i d.m.Y') . ' at location "' . $location . '" : ' .
+            json_encode($payload),
+        );
         foreach ($payload as $quantity => $value) {
             $weatherRepository->persist(
                 $location,

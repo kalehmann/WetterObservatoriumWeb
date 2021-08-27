@@ -31,6 +31,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RunTimeException;
 
 /**
@@ -44,6 +45,7 @@ class AddDataActionTest extends TestCase
      */
     public function testWithInvalidRequest(): void
     {
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $normalizer = new Normalizer();
         $psr17Factory = $this->createMock(Psr17Factory::class);
         $psr17Factory->expects($this->once())
@@ -60,6 +62,7 @@ class AddDataActionTest extends TestCase
 
         $action = new AddDataAction();
         $response = ($action)(
+            $loggerMock,
             $normalizer,
             $psr17Factory,
             $request,
@@ -77,6 +80,7 @@ class AddDataActionTest extends TestCase
      */
     public function testWithValidRequest(): void
     {
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $normalizerMock = $this->createMock(NormalizerInterface::class);
         $normalizerMock->expects($this->exactly(2))
                        ->method('normalizeValue')
@@ -130,6 +134,7 @@ class AddDataActionTest extends TestCase
 
         $action = new AddDataAction();
         $response = ($action)(
+            $loggerMock,
             $normalizerMock,
             $psr17Factory,
             $request,
