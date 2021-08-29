@@ -23,7 +23,7 @@ jobs:
                           uses: "./.github/actions/code-sniffer"
                           with:
                                   source-directories: >-
-                                          config.php public/ src/ tests/
+                                          config.php public/api.php src/ tests/
         unit-tests:
                 runs-on: "ubuntu-latest"
                 name: "PHPUnit tests"
