@@ -14,7 +14,7 @@ style-check:
         script:
                 - >-
                         /usr/bin/env php vendor/bin/phpcs
-                        --standard=PSR2 config.php public/ src/ tests/
+                        --standard=PSR2 config.php public/api.php src/ tests/
 
 unit_tests:
         script:
