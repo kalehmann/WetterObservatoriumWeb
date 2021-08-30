@@ -1,8 +1,15 @@
 {
-  "name": "WetterObservatoriumWeb",
-  "packageManager": "yarn@3.0.1",
+  "author": {
+    "name": "Karsten Lehmann",
+    "email": "mail@kalehmann.de",
+    "url": "https://kalehmann.de/"
+  },
   "devDependencies": {
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
-  }
+  },
+  "license": "AGPL-3.0-or-later",
+  "name": "WetterObservatoriumWeb",
+  "packageManager": "yarn@3.0.1",
+  "private": true
 }
