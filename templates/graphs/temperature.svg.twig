@@ -4,8 +4,13 @@
 {% set sepWidth = frameSize / (dataCount + 1) %}
 {% set tMax = 60 %}
 {% set tMin = -30 %}
-{% set timeMax = max(data["temperature"]|keys) %}
-{% set timeMin = min(data["temperature"]|keys) %}
+{% if dataCount %}
+   {% set timeMax = max(data["temperature"]|keys) %}
+   {% set timeMin = min(data["temperature"]|keys) %}
+{% else %}
+   {% set timeMax = date().timestamp %}
+   {% set timeMin = date().timestamp - 3600 * 24 %}
+{% endif %}
 
 {% block graph %}
    {% for timestamp, value in data["temperature"] %}

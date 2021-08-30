@@ -4,8 +4,13 @@
 {% set sepWidth = frameSize / (dataCount + 1) %}
 {% set pMax = 1150 %}
 {% set pMin = 850 %}
-{% set timeMax = max(data["pressure"]|keys) %}
-{% set timeMin = min(data["pressure"]|keys) %}
+{% if dataCount %}
+   {% set timeMax = max(data["pressure"]|keys) %}
+   {% set timeMin = min(data["pressure"]|keys) %}
+{% else %}
+   {% set timeMax = date().timestamp %}
+   {% set timeMin = date().timestamp - 3600 * 24 %}
+{% endif %}
 
 {% block graph %}
    {% for timestamp, value in data["pressure"] %}
