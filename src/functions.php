@@ -41,7 +41,7 @@ if (!function_exists('KaLehmann\WetterObservatoriumWeb\env_var')) {
         string $name,
         ?string $default = null,
     ): ?string {
-        $var = $_ENV[$name] ?? $_SERVER[$name];
+        $var = $_ENV[$name] ?? $_SERVER[$name] ?? null;
         if ($var) {
             return $var;
         }
