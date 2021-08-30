@@ -28,7 +28,6 @@ use DateTimeImmutable;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\Buffer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\BufferCreator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
-use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\RingBuffer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\WeatherRepository;
 use PHPUnit\Framework\TestCase;
@@ -458,7 +457,7 @@ class WeatherRepositoryTest extends TestCase
 
     /**
      * Check that trying to query the data of the last 24 hours without
-     * the 24h ring buffer results in an exception.
+     * the 24h ring buffer returns an empty array.
      */
     public function testQuery24hWithoutBuffer(): void
     {
@@ -470,10 +469,12 @@ class WeatherRepositoryTest extends TestCase
             $loggerMock,
         );
 
-        $this->expectException(IOException::class);
-        $weatherRepository->query24h(
-            'unknown_location',
-            'unknown_quantity',
+        $this->assertEquals(
+            [],
+            $weatherRepository->query24h(
+                'unknown_location',
+                'unknown_quantity',
+            ),
         );
     }
 
@@ -535,7 +536,7 @@ class WeatherRepositoryTest extends TestCase
 
     /**
      * Check that trying to query the data of the last 31 days without
-     * the 31d ring buffer results in an exception.
+     * the 31d ring buffer returns an empty array.
      */
     public function testQuery31dWithoutBuffer(): void
     {
@@ -547,10 +548,12 @@ class WeatherRepositoryTest extends TestCase
             $loggerMock,
         );
 
-        $this->expectException(IOException::class);
-        $weatherRepository->query31d(
-            'unknown_location',
-            'unknown_quantity',
+        $this->assertEquals(
+            [],
+            $weatherRepository->query31d(
+                'unknown_location',
+                'unknown_quantity',
+            ),
         );
     }
 
@@ -655,7 +658,7 @@ class WeatherRepositoryTest extends TestCase
 
     /**
      * Check that trying to query the data of a month without the buffer for
-     * the month existing results in an exception.
+     * the month existing returns an empty array.
      */
     public function testQueryMonthWithoutBuffer(): void
     {
@@ -667,12 +670,14 @@ class WeatherRepositoryTest extends TestCase
             $loggerMock,
         );
 
-        $this->expectException(IOException::class);
-        $weatherRepository->queryMonth(
-            $this->location,
-            $this->quantity,
-            $this->year,
-            $this->month + 1,
+        $this->assertEquals(
+            [],
+            $weatherRepository->queryMonth(
+                $this->location,
+                $this->quantity,
+                $this->year,
+                $this->month + 1,
+            ),
         );
     }
 
@@ -780,7 +785,7 @@ class WeatherRepositoryTest extends TestCase
 
     /**
      * Check that trying to query the data of a year without the buffer for
-     * the year existing results in an exception.
+     * the year existing returns an empty array.
      */
     public function testQueryYearWithoutBuffer(): void
     {
@@ -792,11 +797,13 @@ class WeatherRepositoryTest extends TestCase
             $loggerMock,
         );
 
-        $this->expectException(IOException::class);
-        $weatherRepository->queryYear(
-            $this->location,
-            $this->quantity,
-            $this->year + 1,
+        $this->assertEquals(
+            [],
+            $weatherRepository->queryYear(
+                $this->location,
+                $this->quantity,
+                $this->year + 1,
+            ),
         );
     }
 

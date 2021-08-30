@@ -270,6 +270,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         string $quantity,
     ): array {
         $path24h = $this->dataLocator->get24hPath($location, $quantity);
+        if (false === file_exists($path24h)) {
+            return [];
+        }
         $buffer24h = $this->openRingBuffer($path24h, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer24h as $elements) {
@@ -289,6 +292,9 @@ class WeatherRepository implements WeatherRepositoryInterface
         string $quantity,
     ): array {
         $path31d = $this->dataLocator->get31dPath($location, $quantity);
+        if (false === file_exists($path31d)) {
+            return [];
+        }
         $buffer31d = $this->openRingBuffer($path31d, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer31d as $elements) {
@@ -332,6 +338,9 @@ class WeatherRepository implements WeatherRepositoryInterface
             $year,
             $month,
         );
+        if (false === file_exists($monthPath)) {
+            return [];
+        }
         $buffer = $this->openBuffer($monthPath, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer as $elements) {
@@ -385,6 +394,9 @@ class WeatherRepository implements WeatherRepositoryInterface
             $quantity,
             $year,
         );
+        if (false === file_exists($yearPath)) {
+            return [];
+        }
         $buffer = $this->openBuffer($yearPath, self::BUFFER_FORMAT);
         $data = [];
         foreach ($buffer as $elements) {
