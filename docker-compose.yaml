@@ -10,10 +10,16 @@ services:
                                 NODE_VERSION: "16"
                         context: "."
                         target: "wo_node"
+                command:
+                        - "yarn"
+                        - "run"
+                        - "webpack"
+                        - "--mode=development"
+                        - "--watch"
                 user: "node"
-                working_dir: "/application"
                 volumes:
                         - ".:/application"
+                working_dir: "/application"
         php:
                 build:
                         args:
