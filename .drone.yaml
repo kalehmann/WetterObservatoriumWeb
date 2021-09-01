@@ -12,6 +12,12 @@ steps:
           image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
           commands:
                   - "composer install --no-dev --classmap-authoritative"
+        - name: "Run webpack"
+          image: "node:16-alpine"
+          commands:
+                  - "yarn run webpack --mode=production"
+          depends_on:
+                  - "Install the Node dependencies"
         - name: "Deploy the website"
           image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
           commands:
@@ -37,8 +43,8 @@ steps:
                         public_html/blumenwetter-kalehmann-de;
                       exit;"'
           depends_on:
-                  - "Install the Node dependencies"
                   - "Install the PHP dependencies"
+                  - "Run webpack"
           environment:
                   ENV_FILE:
                           from_secret: "env_file"
