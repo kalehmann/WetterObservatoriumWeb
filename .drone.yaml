@@ -30,13 +30,21 @@ steps:
                         --delete
                         --exclude=^.dockerignore
                         --exclude=^.drone.yaml
+                        --exclude=^.editorconfig
                         --exclude=^.git
+                        --exclude=^.pnp.cjs
+                        --exclude=^.yarn
+                        --exclude=^.yarnrc.yml
+                        --exclude=^assets
                         --exclude=^data
                         --exclude=^doc
                         --exclude=^docker
                         --exclude=^Dockerfile
+                        --exclude=^package.json
                         --exclude=^scripts
                         --exclude=^tests
+                        --exclude=^webpack.config.js
+                        --exclude=^yarn.lock
                         --parallel=20
                         --reverse
                         $(pwd)
