@@ -4,7 +4,11 @@ type: "docker"
 name: "deployment"
 
 steps:
-        - name: "Install the dependencies"
+        - name: "Install the Node dependencies"
+          image: "node:16-alpine"
+          commands:
+                  - "yarn install"
+        - name: "Install the PHP dependencies"
           image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
           commands:
                   - "composer install --no-dev --classmap-authoritative"
@@ -33,7 +37,8 @@ steps:
                         public_html/blumenwetter-kalehmann-de;
                       exit;"'
           depends_on:
-                  - "Install the dependencies"
+                  - "Install the Node dependencies"
+                  - "Install the PHP dependencies"
           environment:
                   ENV_FILE:
                           from_secret: "env_file"
