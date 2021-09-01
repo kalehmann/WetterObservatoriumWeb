@@ -5,22 +5,25 @@
 {% set pMax = 1150 %}
 {% set pMin = 850 %}
 {% if dataCount %}
-   {% set timeMax = max(data["pressure"]|keys) %}
-   {% set timeMin = min(data["pressure"]|keys) %}
+    {% set timeMax = max(data["pressure"]|keys) %}
+    {% set timeMin = min(data["pressure"]|keys) %}
 {% else %}
-   {% set timeMax = date().timestamp %}
-   {% set timeMin = date().timestamp - 3600 * 24 %}
+    {% set timeMax = date().timestamp %}
+    {% set timeMin = date().timestamp - 3600 * 24 %}
 {% endif %}
 
 {% block graph %}
-   {% for timestamp, value in data["pressure"] %}
-        <rect
-            x="{{ timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) }}"
-            y="{{ value|mapRange(pMin, pMax, frameSize - 40, 0) }}"
-            width="10"
-            height="10"
-        ></rect>
+    <path d="
+    {% for timestamp, value in data["pressure"] %}
+        {% set x = timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) %}
+	{% set y = value|mapRange(pMin, pMax, frameSize - 40, 0) %}
+        {% if loop.index == 1 %}
+	    M {{ x }} {{ y }}
+	{% else %}
+	    L {{ x }} {{ y }}
+	{% endif %}
     {% endfor %}
+    " fill="transparent" stroke="black" stroke-width="2" />
 {% endblock %}
 
 {% block xticks %}
