@@ -6,13 +6,27 @@
     <title>Wetter Observatorium</title>
   </head>
   <body>
-    <h1>Wetter Observatorium</h1>
-
-    <h2>Außen</h2>
-    <img src="/api/outdoor/temperature.svg" alt="Außentemperatur der letzten 24 Stunden"></img>
-
-    <img src="/api/outdoor/pressure.svg" alt="Luftdruck der letzten 24 Stunden"></img>
-
-    <a href="https://github.com/kalehmann/WetterObservatoriumWeb">Quellcode auf GitHub</a>
+    <header>
+      <h1>Wetter Observatorium</h1>
+    </header>
+    <main>
+      <section>
+	<h2>Außentemperatur</h2>
+	<figure>
+	  <img src="/api/outdoor/temperature.svg" alt="Außentemperatur der letzten 24 Stunden"></img>
+	  <figcaption>Außentemperatur der letzten 24 Stunden</figcaption>
+	</figure>
+      </section>
+      <section>
+	<h2>Luftdruck</h2>
+	<figure>
+	  <img src="/api/outdoor/pressure.svg" alt="Luftdruck der letzten 24 Stunden"></img>
+	  <figcaption>Luftdruck der letzten 24 Stunden</figcaption>
+	</figure>
+      </section>
+    </main>
+    <footer>
+      <a href="https://github.com/kalehmann/WetterObservatoriumWeb">Quellcode auf GitHub</a>
+    </footer>
   </body>
 </html>
