@@ -1,7 +1,6 @@
 {% extends 'graphs/graph.svg.twig' %}
 
 {% set dataCount = data["temperature"]|length %}
-{% set sepWidth = frameSize / (dataCount + 1) %}
 {% set tMax = 60 %}
 {% set tMin = -30 %}
 {% if dataCount %}
