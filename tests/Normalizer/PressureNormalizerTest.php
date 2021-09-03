@@ -55,12 +55,12 @@ class PressureNormalizerTest extends TestCase
         $normalizer = new PressureNormalizer();
 
         $this->assertEquals(
-            1013,
+            10133,
             $normalizer->normalizeValue(1013.25),
         );
 
         $this->assertEquals(
-            1000,
+            10000,
             $normalizer->normalizeValue(999.99),
         );
     }
@@ -73,8 +73,8 @@ class PressureNormalizerTest extends TestCase
     {
         $normalizer = new PressureNormalizer();
         $this->assertEquals(
-            42,
-            $normalizer->denormalizeValue(42),
+            42.5,
+            $normalizer->denormalizeValue(425),
         );
     }
 }

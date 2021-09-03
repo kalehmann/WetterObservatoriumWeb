@@ -27,7 +27,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Normalizer;
  * Converts measured pressure values (hecto-Pascal) into unsigned integers
  * and back.
  */
-class PressureNormalizer extends DummyNormalizer
+class PressureNormalizer implements QuantityNormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -35,5 +35,21 @@ class PressureNormalizer extends DummyNormalizer
     public function supportsQuantity(string $quantity): bool
     {
         return $quantity === 'pressure';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function normalizeValue(float|int $value): int
+    {
+        return (int) round($value * 10);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalizeValue(int $value): float|int
+    {
+        return $value / 10;
     }
 }

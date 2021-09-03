@@ -32,5 +32,10 @@ Eine weitere Normalisierung der Daten ist nicht erforderlich.
 
 ### Normalisierung des Lufdrucks
 
-Der Luftdruck wird in Hektopascal erfasst und auf eine ganze Zahl gerundet.
-Eine weitere Normalisierung der Daten ist nicht erforderlich.
+Der Luftdruck wird in Hektopascal erfasst.
+Zur Normalisierung wird der gemessene Wert mit `10` multipliziert und auf eine
+ganze Zahl gerundet.
+Damit wird die Speicherung als natürliche Zahl gewährleistet und eine
+Nachkommastelle bleibt erhalten.
+
+Um die Luftdruckdaten wieder auszugeben wird der Wert mit `10` dividiert.
