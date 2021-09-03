@@ -56,4 +56,68 @@ class GraphExtensionTest extends TestCase
             GraphExtension::mapRange(1, 1, 1, 0, 80),
         );
     }
+
+    /**
+     * Check that the maxTime method returns the largest timestamp from the
+     * data.
+     */
+    public function testMaxTime(): void
+    {
+        $data = [
+            1 => 6,
+            2 => 7,
+            3 => 8,
+        ];
+        $this->assertEquals(
+            3,
+            GraphExtension::maxTime($data),
+        );
+    }
+
+    /**
+     * Check that the maxTime function returns the current timestamp if called
+     * with an empty dataset.
+     */
+    public function tesMaxTimeWithEmptyDataSet(): void
+    {
+        $timeBefore = time();
+        $timeMax = GraphExtension::maxTime([]);
+        $timeAfter = time();
+
+        $this->assertTrue(
+            $timeBefore <= $timeMax && $timeMax <= $timeAfter,
+        );
+    }
+
+    /**
+     * Check that the minTime method returns the largest timestamp from the
+     * data.
+     */
+    public function testMinTime(): void
+    {
+        $data = [
+            1 => 6,
+            2 => 7,
+            3 => 8,
+        ];
+        $this->assertEquals(
+            1,
+            GraphExtension::minTime($data),
+        );
+    }
+
+    /**
+     * Check that the minTime function returns the current timestamp minus one
+     * day if called with an empty dataset.
+     */
+    public function testMinTimeWithEmptyDataSet(): void
+    {
+        $timeBefore = time() - 3600 * 24;
+        $timeMin = GraphExtension::minTime([]);
+        $timeAfter = time() - 3600 * 24;
+
+        $this->assertTrue(
+            $timeBefore <= $timeMin && $timeMin <= $timeAfter,
+        );
+    }
 }

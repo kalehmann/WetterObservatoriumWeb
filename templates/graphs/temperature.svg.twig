@@ -3,13 +3,8 @@
 {% set dataCount = data["temperature"]|length %}
 {% set tMax = 60 %}
 {% set tMin = -30 %}
-{% if dataCount %}
-    {% set timeMax = max(data["temperature"]|keys) %}
-    {% set timeMin = min(data["temperature"]|keys) %}
-{% else %}
-    {% set timeMax = date().timestamp %}
-    {% set timeMin = date().timestamp - 3600 * 24 %}
-{% endif %}
+{% set timeMax = data["temperature"]|maxTime %}
+{% set timeMin = data["temperature"]|minTime %}
 
 {% block graph %}
     <path d="

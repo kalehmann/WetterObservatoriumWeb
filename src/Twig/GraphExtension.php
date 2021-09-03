@@ -41,7 +41,49 @@ class GraphExtension extends AbstractExtension
                 'mapRange',
                 [self::class, 'mapRange'],
             ),
+            new TwigFilter(
+                'maxTime',
+                [self::class, 'maxTime'],
+            ),
+            new TwigFilter(
+                'minTime',
+                [self::class, 'minTime'],
+            ),
         ];
+    }
+
+    /**
+     * Returns the youngest timestamp contained in $data.
+     *
+     * @param array<int, float|int> $data
+     *
+     * @return int
+     */
+    public static function maxTime(array $data): int
+    {
+        $timestamps = array_keys($data);
+        if (0 === count($timestamps)) {
+            return time();
+        }
+
+        return max($timestamps);
+    }
+
+    /**
+     * Returns the oldest timestamp contained in $data.
+     *
+     * @param array<int, float|int> $data
+     *
+     * @return int
+     */
+    public static function minTime(array $data): int
+    {
+        $timestamps = array_keys($data);
+        if (0 === count($timestamps)) {
+            return time() - 3600 * 24;
+        }
+
+        return min($timestamps);
     }
 
     /**

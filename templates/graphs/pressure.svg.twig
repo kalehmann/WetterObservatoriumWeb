@@ -3,13 +3,8 @@
 {% set dataCount = data["pressure"]|length %}
 {% set pMax = 1150 %}
 {% set pMin = 850 %}
-{% if dataCount %}
-    {% set timeMax = max(data["pressure"]|keys) %}
-    {% set timeMin = min(data["pressure"]|keys) %}
-{% else %}
-    {% set timeMax = date().timestamp %}
-    {% set timeMin = date().timestamp - 3600 * 24 %}
-{% endif %}
+{% set timeMax = data["pressure"]|maxTime %}
+{% set timeMin = data["pressure"]|minTime %}
 
 {% block graph %}
     <path d="
