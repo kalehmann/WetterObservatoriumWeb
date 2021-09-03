@@ -59,4 +59,33 @@ class ListQuantitiesActionTest extends TestCase
             json_decode((string)$response->getBody()),
         );
     }
+
+    /**
+     * Check that an empty list of quantities is returned for an unknown
+     * location.
+     */
+    public function testListQuantitiesWithUnknownLocation(): void
+    {
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryQuantities')
+                          ->with('aquarium')
+                          ->willReturn([]);
+
+        $action = new ListQuantitiesAction();
+        $response = ($action)(
+            $weatherRepository,
+            'aquarium',
+            'json',
+        );
+
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEqualsCanonicalizing(
+            [],
+            json_decode((string)$response->getBody()),
+        );
+    }
 }
