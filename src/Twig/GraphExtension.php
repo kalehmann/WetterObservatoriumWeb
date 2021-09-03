@@ -29,7 +29,7 @@ use Twig\TwigFilter;
 /**
  * A Twig extension with a filter to map a number from one range to another.
  */
-class MapRangeExtension extends AbstractExtension
+class GraphExtension extends AbstractExtension
 {
     /**
      * Returns the `mapRange` filter.

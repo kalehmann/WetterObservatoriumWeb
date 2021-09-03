@@ -23,13 +23,13 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\tests\Twig;
 
-use KaLehmann\WetterObservatoriumWeb\Twig\MapRangeExtension;
+use KaLehmann\WetterObservatoriumWeb\Twig\GraphExtension;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases for the MapRangeExtension.
+ * Test cases for the GraphExtension.
  */
-class MapRangeExtensionTest extends TestCase
+class GraphExtensionTest extends TestCase
 {
     /**
      * Check that a number can be mapped from one range to another.
@@ -38,11 +38,11 @@ class MapRangeExtensionTest extends TestCase
     {
         $this->assertEquals(
             50,
-            MapRangeExtension::mapRange(5, 0, 10, 0, 100),
+            GraphExtension::mapRange(5, 0, 10, 0, 100),
         );
         $this->assertEquals(
             20,
-            MapRangeExtension::mapRange(10, 5, 30, 10, 60),
+            GraphExtension::mapRange(10, 5, 30, 10, 60),
         );
     }
 
@@ -53,7 +53,7 @@ class MapRangeExtensionTest extends TestCase
     {
         $this->assertEquals(
             40,
-            MapRangeExtension::mapRange(1, 1, 1, 0, 80),
+            GraphExtension::mapRange(1, 1, 1, 0, 80),
         );
     }
 }
