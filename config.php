@@ -39,7 +39,7 @@ use KaLehmann\WetterObservatoriumWeb\Normalizer\TemperatureNormalizer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\WeatherRepository;
 use KaLehmann\WetterObservatoriumWeb\Persistence\WeatherRepositoryInterface;
-use KaLehmann\WetterObservatoriumWeb\Twig\MapRangeExtension;
+use KaLehmann\WetterObservatoriumWeb\Twig\GraphExtension;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -89,7 +89,7 @@ return [
         )
         ->method(
             'addExtension',
-            fn (ContainerInterface $container) => $container->get(MapRangeExtension::class),
+            fn (ContainerInterface $container) => $container->get(GraphExtension::class),
         ),
     HMACAuthorizationMiddleware::class => create()
         ->constructor(
