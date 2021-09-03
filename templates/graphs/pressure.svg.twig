@@ -1,8 +1,8 @@
 {% extends 'graphs/graph.svg.twig' %}
 
 {% set dataCount = data["pressure"]|length %}
-{% set pMax = 1150 %}
-{% set pMin = 850 %}
+{% set pMax = data["pressure"]|yUpperLimit|default(1150) %}
+{% set pMin = data["pressure"]|yLowerLimit|default(850) %}
 {% set timeMax = data["pressure"]|maxTime %}
 {% set timeMin = data["pressure"]|minTime %}
 
@@ -29,7 +29,7 @@
     {% endfor %}
 {% endblock %}
 {% block yticks %}
-    {% for i in (pMin..pMax)|filter(v => v is divisible by(20)) %}
+    {% for i in yTicks(pMin, pMax) %}
         <g>
             <text stroke="black" size="2px" x="70" y="{{ i|mapRange(pMin, pMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} hPa</text>
             <rect x="90" y="{{ i|mapRange(pMin, pMax, frameSize - 40, 0) - 6 }}" width="10" height="3"></rect>

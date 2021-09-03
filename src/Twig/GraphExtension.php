@@ -25,12 +25,18 @@ namespace KaLehmann\WetterObservatoriumWeb\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * A Twig extension with a filter to map a number from one range to another.
  */
 class GraphExtension extends AbstractExtension
 {
+    /**
+     * Maximum number of label for the y axis of the plot.
+     */
+    public const TICK_LIMIT = 20;
+
     /**
      * Returns the `mapRange` filter.
      */
@@ -48,6 +54,24 @@ class GraphExtension extends AbstractExtension
             new TwigFilter(
                 'minTime',
                 [self::class, 'minTime'],
+            ),
+            new TwigFilter(
+                'yLowerLimit',
+                [self::class, 'yLowerLimit'],
+            ),
+            new TwigFilter(
+                'yUpperLimit',
+                [self::class, 'yUpperLimit'],
+            ),
+        ];
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction(
+                'yTicks',
+                [self::class, 'yTicks'],
             ),
         ];
     }
@@ -98,6 +122,7 @@ class GraphExtension extends AbstractExtension
      * @param float $maxIn the upper bound of the source range.
      * @param float $minOut the lower bound of the target range.
      * @param float $maxOut the upper bound of the target range.
+     *
      * @return float the value mapped from the source range to the target range.
      */
     public static function mapRange(
@@ -114,5 +139,83 @@ class GraphExtension extends AbstractExtension
 
         return ($value - $minIn) * ($maxOut - $minOut)
             / ($maxIn - $minIn) + $minOut;
+    }
+
+    /**
+     * Returns the lower value for the plot of the measured data.
+     *
+     * @param array<int, float|int> $data is the measured data.
+     *
+     * @return int|null the lower limit or null on empty data.
+     */
+    public static function yLowerLimit(array $data): ?int
+    {
+        if (0 === count($data)) {
+            return null;
+        }
+
+        $max = max($data);
+        $min = min($data);
+        $range = $max - $min;
+
+        return (int)($min - $range * 0.2);
+    }
+
+    /**
+     * Returns the upper value for the plot of the measured data.
+     *
+     * @param array<int, float|int> $data is the measured data.
+     *
+     * @return int|null the upper limit or null on empty data.
+     */
+    public static function yUpperLimit(array $data): ?int
+    {
+        if (0 === count($data)) {
+            return null;
+        }
+
+        $max = max($data);
+        $min = min($data);
+        $range = $max - $min;
+
+        return (int)($max + $range * 0.2);
+    }
+
+    /**
+     * Returns the ticks for the y axis of the plot for the measured data.
+     *
+     * This method returns a reasonable set of values from the range of the
+     * measured data.
+     * The number of values should be lower but close to 20 and each value is
+     * divisible by either 5, 2 or at least 1.
+     *
+     * @param int $lower the lower limit of the measured data.
+     * @param int $upper the upper limit of the measured data.
+     *
+     * @return array<int> the values that should be displayed on the y axis of
+     *                    the plot.
+     */
+    public static function yTicks(int $lower, int $upper): array
+    {
+        $baseResolutions = [1, 2, 5];
+        $multiplier = 1;
+        $range = $upper - $lower;
+
+        while (true) {
+            foreach ($baseResolutions as $baseRes) {
+                $res = $baseRes * $multiplier;
+                if (($range / $res) < self::TICK_LIMIT) {
+                    return array_map(
+                        fn (float|int $val): int => (int)$val,
+                        range(
+                            ceil($lower / $res) * $res,
+                            floor($upper / $res) * $res,
+                            $res,
+                        ),
+                    );
+                }
+            }
+            $multiplier = $multiplier * 10;
+        }
     }
 }

@@ -120,4 +120,117 @@ class GraphExtensionTest extends TestCase
             $timeBefore <= $timeMin && $timeMin <= $timeAfter,
         );
     }
+
+    /**
+     * Check that the yLowerLimit method returns a value between the minimum of
+     * the provided data and the minimum minus the range of the data.
+     */
+    public function testYLowerLimit(): void
+    {
+        $upper = 10;
+        $lower = 5;
+        $data = range($lower, $upper);
+        $range = $upper - $lower;
+        $lowerLimit = GraphExtension::yLowerLimit($data);
+        $this->assertLessThanOrEqual(
+            $lower,
+            $lowerLimit,
+        );
+        $this->assertGreaterThanOrEqual(
+            $lower - $range,
+            $lowerLimit,
+        );
+    }
+
+    /**
+     * Check that the yLowerLimit method returns null if called with empty data.
+     */
+    public function testYLowerLimitWithEmptyData(): void
+    {
+        $this->assertNull(
+            GraphExtension::yLowerLimit([]),
+        );
+    }
+
+    /**
+     * Check that the yUpperLimit method returns a value between the maximum of
+     * the provided data and the maximum plus the range of the data.
+     */
+    public function testYUpperLimit(): void
+    {
+        $upper = 10;
+        $lower = 5;
+        $data = range($lower, $upper);
+        $range = $upper - $lower;
+        $upperLimit = GraphExtension::yUpperLimit($data);
+        $this->assertGreaterThanOrEqual(
+            $upper,
+            $upperLimit,
+        );
+        $this->assertLessThanOrEqual(
+            $upper + $range,
+            $upperLimit,
+        );
+    }
+
+    /**
+     * Check that the yUpperLimit method returns null if called with empty data.
+     */
+    public function testYUpperLimitWithEmptyData(): void
+    {
+        $this->assertNull(
+            GraphExtension::yUpperLimit([]),
+        );
+    }
+
+    /**
+     * Check the the yTicks method returns the lower/upper bound for an empty
+     * range.
+     */
+    public function testYTicksWithEmptyRange(): void
+    {
+        $lower = $upper = 5;
+        $this->assertEquals(
+            [$lower],
+            GraphExtension::yTicks($lower, $upper),
+        );
+    }
+
+    /**
+     * Check that the yTicks method uses a resolution of one for an input range
+     * below the tick limit.
+     */
+    public function testYTicksWithRangeBelowTickLimit(): void
+    {
+        $lower = 20;
+        $upper = $lower + GraphExtension::TICK_LIMIT - 1;
+
+        $this->assertEquals(
+            range(
+                $lower,
+                $upper,
+                1,
+            ),
+            GraphExtension::yTicks($lower, $upper),
+        );
+    }
+
+    /**
+     * Check that the yTicks method uses an appropriate resolution for a large
+     * input range.
+     */
+    public function testYTicksWithLargeRange(): void
+    {
+        $lower = 100;
+        $upper = $lower + (GraphExtension::TICK_LIMIT - 1) * 50;
+
+        $this->assertEquals(
+            range(
+                $lower,
+                $upper,
+                50,
+            ),
+            GraphExtension::yTicks($lower, $upper),
+        );
+    }
 }
