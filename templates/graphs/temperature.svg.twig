@@ -15,12 +15,12 @@
     <path d="
     {% for timestamp, value in data["temperature"] %}
         {% set x = timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) %}
-	{% set y = value|mapRange(tMin, tMax, frameSize - 40, 0) %}
+        {% set y = value|mapRange(tMin, tMax, frameSize - 40, 0) %}
         {% if loop.index == 1 %}
-	    M {{ x }} {{ y }}
-	{% else %}
-	    L {{ x }} {{ y }}
-	{% endif %}
+            M {{ x }} {{ y }}
+        {% else %}
+            L {{ x }} {{ y }}
+        {% endif %}
     {% endfor %}
     " fill="transparent" stroke="black" stroke-width="2" />
 {% endblock %}
