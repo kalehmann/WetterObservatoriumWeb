@@ -29,7 +29,7 @@
     {% endfor %}
 {% endblock %}
 {% block yticks %}
-    {% for i in yTicks(tMin, tMax) %}
+    {% for i in yTicks(hMin, hMax) %}
         <g>
             <text stroke="black" size="2px" x="70" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} %</text>
             <rect x="90" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) - 6 }}" width="10" height="3"></rect>
