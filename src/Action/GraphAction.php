@@ -68,6 +68,22 @@ class GraphAction
         ?int $year = null,
         ?int $month = null,
     ): ResponseInterface {
+        $availableLocations = $weatherRepository->queryLocations();
+        if (false === in_array($location, $availableLocations)) {
+            return new Response(
+                body: 'No data was measured at the location "' . $location . '".',
+                status: 404,
+            );
+        }
+        $availableQuantities = $weatherRepository->queryQuantities($location);
+        if ($quantity
+            && false === in_array($quantity, $availableQuantities, true)) {
+            return new Response(
+                body: 'The quantity "' . $quantity . '" was not measured at ' .
+                'the location "' . $location . '".',
+                status: 404,
+            );
+        }
         $data = $this->getData(
             $weatherRepository,
             $location,

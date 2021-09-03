@@ -64,6 +64,13 @@ class GraphActionTest extends TestCase
         $weatherRepositoryMock
             = $this->createMock(WeatherRepositoryInterface::class);
         $weatherRepositoryMock->expects($this->once())
+                              ->method('queryLocations')
+                              ->willReturn([$location]);
+        $weatherRepositoryMock->expects($this->once())
+                              ->method('queryQuantities')
+                              ->with($location)
+                              ->willReturn([$quantity]);
+        $weatherRepositoryMock->expects($this->once())
                           ->method('query24h')
                           ->with($location, $quantity)
                           ->willReturn(
@@ -81,10 +88,76 @@ class GraphActionTest extends TestCase
             $location,
             $quantity,
         );
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
         $contentType = $response->getHeader('Content-Type');
         $this->assertContains(
             'image/svg+xml',
             $contentType,
+        );
+    }
+
+    /**
+     * Check that a 404 response is returned for an unknown location.
+     */
+    public function testWithUnknownLocation(): void
+    {
+        $location = 'testlocation';
+        $quantity = 'testquantity';
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $twigMock = $this->createMock(Environment::class);
+        $weatherRepositoryMock
+            = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepositoryMock->expects($this->once())
+                              ->method('queryLocations')
+                              ->willReturn([]);
+
+        $action = new GraphAction();
+        $response = ($action)(
+            $twigMock,
+            $normalizerMock,
+            $weatherRepositoryMock,
+            $location,
+            $quantity,
+        );
+        $this->assertEquals(
+            404,
+            $response->getStatusCode(),
+        );
+    }
+
+    /**
+     * Check that a 404 response is returned for an unknown quantity.
+     */
+    public function testWithUnknownQuantity(): void
+    {
+        $location = 'testlocation';
+        $quantity = 'testquantity';
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $twigMock = $this->createMock(Environment::class);
+        $weatherRepositoryMock
+            = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepositoryMock->expects($this->once())
+                              ->method('queryLocations')
+                              ->willReturn([$location]);
+        $weatherRepositoryMock->expects($this->once())
+                              ->method('queryQuantities')
+                              ->with($location)
+                              ->willReturn([]);
+
+        $action = new GraphAction();
+        $response = ($action)(
+            $twigMock,
+            $normalizerMock,
+            $weatherRepositoryMock,
+            $location,
+            $quantity,
+        );
+        $this->assertEquals(
+            404,
+            $response->getStatusCode(),
         );
     }
 }
