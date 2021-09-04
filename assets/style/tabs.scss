@@ -1,0 +1,42 @@
+@for $i from 2 through 4 {
+    .tabs-#{$i} {
+        display: grid;
+        grid-template-columns: repeat(#{$i}, auto);
+        @for $j from 1 through $i {
+            & > label:nth-of-type(#{$j}) {
+                grid-column: #{$j};
+                grid-row: 1;
+            }
+
+            & > input:nth-of-type(#{$j}):checked ~ *:not(label):not(input):nth-of-type(#{$j}) {
+                opacity: 1;
+            }
+        }
+
+        & > * {
+            transition: all .4s;
+        }
+
+        & > label {
+            border-bottom: 1px solid black;
+            padding: .3em 0;
+            text-align: center;
+        }
+
+        & > input {
+            display: none;
+
+            &:checked + label {
+                border: 1px solid black;
+                border-bottom: transparent;
+                border-radius: 5px 5px 0 0;
+            }
+        }
+
+        & > *:not(label) {
+            grid-column: 1 / #{$i + 1};
+            grid-row: 2;
+            opacity: 0;
+        }
+    }
+}

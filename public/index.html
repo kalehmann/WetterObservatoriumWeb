@@ -11,25 +11,56 @@
     </header>
     <main>
       <section>
-	<h2>Außentemperatur</h2>
-	<figure>
-	  <img src="/api/outdoor/temperature.svg" alt="Außentemperatur der letzten 24 Stunden"></img>
-	  <figcaption>Außentemperatur der letzten 24 Stunden</figcaption>
-	</figure>
+        <h2>Außentemperatur</h2>
+        <div class="tabs-2">
+          <input id="temp_24h" name="temperature" type="radio" checked />
+          <label for="temp_24h">24 Stunden</label>
+          <input id="temp_31d" name="temperature" type="radio" />
+          <label for="temp_31d">31 Tage</label>
+          <figure>
+            <img src="/api/outdoor/temperature.svg" alt="Außentemperatur der letzten 24 Stunden"></img>
+            <figcaption>Außentemperatur der letzten 24 Stunden</figcaption>
+          </figure>
+          <figure>
+            <img src="/api/outdoor/temperature/31d.svg" alt="Außentemperatur der letzten 31 Tage"></img>
+            <figcaption>Außentemperatur der letzten 31 Tage</figcaption>
+          </figure>
+          </div>
+        </div>
       </section>
       <section>
-	<h2>Luftdruck</h2>
-	<figure>
-	  <img src="/api/outdoor/pressure.svg" alt="Luftdruck der letzten 24 Stunden"></img>
-	  <figcaption>Luftdruck der letzten 24 Stunden</figcaption>
-	</figure>
+        <h2>Luftdruck</h2>
+        <div class="tabs-2">
+          <input id="pres_24h" name="pressure" type="radio" checked />
+          <label for="pres_24h">24 Stunden</label>
+          <input id="pres_31d" name="pressure" type="radio" />
+          <label for="pres_31d">31 Tage</label>
+          <figure>
+            <img src="/api/outdoor/pressure.svg" alt="Luftdruck der letzten 24 Stunden"></img>
+            <figcaption>Luftdruck der letzten 24 Stunden</figcaption>
+          </figure>
+          <figure>
+            <img src="/api/outdoor/pressure/31d.svg" alt="Luftdruck der letzten 31 Tage"></img>
+            <figcaption>Luftdruck der letzten 31 Tage</figcaption>
+          </figure>
+        </div>
       </section>
       <section>
-	<h2>Luftfeuchtigkeit</h2>
-	<figure>
-	  <img src="/api/outdoor/humidity.svg" alt="Luftfeuchtigkeit der letzten 24 Stunden"></img>
-	  <figcaption>Luftfeuchtigkeit der letzten 24 Stunden</figcaption>
-	</figure>
+        <h2>Luftfeuchtigkeit</h2>
+        <div class="tabs-2">
+          <input id="hum_24h" name="humidity" type="radio" checked />
+          <label for="hum_24h">24 Stunden</label>
+          <input id="hum_31d" name="humidity" type="radio" />
+          <label for="hum_31d">31 Tage</label>
+          <figure>
+            <img src="/api/outdoor/humidity.svg" alt="Luftfeuchtigkeit der letzten 24 Stunden"></img>
+            <figcaption>Luftfeuchtigkeit der letzten 24 Stunden</figcaption>
+          </figure>
+          <figure>
+            <img src="/api/outdoor/humidity/31d.svg" alt="Luftfeuchtigkeit der letzten 31 Tage"></img>
+            <figcaption>Luftfeuchtigkeit der letzten 31 Tage</figcaption>
+          </figure>
+        </div>
       </section>
     </main>
     <footer>
