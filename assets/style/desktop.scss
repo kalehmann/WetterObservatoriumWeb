@@ -1,0 +1,30 @@
+@import './breakpoints';
+
+@include for-desktop-up {
+    html > body {
+        max-width: 60em;
+    }
+
+    main > section {
+        display: grid;
+        grid-template-columns: 20% auto;
+
+        & figure {
+            display: inline-block;
+            margin: .5em;
+            width: 45%;
+        }
+
+        & > h2 {
+            border-bottom: 2px solid var(--foreground-color);
+            grid-column: 1;
+            height: min-content;
+            margin-right: 1em;
+            margin-top: 4em;
+        }
+
+        & > *:not(h2) {
+            grid-column: 2;
+        }
+    }
+}

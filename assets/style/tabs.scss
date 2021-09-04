@@ -1,3 +1,5 @@
+@import './breakpoints';
+
 @for $i from 2 through 4 {
     .tabs-#{$i} {
         display: grid;
@@ -37,6 +39,23 @@
             grid-column: 1 / #{$i + 1};
             grid-row: 2;
             opacity: 0;
+        }
+    }
+}
+
+
+@include for-desktop-up {
+    @for $i from 2 through 4 {
+        .tabs-#{$i} {
+            display: block;
+
+            & > label {
+                display: none;
+            }
+
+            & > *:not(label) {
+                opacity: 1;
+            }
         }
     }
 }
