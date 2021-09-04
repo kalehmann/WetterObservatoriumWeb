@@ -1,8 +1,14 @@
 @import "../fonts/cmu-serif/cmun-serif.css";
 @import "./tabs";
 
+:root {
+    --background-color: #fdfdfd;
+    --foreground-color: #020202;
+}
+
 body {
-    background-color: #fdfdfd;
+    background-color: var(--background-color);
+    color: var(--foreground-color);
     font-family: "Computer Modern Serif", serif;
     margin: 1em auto;
     max-width: 40em;
@@ -13,9 +19,9 @@ h1,h2,h3 {
 }
 
 @media (prefers-color-scheme: dark){
-    body {
-	background: #020202;
-	color: #fdfdfd;
+    :root {
+	--background-color: #020202;
+	--foreground-color: #fdfdfd;
     }
     a:link {
 	color: #9cf;

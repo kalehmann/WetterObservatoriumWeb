@@ -18,7 +18,7 @@
         }
 
         & > label {
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid var(--foreground-color);
             padding: .3em 0;
             text-align: center;
         }
@@ -27,7 +27,7 @@
             display: none;
 
             &:checked + label {
-                border: 1px solid black;
+                border: 1px solid var(--foreground-color);
                 border-bottom: transparent;
                 border-radius: 5px 5px 0 0;
             }
