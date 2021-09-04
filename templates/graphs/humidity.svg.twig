@@ -18,23 +18,23 @@
             L {{ x }} {{ y }}
         {% endif %}
     {% endfor %}
-    " fill="transparent" stroke="black" stroke-width="2" />
+    " fill="transparent" stroke-width="1.5" />
 {% endblock %}
 
 {% block xticks %}
     {% for i in 1..timeTicks %}
         <g transform="translate({{ i|mapRange(1, timeTicks, 20, frameSize - 40) }}, 0)">
             {% set timeStamp = (timeMin + (timeMax - timeMin) / timeTicks * i)|round %}
-            <text transform="rotate(45)" stroke="black">{{ timeStamp|date("H:i") }}</text>
-            <text transform="rotate(45)" stroke="black" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
+            <text transform="rotate(45)">{{ timeStamp|date("H:i") }}</text>
+            <text transform="rotate(45)" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
         </g>
     {% endfor %}
 {% endblock %}
 {% block yticks %}
     {% for i in yTicks(hMin, hMax) %}
         <g>
-            <text stroke="black" size="2px" x="70" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} %</text>
-            <rect x="90" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) - 6 }}" width="10" height="3"></rect>
+            <text size="2px" x="70" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} %</text>
+            <rect x="90" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) - 6 }}" width="10" height="1.5"></rect>
         </g>
     {% endfor %}
 {% endblock %}

@@ -2,13 +2,24 @@
     viewBox="0 0 1000 1000"
     width="100%"
     xmlns="http://www.w3.org/2000/svg">
+    <style>
+      * {
+          background: #fdfdfd;
+          stroke: #020202;
+      }
+      @media (prefers-color-scheme: dark){
+          * {
+              background: #020202;
+              stroke: #fdfdfd;
+          }
+      }
+    </style>
     {% set frameSize = 800 %}
     {% block contents %}
         {% block frame %}
             <rect
                 x="100"
                 y="80"
-                stroke="black"
                 width="{{ frameSize }}"
                 height="{{ frameSize }}"
                 fill="none"
