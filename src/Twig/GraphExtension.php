@@ -146,9 +146,9 @@ class GraphExtension extends AbstractExtension
      *
      * @param array<int, float|int> $data is the measured data.
      *
-     * @return int|null the lower limit or null on empty data.
+     * @return float|null the lower limit or null on empty data.
      */
-    public static function yLowerLimit(array $data): ?int
+    public static function yLowerLimit(array $data): ?float
     {
         if (0 === count($data)) {
             return null;
@@ -158,7 +158,7 @@ class GraphExtension extends AbstractExtension
         $min = min($data);
         $range = $max - $min;
 
-        return (int)($min - ceil($range * 0.2));
+        return $min - $range * 0.2;
     }
 
     /**
@@ -166,9 +166,9 @@ class GraphExtension extends AbstractExtension
      *
      * @param array<int, float|int> $data is the measured data.
      *
-     * @return int|null the upper limit or null on empty data.
+     * @return float|null the upper limit or null on empty data.
      */
-    public static function yUpperLimit(array $data): ?int
+    public static function yUpperLimit(array $data): ?float
     {
         if (0 === count($data)) {
             return null;
@@ -178,7 +178,7 @@ class GraphExtension extends AbstractExtension
         $min = min($data);
         $range = $max - $min;
 
-        return (int)($max + ceil($range * 0.2));
+        return $max + $range * 0.2;
     }
 
     /**
