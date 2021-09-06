@@ -158,7 +158,7 @@ class GraphExtension extends AbstractExtension
         $min = min($data);
         $range = $max - $min;
 
-        return (int)($min - $range * 0.2);
+        return (int)($min - ceil($range * 0.2));
     }
 
     /**
@@ -178,7 +178,7 @@ class GraphExtension extends AbstractExtension
         $min = min($data);
         $range = $max - $min;
 
-        return (int)($max + $range * 0.2);
+        return (int)($max + ceil($range * 0.2));
     }
 
     /**
