@@ -1,0 +1,11 @@
+{% set timeMax = measuredData|maxTime %}
+{% set timeMin = measuredData|minTime %}
+{% set timeTicks = 8 %}
+
+{% for i in 1..timeTicks %}
+    <g transform="translate({{ i|mapRange(1, timeTicks, 20, frameSize - 40) }}, 0)">
+	{% set timeStamp = (timeMin + (timeMax - timeMin) / timeTicks * i)|round %}
+	<text transform="rotate(45)">{{ timeStamp|date("H:i") }}</text>
+	<text transform="rotate(45)" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
+    </g>
+{% endfor %}

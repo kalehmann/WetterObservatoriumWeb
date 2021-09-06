@@ -1,0 +1,9 @@
+{% set timeMax = measuredData|maxTime %}
+{% set timeMin = measuredData|minTime %}
+
+{% for i in yTicks(vMin|round(0, 'ceil'), vMax|round(0, 'floor')) %}
+    <g>
+	<text size="2px" x="70" y="{{ i|mapRange(vMin, vMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} {{ unit }}</text>
+	<rect x="90" y="{{ i|mapRange(vMin, vMax, frameSize - 40, 0) - 6 }}" width="10" height="1.5"></rect>
+    </g>
+{% endfor %}

@@ -1,40 +1,16 @@
 {% extends 'graphs/graph.svg.twig' %}
 
-{% set dataCount = data["humidity"]|length %}
-{% set hMax = data["humidity"]|yUpperLimit|default(100) %}
-{% set hMin = data["humidity"]|yLowerLimit|default(0) %}
-{% set timeMax = data["humidity"]|maxTime %}
-{% set timeMin = data["humidity"]|minTime %}
-{% set timeTicks = 8 %}
+{% set measuredData = data["humidity"] %}
+{% set vMax = measuredData|yUpperLimit|default(100) %}
+{% set vMin = measuredData|yLowerLimit|default(0) %}
 
 {% block graph %}
-    <path d="
-    {% for timestamp, value in data["humidity"] %}
-        {% set x = timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) %}
-        {% set y = value|mapRange(hMin, hMax, frameSize - 40, 0) %}
-        {% if loop.index == 1 %}
-            M {{ x }} {{ y }}
-        {% else %}
-            L {{ x }} {{ y }}
-        {% endif %}
-    {% endfor %}
-    " fill="transparent" stroke-width="1.5" />
+    {% include 'graphs/_components/plot.svg.twig' %}
 {% endblock %}
 
 {% block xticks %}
-    {% for i in 1..timeTicks %}
-        <g transform="translate({{ i|mapRange(1, timeTicks, 20, frameSize - 40) }}, 0)">
-            {% set timeStamp = (timeMin + (timeMax - timeMin) / timeTicks * i)|round %}
-            <text transform="rotate(45)">{{ timeStamp|date("H:i") }}</text>
-            <text transform="rotate(45)" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
-        </g>
-    {% endfor %}
+    {% include 'graphs/_components/xticks.svg.twig' %}
 {% endblock %}
 {% block yticks %}
-    {% for i in yTicks(hMin|round(0, 'ceil'), hMax|round(0, 'floor')) %}
-        <g>
-            <text size="2px" x="70" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) }}" text-anchor="end">{{ i }} %</text>
-            <rect x="90" y="{{ i|mapRange(hMin, hMax, frameSize - 40, 0) - 6 }}" width="10" height="1.5"></rect>
-        </g>
-    {% endfor %}
+    {% include 'graphs/_components/yticks.svg.twig' with { 'unit' : '%' } %}
 {% endblock %}

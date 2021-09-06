@@ -1,0 +1,14 @@
+{% set timeMax = measuredData|maxTime %}
+{% set timeMin = measuredData|minTime %}
+
+<path d="
+{% for timestamp, value in measuredData %}
+    {% set x = timestamp|mapRange(timeMin, timeMax, 20, frameSize - 40) %}
+    {% set y = value|mapRange(vMin, vMax, frameSize - 40, 0) %}
+    {% if loop.index == 1 %}
+	M {{ x }} {{ y }}
+    {% else %}
+	L {{ x }} {{ y }}
+    {% endif %}
+{% endfor %}
+" fill="transparent" stroke-width="1.5" />
