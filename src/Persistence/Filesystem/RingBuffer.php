@@ -63,7 +63,11 @@ class RingBuffer implements BufferInterface
      */
     public function __construct(string $contents, string $format)
     {
-        $this->elementSize = DataPacker::getElementSize($format);
+        $elementSize = DataPacker::getElementSize($format);
+        if (0 === $elementSize) {
+            throw new IOException('Buffer format ' . $format . ' has zero elements');
+        }
+        $this->elementSize = $elementSize;
         $this->formatSpec = $format;
 
         [$elementCount, $this->index] = $this->readHeader($contents);
@@ -203,7 +207,7 @@ class RingBuffer implements BufferInterface
      *
      * @param string $content is the data of the ring buffer as binary string
      *
-     * @return array<int> an array of two integers, the first one being the
+     * @return array<int<0, max>> an array of two integers, the first one being the
      *                    total number of elements in the ring buffer and the
      *                    second one being the index of the current element.
      */
@@ -213,6 +217,12 @@ class RingBuffer implements BufferInterface
 
         $unpackedHeader = DataPacker::unpack(self::getHeaderFormat(), $header);
         [$count, $current] = $unpackedHeader;
+        if ($count < 0) {
+            throw new IOException('Buffer has negative element count');
+        }
+        if ($current < 0) {
+            throw new IOException('Current index of buffer is negativ');
+        }
 
         return [$count, $current];
     }

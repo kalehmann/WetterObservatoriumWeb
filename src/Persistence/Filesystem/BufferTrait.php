@@ -42,6 +42,8 @@ trait BufferTrait
 
     /**
      * The packed size of each element in bytes.
+     *
+     * @var int<1, max>
      */
     private int $elementSize;
 

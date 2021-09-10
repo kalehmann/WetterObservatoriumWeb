@@ -154,7 +154,7 @@ class DataPacker
     /**
      * Get the packed size for a format code.
      *
-     * @return int the packed size in bytes.
+     * @return int<0, max> the packed size in bytes.
      * @throws InvalidPackFormatException for unknown format codes.
      */
     public static function getElementSize(string $format): int

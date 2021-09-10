@@ -42,7 +42,11 @@ class Buffer implements BufferInterface
      */
     public function __construct(string $contents, string $format)
     {
-        $this->elementSize = DataPacker::getElementSize($format);
+        $elementSize = DataPacker::getElementSize($format);
+        if (0 === $elementSize) {
+            throw new IOException('Buffer format ' . $format . ' has zero elements');
+        }
+        $this->elementSize = $elementSize;
         $this->formatSpec = $format;
 
         $elementCount = $this->readHeader($contents);
