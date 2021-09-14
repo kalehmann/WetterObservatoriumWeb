@@ -4,8 +4,12 @@
 
 {% for i in 1..timeTicks %}
     <g transform="translate({{ i|mapRange(1, timeTicks, 20, frameSize - 40) }}, 0)">
-	{% set timeStamp = (timeMin + (timeMax - timeMin) / timeTicks * i)|round %}
-	<text transform="rotate(45)">{{ timeStamp|date("H:i") }}</text>
-	<text transform="rotate(45)" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
+        {% set timeStamp = (timeMin + (timeMax - timeMin) / timeTicks * i)|round %}
+        {% if timeMax - timeMin < 3600 * 24 * 16 %}
+            <text transform="rotate(45)">{{ timeStamp|date("H:i") }}</text>
+            <text transform="rotate(45)" x="-10" y="20">{{ timeStamp|date("d.m.y") }}</text>
+        {% else %}
+            <text transform="rotate(45)">{{ timeStamp|date("d.m.y") }}</text>
+        {% endif %}
     </g>
 {% endfor %}
