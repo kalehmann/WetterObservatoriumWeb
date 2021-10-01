@@ -77,7 +77,7 @@ class HMACAuthorizationMiddleware implements MiddlewareInterface
 
         $reflector = new ReflectionClass($actionClass);
         $authorizationAttributes = $reflector->getAttributes(
-            AuthorizationAttribute::class
+            AuthorizationAttribute::class,
         );
 
         if (count($authorizationAttributes) > 0) {

@@ -25,6 +25,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Tests\Middleware;
 
 use DateTime;
 use KaLehmann\WetterObservatoriumWeb\Action\AddDataAction;
+use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\ServerRequest;
@@ -38,7 +39,40 @@ use Psr\Log\LoggerInterface;
 class HMACAuthorizationMiddlewareTest extends TestCase
 {
     /**
-     * Test that a request to a procted ressource without the `Authorization`
+     * Check that a request to an action without the Authorization attribute is
+     * passed to the next handler.
+     */
+    public function testAccessWithoutAuthorizationAttributeIsGranted(): void
+    {
+        $request = new ServerRequest(
+            'GET',
+            '/api/locations',
+            [],
+        );
+        $request = $request->withAttribute(
+            '_action',
+            ListLocationsAction::class,
+        );
+        $handlerMock = $this->createMock(RequestHandlerInterface::class);
+        $handlerMock->expects($this->once())
+                    ->method('handle')
+                    ->with($request);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $psr17FactoryMock = $this->createMock(Psr17Factory::class);
+        $hmacAuthorizationMiddleware = new HMACAuthorizationMiddleware(
+            '',
+            $loggerMock,
+            $psr17FactoryMock
+        );
+
+        $hmacAuthorizationMiddleware->process(
+            $request,
+            $handlerMock
+        );
+    }
+
+    /**
+     * Check that a request to a procted ressource without the `Authorization`
      * header results in a 401 response.
      */
     public function testProctectedRessourceWithoutAuthorization(): void
@@ -46,7 +80,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
         $request = new ServerRequest(
             'POST',
             '/api/aquarium',
-            []
+            [],
         );
         $request = $request->withAttribute(
             '_action',
@@ -73,8 +107,8 @@ class HMACAuthorizationMiddlewareTest extends TestCase
     }
 
     /**
-     * Test that a request to a procted ressource with a malformed `Authorization`
-     * header results in a 401 response.
+     * Check that a request to a procted ressource with a malformed
+     * `Authorization` header results in a 401 response.
      */
     public function testProctectedRessourceWithMalformedAuthorization(): void
     {
@@ -125,7 +159,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
             $hashAlgo,
             'timestamp: ' . $timestamp . PHP_EOL .
             $body,
-            $key
+            $key,
         );
 
         $request = new ServerRequest(
@@ -138,7 +172,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
                     'headers="timestamp", ' .
                     'signature="' . $signature . '"',
             ],
-            $body
+            $body,
         );
         $request = $request->withAttribute(
             '_action',
@@ -154,12 +188,12 @@ class HMACAuthorizationMiddlewareTest extends TestCase
         $hmacAuthorizationMiddleware = new HMACAuthorizationMiddleware(
             $key,
             $loggerMock,
-            $psr17FactoryMock
+            $psr17FactoryMock,
         );
 
         $hmacAuthorizationMiddleware->process(
             $request,
-            $handlerMock
+            $handlerMock,
         );
     }
 
@@ -177,7 +211,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
                     'algorithm="myFancyHash", ' .
                     'headers="date", ' .
                     'signature="YWZhc2YzMjRhc2+/Q="',
-            ]
+            ],
         );
         $request = $request->withAttribute(
             '_action',
@@ -194,12 +228,12 @@ class HMACAuthorizationMiddlewareTest extends TestCase
         $hmacAuthorizationMiddleware = new HMACAuthorizationMiddleware(
             '',
             $loggerMock,
-            $psr17FactoryMock
+            $psr17FactoryMock,
         );
 
         $hmacAuthorizationMiddleware->process(
             $request,
-            $handlerMock
+            $handlerMock,
         );
     }
 }
