@@ -28,6 +28,7 @@ use KaLehmann\WetterObservatoriumWeb\Action\ListLocationsAction;
 use KaLehmann\WetterObservatoriumWeb\Action\ListQuantitiesAction;
 use KaLehmann\WetterObservatoriumWeb\Action\QueryContinuousDataAction;
 use KaLehmann\WetterObservatoriumWeb\Action\QueryFixedDataAction;
+use KaLehmann\WetterObservatoriumWeb\Middleware\ActionMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\Normalizer;
@@ -49,6 +50,7 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Relay\Relay;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -139,6 +141,14 @@ return [
                 create(PressureNormalizer::class),
                 create(SunIntensityNormalizer::class),
                 create(TemperatureNormalizer::class),
+            ],
+        ),
+    Relay::class => create()
+        ->constructor(
+            [
+                get(RoutingMiddleware::class),
+                get(HMACAuthorizationMiddleware::class),
+                get(ActionMiddleware::class),
             ],
         ),
     RoutingMiddleware::class => create()

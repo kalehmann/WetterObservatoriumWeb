@@ -22,9 +22,6 @@
 declare(strict_types=1);
 
 use DI\ContainerBuilder;
-use KaLehmann\WetterObservatoriumWeb\Middleware\ActionMiddleware;
-use KaLehmann\WetterObservatoriumWeb\Middleware\HMACAuthorizationMiddleware;
-use KaLehmann\WetterObservatoriumWeb\Middleware\RoutingMiddleware;
 use Narrowspark\HttpEmitter\SapiEmitter;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Log\LoggerInterface;
@@ -54,10 +51,7 @@ set_exception_handler(
 $serverRequestCreator = $container->get(ServerRequestCreator::class);
 $request = $serverRequestCreator->fromGlobals();
 
-$queue[] = $container->get(RoutingMiddleware::class);
-$queue[] = $container->get(HMACAuthorizationMiddleware::class);
-$queue[] = $container->get(ActionMiddleware::class);
-$relay = new Relay($queue);
+$relay = $container->get(Relay::class);
 $response = $relay->handle($request);
 
 $emitter = $container->get(SapiEmitter::class);
