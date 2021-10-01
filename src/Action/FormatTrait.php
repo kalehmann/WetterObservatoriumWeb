@@ -27,6 +27,11 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use RunTimeException;
 
+use function fputcsv;
+use function json_encode;
+use function rewind;
+use function stream_get_contents;
+
 /**
  * Helper functions for creating responses in various formats.
  */
@@ -59,6 +64,16 @@ trait FormatTrait
         $body = '';
         $headers = [];
         switch ($format) {
+            case 'csv':
+                $stream = fopen('php://memory', 'r+');
+                fputcsv($stream, ['timestamp', 'value']);
+                foreach ($payload as $timestamp => $value) {
+                    fputcsv($stream, [$timestamp, $value]);
+                }
+                rewind($stream);
+                $body = stream_get_contents($stream);
+                $headers['Content-Type'] = 'application/csv';
+                break;
             case 'json':
             default:
                 $body = json_encode($payload);
@@ -85,6 +100,6 @@ trait FormatTrait
      */
     private static function FORMATS(): array
     {
-        return ['json'];
+        return ['csv', 'json'];
     }
 }
