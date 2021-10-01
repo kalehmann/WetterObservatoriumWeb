@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Attribute;
 
-use \Attribute;
+use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 class AuthorizationAttribute

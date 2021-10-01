@@ -167,7 +167,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
             '/api/aquarium',
             [
                 'Timestamp' => (string) $timestamp,
-                'Authorization' =>'hmac username="esp8266", ' .
+                'Authorization' => 'hmac username="esp8266", ' .
                     'algorithm="' . $hashAlgo . '", ' .
                     'headers="timestamp", ' .
                     'signature="' . $signature . '"',
@@ -207,7 +207,7 @@ class HMACAuthorizationMiddlewareTest extends TestCase
             'POST',
             '/api/aquarium',
             [
-                'Authorization' =>'hmac username="esp8266", ' .
+                'Authorization' => 'hmac username="esp8266", ' .
                     'algorithm="myFancyHash", ' .
                     'headers="date", ' .
                     'signature="YWZhc2YzMjRhc2+/Q="',

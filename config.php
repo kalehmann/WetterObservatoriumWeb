@@ -77,8 +77,10 @@ return [
                             return false;
                         }
 
-                        if (strlen($cachePath)
-                            && $cachePath[0] === DIRECTORY_SEPARATOR) {
+                        if (
+                            strlen($cachePath) &&
+                            $cachePath[0] === DIRECTORY_SEPARATOR
+                        ) {
                             return $cachePath;
                         }
 
@@ -108,8 +110,10 @@ return [
                 return $logger;
             }
 
-            if (strlen($logFile) &&
-                $logFile[0] === DIRECTORY_SEPARATOR) {
+            if (
+                strlen($logFile) &&
+                $logFile[0] === DIRECTORY_SEPARATOR
+            ) {
                 $logger->pushHandler(
                     new StreamHandler($logFile, Logger::DEBUG),
                 );

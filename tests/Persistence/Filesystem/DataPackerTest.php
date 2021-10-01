@@ -100,7 +100,7 @@ class DataPackerTest extends TestCase
         );
         $this->assertEquals(
             strlen(
-                pack('qcxxS', -2**16, 'a', 42),
+                pack('qcxxS', -2 ** 16, 'a', 42),
             ),
             DataPacker::getElementSize('qcxxS'),
         );

@@ -23,8 +23,9 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use \Generator;
-use \IteratorAggregate;
+use Generator;
+use IteratorAggregate;
+
 use function array_filter;
 use function array_keys;
 use function array_key_exists;

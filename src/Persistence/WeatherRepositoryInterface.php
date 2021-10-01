@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \DateTimeImmutable;
+use DateTimeImmutable;
 
 /**
  * Repository for all weather related data.

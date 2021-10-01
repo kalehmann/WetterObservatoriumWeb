@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \Traversable;
+use Traversable;
 
 /**
  * Helper functions for condensating data on given intervals (60 minutes,
@@ -110,7 +110,7 @@ class WeatherCondensator
         if (count($interval) === 0) {
             throw new CondensationException(
                 'Cannot condensate the data between ' .
-                date('Y-m-d H:i:s', $startTimestamp) . ' and '.
+                date('Y-m-d H:i:s', $startTimestamp) . ' and ' .
                 date('Y-m-d H:i:s', $endTimestamp) . '. No data recorded in ' .
                 'this interval.',
             );

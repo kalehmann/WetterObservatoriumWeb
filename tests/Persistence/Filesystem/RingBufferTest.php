@@ -26,7 +26,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Tests\Persistence\Filesystem;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\InvalidPackFormatException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\RingBuffer;
-use \RunTimeException;
+use RunTimeException;
 use PHPUnit\Framework\TestCase;
 
 /**

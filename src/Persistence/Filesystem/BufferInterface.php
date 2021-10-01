@@ -23,9 +23,9 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use \Countable;
-use \IteratorAggregate;
-use \Stringable;
+use Countable;
+use IteratorAggregate;
+use Stringable;
 
 /**
  * @extends IteratorAggregate<int, array<int, int>>

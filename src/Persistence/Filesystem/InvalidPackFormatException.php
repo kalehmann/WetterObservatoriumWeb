@@ -23,7 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use \Exception;
+use Exception;
+
 use function array_unique;
 use function join;
 

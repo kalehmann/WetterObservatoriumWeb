@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence;
 
-use \Exception;
+use Exception;
 
 /**
  * Exception for anything related to the condensation of data.

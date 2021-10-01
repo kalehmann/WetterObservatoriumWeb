@@ -23,7 +23,8 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use \RunTimeException;
+use RunTimeException;
+
 use function is_dir;
 use function realpath;
 

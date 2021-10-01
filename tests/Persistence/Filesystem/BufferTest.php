@@ -27,7 +27,7 @@ use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\InvalidPackFormatExc
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\IOException;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\Buffer;
 use PHPUnit\Framework\TestCase;
-use \RunTimeException;
+use RunTimeException;
 
 /**
  * Test cases for the Buffer.

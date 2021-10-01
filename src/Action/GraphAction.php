@@ -76,8 +76,10 @@ class GraphAction
             );
         }
         $availableQuantities = $weatherRepository->queryQuantities($location);
-        if ($quantity
-            && false === in_array($quantity, $availableQuantities, true)) {
+        if (
+            $quantity
+            && false === in_array($quantity, $availableQuantities, true)
+        ) {
             return new Response(
                 body: 'The quantity "' . $quantity . '" was not measured at ' .
                 'the location "' . $location . '".',

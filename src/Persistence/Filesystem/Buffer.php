@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem;
 
-use \Generator;
+use Generator;
 
 /**
  * Implementation of a buffer with fixed size elements.

@@ -64,7 +64,7 @@ trait BufferTrait
     {
         if (!file_exists($path)) {
             throw new IOException(
-                'Could not open buffer at '. $path.
+                'Could not open buffer at ' . $path .
                 '. File does not exist',
             );
         }
