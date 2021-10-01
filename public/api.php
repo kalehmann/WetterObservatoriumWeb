@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 use DI\ContainerBuilder;
 use Narrowspark\HttpEmitter\SapiEmitter;
-use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Relay\Relay;
 use Symfony\Component\Dotenv\Dotenv;
@@ -47,11 +47,11 @@ set_exception_handler(
     },
 );
 
-$serverRequestCreator = $container->get(ServerRequestCreator::class);
-$request = $serverRequestCreator->fromGlobals();
-
-$relay = $container->get(Relay::class);
-$response = $relay->handle($request);
-
-$emitter = $container->get(SapiEmitter::class);
-$emitter->emit($response);
+$response = $container
+          ->get(Relay::class)
+          ->handle(
+              $container->get(ServerRequestInterface::class),
+          );
+$container
+    ->get(SapiEmitter::class)
+    ->emit($response);

@@ -44,8 +44,10 @@ use KaLehmann\WetterObservatoriumWeb\Twig\GraphExtension;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
@@ -222,6 +224,11 @@ return [
                 );
             },
         ),
+    ServerRequestInterface::class => factory(
+        fn(ContainerInterface $c) => $c
+            ->get(ServerRequestCreator::class)
+            ->fromGlobals(),
+    ),
     ServerRequestFactoryInterface::class => create(Psr17Factory::class),
     StreamFactoryInterface::class => create(Psr17Factory::class),
     UploadedFileFactoryInterface::class => create(Psr17Factory::class),
