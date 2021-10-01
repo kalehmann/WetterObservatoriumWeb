@@ -33,15 +33,14 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../.env');
 
-$builder = new ContainerBuilder();
-$builder->addDefinitions(__DIR__ . '/../config.php');
-$builder->useAnnotations(false);
-$container = $builder->build();
-$logger = $container->get(LoggerInterface::class);
+$container = (new ContainerBuilder())
+         ->addDefinitions(__DIR__ . '/../config.php')
+         ->useAnnotations(false)
+         ->build();
 
 set_exception_handler(
-    function (Throwable $exception) use ($logger): void {
-        $logger->error(
+    function (Throwable $exception) use ($container): void {
+        $container->get(LoggerInterface::class)->error(
             $exception::class . ' in ' . $exception->getFile() . ':' .
             $exception->getLine() . ' : ' . $exception->getMessage(),
         );
