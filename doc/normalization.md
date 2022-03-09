@@ -9,7 +9,7 @@ müssen diese vorher in eine ganze Zahl umgewandelt werden.
 ### Normalisierung von Temperaturdaten
 
 Eigenhende Temperaturdaten in Grad Celsius werden zuerst durch Addition von
-`273.15` in Grad Kelvin umgewandelt.
+`273.15` in Kelvin umgewandelt.
 Anschließend wird der Wert mit `10` multipliziert und auf eine ganze Zahl
 gerundet.
 Damit wird die Speicherung als natürliche Zahl gewährleistet und eine
