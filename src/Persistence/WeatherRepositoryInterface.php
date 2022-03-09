@@ -134,6 +134,6 @@ interface WeatherRepositoryInterface
     public function queryYear(
         string $location,
         string $quantity,
-        int $year
+        int $year,
     ): array;
 }
