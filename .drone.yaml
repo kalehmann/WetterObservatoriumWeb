@@ -48,7 +48,7 @@ steps:
                         --parallel=20
                         --reverse
                         $(pwd)
-                        public_html/blumenwetter-kalehmann-de;
+                        public_html/alaunwetter-kalehmann-de;
                       exit;"'
           depends_on:
                   - "Install the PHP dependencies"
