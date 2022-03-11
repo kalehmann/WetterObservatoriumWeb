@@ -27,7 +27,7 @@ namespace KaLehmann\WetterObservatoriumWeb\Normalizer;
  * Converts measured sun intensity values (Lux) into unsigned integers
  * and back.
  */
-class SunIntensityNormalizer extends DummyNormalizer
+class SunIntensityNormalizer implements QuantityNormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -35,5 +35,21 @@ class SunIntensityNormalizer extends DummyNormalizer
     public function supportsQuantity(string $quantity): bool
     {
         return $quantity === 'sun';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function normalizeValue(float|int $value): int
+    {
+        return (int) round($value * 10);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalizeValue(int $value): float|int
+    {
+        return $value / 10;
     }
 }
