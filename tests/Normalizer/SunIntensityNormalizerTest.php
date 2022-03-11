@@ -55,8 +55,8 @@ class SunIntensityNormalizerTest extends TestCase
         $normalizer = new SunIntensityNormalizer();
 
         $this->assertEquals(
-            15000,
-            $normalizer->normalizeValue(15000.0),
+            644,
+            $normalizer->normalizeValue(64.4),
         );
     }
 
@@ -68,8 +68,8 @@ class SunIntensityNormalizerTest extends TestCase
     {
         $normalizer = new SunIntensityNormalizer();
         $this->assertEquals(
-            42,
-            $normalizer->denormalizeValue(42),
+            42.2,
+            $normalizer->denormalizeValue(422),
         );
     }
 }
