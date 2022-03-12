@@ -44,8 +44,8 @@ class TemperatureNormalizer implements QuantityNormalizerInterface
      */
     public function normalizeValue(float|int $value): int
     {
-        return (int) round(
-            ($value + self::KELVIN) * 10
+        return (int) (
+            round($value + self::KELVIN, 1) * 10
         );
     }
 
@@ -54,6 +54,6 @@ class TemperatureNormalizer implements QuantityNormalizerInterface
      */
     public function denormalizeValue(int $value): float|int
     {
-        return $value / 10 - self::KELVIN;
+        return round($value / 10 - self::KELVIN, 1);
     }
 }

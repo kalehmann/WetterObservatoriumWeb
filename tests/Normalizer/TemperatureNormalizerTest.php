@@ -82,7 +82,7 @@ class TemperatureNormalizerTest extends TestCase
         $this->assertEqualsWithDelta(
             22.5,
             $normalizer->denormalizeValue(2957),
-            0.1,
+            0.15,
         );
     }
 }
