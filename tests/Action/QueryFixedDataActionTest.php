@@ -65,10 +65,10 @@ class QueryFixedDataActionTest extends TestCase
             $normalizerMock,
             $weatherRepository,
             'aquarium',
-            'temperature',
-            2021,
             'json',
+            2021,
             05,
+            'temperature',
         );
 
         $this->assertEquals(
@@ -77,7 +77,7 @@ class QueryFixedDataActionTest extends TestCase
         );
         $this->assertEqualsCanonicalizing(
             [[1, 10], [2, 20]],
-            json_decode((string)$response->getBody()),
+            json_decode((string)$response->getBody(), true),
         );
     }
 
@@ -113,9 +113,10 @@ class QueryFixedDataActionTest extends TestCase
             $normalizerMock,
             $weatherRepository,
             'aquarium',
-            'temperature',
-            2021,
             'json',
+            2021,
+            null,
+            'temperature',
         );
 
         $this->assertEquals(
@@ -124,7 +125,7 @@ class QueryFixedDataActionTest extends TestCase
         );
         $this->assertEqualsCanonicalizing(
             [[1, 20], [3, 40]],
-            json_decode((string)$response->getBody()),
+            json_decode((string)$response->getBody(), true),
         );
     }
 }

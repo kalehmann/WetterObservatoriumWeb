@@ -67,13 +67,12 @@ class QueryContinuousDataAction
     /**
      * Query the weather data of $quantity measured at $location in $timespan.
      *
+     * @param NormalizerInterface $normalizer the normalizer for the stored data
      * @param WeatherRepositoryInterface $weatherRepository the repository with
      *                                                      the weather data.
      * @param string $location filter by the location where the data was
      *                         measured.
-     * @param array<string> $quantities filter by the measured quantity or use
-     *                                  null for all quantities measured at the
-     *                                  location
+     * @param array<string> $quantities filter by the measured quantities
      * @param string|null $timespan the timespan that should be queried.
      *                              If no value is given, the data of the last
      *                              24 hours will be returned.
