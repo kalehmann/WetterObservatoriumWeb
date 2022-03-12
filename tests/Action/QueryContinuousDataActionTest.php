@@ -74,8 +74,8 @@ class QueryContinuousDataActionTest extends TestCase
             $normalizerMock,
             $weatherRepository,
             'aquarium',
-            'temperature',
             'json',
+            'temperature',
         );
 
         $this->assertEquals(
@@ -104,8 +104,8 @@ class QueryContinuousDataActionTest extends TestCase
             $normalizerMock,
             $weatherRepository,
             'aquarium',
-            'temperature',
             'json',
+            'temperature',
             '24h',
         );
 
@@ -164,8 +164,8 @@ class QueryContinuousDataActionTest extends TestCase
             $normalizerMock,
             $weatherRepository,
             'aquarium',
-            'temperature',
             'json',
+            'temperature',
             '31d'
         );
 

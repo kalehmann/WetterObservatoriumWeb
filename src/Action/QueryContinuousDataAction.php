@@ -41,32 +41,25 @@ class QueryContinuousDataAction
         NormalizerInterface $normalizer,
         WeatherRepositoryInterface $weatherRepository,
         string $location,
-        string $quantity,
         string $format,
+        ?string $quantity = null,
         ?string $timespan = null,
     ): ResponseInterface {
+        if ($quantity) {
+            $quantities = [$quantity];
+        } else {
+            $quantities = $weatherRepository->queryQuantities($location);
+        }
         $data = $this->getData(
+            $normalizer,
             $weatherRepository,
             $location,
-            $quantity,
+            $quantities,
             $timespan,
         );
 
-        // Map the associative array to a list of tuples with the timestamp and
-        // the value.
-        array_walk(
-            $data,
-            fn(int &$value, int $timestamp) => $value = [
-                'timestamp' => $timestamp,
-                $quantity => $normalizer->denormalizeValue(
-                    $quantity,
-                    $value,
-                ),
-            ],
-        );
-
         return $this->createResponse(
-            array_values($data),
+            $data,
             $format,
         );
     }
@@ -78,30 +71,53 @@ class QueryContinuousDataAction
      *                                                      the weather data.
      * @param string $location filter by the location where the data was
      *                         measured.
-     * @param string $quantity filter by the measured quantity.
+     * @param array<string> $quantities filter by the measured quantity or use
+     *                                  null for all quantities measured at the
+     *                                  location
      * @param string|null $timespan the timespan that should be queried.
      *                              If no value is given, the data of the last
      *                              24 hours will be returned.
-     * @return array<int, int> an array with the timestamps as key and the
-     *                         data measured in the $timespan as values.
+     * @return array<array<string, scalar>> an array of arrays with the data
+     *                                      measured in $timespan grouped by
+     *                                      timestamp
      */
     private function getData(
+        NormalizerInterface $normalizer,
         WeatherRepositoryInterface $weatherRepository,
         string $location,
-        string $quantity,
+        array $quantities,
         ?string $timespan = null,
     ): array {
-        switch ($timespan) {
-            case '31d':
-                return $weatherRepository->query31d(
-                    $location,
+        $data = [];
+
+        foreach ($quantities as $quantity) {
+            $quantityData = [];
+            switch ($timespan) {
+                case '31d':
+                    $quantityData = $weatherRepository->query31d(
+                        $location,
+                        $quantity,
+                    );
+                    break;
+                default:
+                    $quantityData = $weatherRepository->query24h(
+                        $location,
+                        $quantity,
+                    );
+            }
+            foreach ($quantityData as $timestamp => $value) {
+                if (!($data[$timestamp] ?? null)) {
+                    $data[$timestamp] = [
+                        'timestamp' => $timestamp,
+                    ];
+                }
+                $data[$timestamp][$quantity] = $normalizer->denormalizeValue(
                     $quantity,
+                    $value,
                 );
-            default:
-                return $weatherRepository->query24h(
-                    $location,
-                    $quantity,
-                );
+            }
         }
+
+        return array_values($data);
     }
 }
