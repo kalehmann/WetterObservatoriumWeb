@@ -27,8 +27,13 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use RunTimeException;
 
+use function array_keys;
+use function array_map;
+use function array_values;
 use function fputcsv;
+use function is_array;
 use function json_encode;
+use function reset;
 use function rewind;
 use function stream_get_contents;
 
@@ -41,7 +46,10 @@ trait FormatTrait
      * Returns a response with the payload encoded in the given format.
      * If the format is not supported, a 404 response is returned.
      *
-     * @param array<int, int|string> $payload to payload for the response body
+     * @param array<array<string, scalar>>|array<scalar> $payload the payload
+     *                                                            for the
+     *                                                            response body
+     *
      * @param string $format the format of the response
      * @param int $status the status code of the response
      *
@@ -65,18 +73,7 @@ trait FormatTrait
         $headers = [];
         switch ($format) {
             case 'csv':
-                $stream = fopen('php://memory', 'r+');
-                if (false === $stream) {
-                    throw new RunTimeException(
-                        'Could not creat in-memory stream for temporary data',
-                    );
-                }
-                fputcsv($stream, ['timestamp', 'value']);
-                foreach ($payload as $timestamp => $value) {
-                    fputcsv($stream, [$timestamp, $value]);
-                }
-                rewind($stream);
-                $body = stream_get_contents($stream);
+                $body = $this->getCsvBody($payload);
                 $headers['Content-Type'] = 'application/csv';
                 break;
             case 'json':
@@ -96,6 +93,57 @@ trait FormatTrait
             headers: $headers,
             status: $status,
         );
+    }
+
+    /**
+     * Converts the payload to CSV.
+     *
+     * @param array<array<string, scalar>>|array<scalar> $payload the payload
+     *                                                            for the
+     *                                                            response body
+     *
+     * @return string the payload as CSV
+     */
+    private function getCsvBody(array $payload): string
+    {
+        $head = reset($payload);
+        if (false === $head) {
+            return '';
+        }
+
+        $stream = fopen('php://memory', 'r+');
+        if (false === $stream) {
+            throw new RunTimeException(
+                'Could not create in-memory stream for temporary data',
+            );
+        }
+        if (!is_array($head)) {
+            /** @var array<scalar> $payload */
+            fputcsv($stream, $payload);
+        } else {
+            /** @var array<array<string, scalar>> $payload */
+            $head = array_keys($head);
+            fputcsv($stream, $head);
+            foreach ($payload as $row) {
+                fputcsv(
+                    $stream,
+                    array_map(
+                        fn (string $key) => $row[$key] ?? null,
+                        $head,
+                    ),
+                );
+            }
+        }
+        rewind($stream);
+        $body = stream_get_contents($stream);
+        if (false === $body) {
+            throw new RunTimeException(
+                'Could not read from in-memory stream',
+            );
+        }
+        fclose($stream);
+
+        return $body;
     }
 
     /**

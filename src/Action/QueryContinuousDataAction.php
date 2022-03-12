@@ -57,8 +57,8 @@ class QueryContinuousDataAction
         array_walk(
             $data,
             fn(int &$value, int $timestamp) => $value = [
-                $timestamp,
-                $normalizer->denormalizeValue(
+                'timestamp' => $timestamp,
+                $quantity => $normalizer->denormalizeValue(
                     $quantity,
                     $value,
                 ),

@@ -59,8 +59,14 @@ class FormatTraitTest extends TestCase
     {
         $response = $this->createResponse(
             [
-                1 => 2,
-                3 => 4,
+                [
+                    'timestamp' => 1,
+                    'temperature' => 2,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 4,
+                ],
             ],
             'csv',
         );
@@ -70,7 +76,7 @@ class FormatTraitTest extends TestCase
         );
         $this->assertEquals(
             [
-                ['timestamp', 'value'],
+                ['timestamp', 'temperature'],
                 [1, 2],
                 [3, 4],
             ],

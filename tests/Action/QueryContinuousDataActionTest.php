@@ -83,8 +83,21 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[1, 20], [3, 40], [5, 60]],
-            json_decode((string)$response->getBody()),
+            [
+                [
+                    'timestamp' => 1,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 40,
+                ],
+                [
+                    'timestamp' => 5,
+                    'temperature' => 60,
+                ],
+            ],
+            json_decode((string)$response->getBody(), true),
         );
 
         $response = ($action)(
@@ -101,8 +114,21 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[1, 20], [3, 40], [5, 60]],
-            json_decode((string)$response->getBody()),
+            [
+                [
+                    'timestamp' => 1,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 40,
+                ],
+                [
+                    'timestamp' => 5,
+                    'temperature' => 60,
+                ],
+            ],
+            json_decode((string)$response->getBody(), true),
         );
     }
 
@@ -148,8 +174,17 @@ class QueryContinuousDataActionTest extends TestCase
             $response->getStatusCode(),
         );
         $this->assertEquals(
-            [[10, 110], [20, 210]],
-            json_decode((string)$response->getBody()),
+            [
+                [
+                    'timestamp' => 10,
+                    'temperature' => 110,
+                ],
+                [
+                    'timestamp' => 20,
+                    'temperature' => 210,
+                ]
+            ],
+            json_decode((string)$response->getBody(), true),
         );
     }
 }
