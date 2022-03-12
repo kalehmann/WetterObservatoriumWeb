@@ -35,6 +35,7 @@ use KaLehmann\WetterObservatoriumWeb\Normalizer\Normalizer;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\NormalizerInterface;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\HumidityNormalizer;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\PressureNormalizer;
+use KaLehmann\WetterObservatoriumWeb\Normalizer\RSSINormalizer;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\SunIntensityNormalizer;
 use KaLehmann\WetterObservatoriumWeb\Normalizer\TemperatureNormalizer;
 use KaLehmann\WetterObservatoriumWeb\Persistence\Filesystem\DataLocator;
@@ -141,6 +142,7 @@ return [
             [
                 create(HumidityNormalizer::class),
                 create(PressureNormalizer::class),
+                create(RSSINormalizer::class),
                 create(SunIntensityNormalizer::class),
                 create(TemperatureNormalizer::class),
             ],
