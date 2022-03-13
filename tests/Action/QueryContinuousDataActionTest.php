@@ -34,9 +34,10 @@ use PHPUnit\Framework\TestCase;
 class QueryContinuousDataActionTest extends TestCase
 {
     /**
-     * Check that the data measured in the last 24 hours can be queried.
+     * Check that the data measured in the last 24 hours for a single quantity at
+     * a given location can be queried.
      */
-    public function testQueryTheDataOfTheLast24Hours(): void
+    public function testQueryTheDataOfTheLast24HoursForSingleQuantity(): void
     {
         $normalizerMock = $this->createMock(NormalizerInterface::class);
         $normalizerMock->expects($this->exactly(6))
@@ -133,9 +134,96 @@ class QueryContinuousDataActionTest extends TestCase
     }
 
     /**
-     * Check that the data measured in the last 31 days can be queried.
+     * Check that the data measured in the last 24 hours for a all quantities at
+     * a given location can be queried.
      */
-    public function testQueryTheDataOfTheLast31Days(): void
+    public function testQueryTheDataOfTheLast24HoursForAllQuantities(): void
+    {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(6))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['humidity', 10],
+                           ['humidity', 11],
+                           ['humidity', 12],
+                           ['temperature', 2],
+                           ['temperature', 4],
+                           ['temperature', 6],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           10,
+                           11,
+                           12,
+                           20,
+                           40,
+                           60,
+                       );
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryQuantities')
+                          ->with('outdoor')
+                          ->willReturn(['humidity', 'temperature']);
+        $weatherRepository->expects($this->exactly(2))
+                          ->method('query24h')
+                          ->withConsecutive(
+                              ['outdoor', 'humidity'],
+                              ['outdoor', 'temperature'],
+                          )
+                          ->willReturnOnConsecutiveCalls(
+                              [
+                                  1 => 10,
+                                  2 => 11,
+                                  3 => 12,
+                              ],
+                              [
+                                  2 => 2,
+                                  3 => 4,
+                                  4 => 6,
+                              ],
+                          );
+
+        $action = new QueryContinuousDataAction();
+        $response = ($action)(
+            $normalizerMock,
+            $weatherRepository,
+            'outdoor',
+            'json',
+        );
+
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'humidity' => 10,
+                ],
+                [
+                    'timestamp' => 2,
+                    'humidity' => 11,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'humidity' => 12,
+                    'temperature' => 40,
+                ],
+                [
+                    'timestamp' => 4,
+                    'temperature' => 60,
+                ],
+            ],
+            json_decode((string)$response->getBody(), true),
+        );
+    }
+
+    /**
+     * Check that the data measured in the last 31 days for a single quantity at
+     * a given location can be queried.
+     */
+    public function testQueryTheDataOfTheLast31DaysForSingleQuantity(): void
     {
         $normalizerMock = $this->createMock(NormalizerInterface::class);
         $normalizerMock->expects($this->exactly(2))
@@ -183,6 +271,94 @@ class QueryContinuousDataActionTest extends TestCase
                     'timestamp' => 20,
                     'temperature' => 210,
                 ]
+            ],
+            json_decode((string)$response->getBody(), true),
+        );
+    }
+
+    /**
+     * Check that the data measured in the last 31 days for a all quantities at
+     * a given location can be queried.
+     */
+    public function testQueryTheDataOfTheLast31DaysForAllQuantities(): void
+    {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(6))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['humidity', 10],
+                           ['humidity', 11],
+                           ['humidity', 12],
+                           ['temperature', 2],
+                           ['temperature', 4],
+                           ['temperature', 6],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           10,
+                           11,
+                           12,
+                           20,
+                           40,
+                           60,
+                       );
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryQuantities')
+                          ->with('outdoor')
+                          ->willReturn(['humidity', 'temperature']);
+        $weatherRepository->expects($this->exactly(2))
+                          ->method('query31d')
+                          ->withConsecutive(
+                              ['outdoor', 'humidity'],
+                              ['outdoor', 'temperature'],
+                          )
+                          ->willReturnOnConsecutiveCalls(
+                              [
+                                  1 => 10,
+                                  2 => 11,
+                                  3 => 12,
+                              ],
+                              [
+                                  2 => 2,
+                                  3 => 4,
+                                  4 => 6,
+                              ],
+                          );
+
+        $action = new QueryContinuousDataAction();
+        $response = ($action)(
+            $normalizerMock,
+            $weatherRepository,
+            'outdoor',
+            'json',
+            null,
+            '31d',
+        );
+
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'humidity' => 10,
+                ],
+                [
+                    'timestamp' => 2,
+                    'humidity' => 11,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'humidity' => 12,
+                    'temperature' => 40,
+                ],
+                [
+                    'timestamp' => 4,
+                    'temperature' => 60,
+                ],
             ],
             json_decode((string)$response->getBody(), true),
         );
