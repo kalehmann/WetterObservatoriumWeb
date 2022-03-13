@@ -157,6 +157,7 @@ return [
         ),
     RoutingMiddleware::class => create()
         ->constructor(
+            get(LoggerInterface::class),
             get(Psr17Factory::class),
             fn () => function (RouteCollector $routeCollector) {
                 $routeCollector->addRoute(

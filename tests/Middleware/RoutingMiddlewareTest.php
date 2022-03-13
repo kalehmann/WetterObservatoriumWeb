@@ -30,6 +30,7 @@ use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test cases for the RoutingMiddleware.
@@ -49,6 +50,7 @@ class RoutingMiddlewareTest extends TestCase
             );
         };
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $psr17FactoryMock = $this->createMock(Psr17Factory::class);
         $psr17FactoryMock->expects($this->once())
                          ->method('createResponse')
@@ -60,6 +62,7 @@ class RoutingMiddlewareTest extends TestCase
         );
 
         $routingMiddleware = new RoutingMiddleware(
+            $loggerMock,
             $psr17FactoryMock,
             $routeDefinitionCallback,
         );
@@ -84,6 +87,7 @@ class RoutingMiddlewareTest extends TestCase
             );
         };
         $handlerMock = $this->createMock(RequestHandlerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $psr17FactoryMock = $this->createMock(Psr17Factory::class);
         $psr17FactoryMock->expects($this->once())
                          ->method('createResponse')
@@ -95,6 +99,7 @@ class RoutingMiddlewareTest extends TestCase
         );
 
         $routingMiddleware = new RoutingMiddleware(
+            $loggerMock,
             $psr17FactoryMock,
             $routeDefinitionCallback,
         );
@@ -132,6 +137,7 @@ class RoutingMiddlewareTest extends TestCase
                     ->with(
                         $requestCallback,
                     );
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $psr17FactoryMock = $this->createMock(Psr17Factory::class);
         $request = new ServerRequest(
             'POST',
@@ -140,6 +146,7 @@ class RoutingMiddlewareTest extends TestCase
         );
 
         $routingMiddleware = new RoutingMiddleware(
+            $loggerMock,
             $psr17FactoryMock,
             $routeDefinitionCallback,
         );

@@ -29,6 +29,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 
 use function FastRoute\simpleDispatcher;
 
@@ -50,12 +51,16 @@ class RoutingMiddleware implements MiddlewareInterface
      */
     private $routeDefinitionCallback;
 
+    private LoggerInterface $logger;
+
     private Psr17Factory $psr17Factory;
 
     public function __construct(
+        LoggerInterface $logger,
         Psr17Factory $psr17Factory,
         callable $routeDefinitionCallback,
     ) {
+        $this->logger = $logger;
         $this->psr17Factory = $psr17Factory;
         $this->routeDefinitionCallback = $routeDefinitionCallback;
     }
@@ -86,6 +91,11 @@ class RoutingMiddleware implements MiddlewareInterface
                     1 => $action,
                     2 => $params
                 ] = $routeInfo;
+                $this->logger->debug(
+                    'Matched request against "' . $request->getUri()->getPath() .
+                    '" to action "' . $action . '"',
+                    $params,
+                );
 
                 return $handler->handle(
                     $request
