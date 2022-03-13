@@ -34,9 +34,10 @@ use PHPUnit\Framework\TestCase;
 class QueryFixedDataActionTest extends TestCase
 {
     /**
-     * Check that all measured quantities for a location can be listed.
+     * Check that the data measured for a single quantity at a given location in
+     * a given year and month can be queried.
      */
-    public function testQueryTheDataOfAMonth(): void
+    public function testQueryTheDataOfAMonthForSingleQuantity(): void
     {
         $normalizerMock = $this->createMock(NormalizerInterface::class);
         $normalizerMock->expects($this->exactly(2))
@@ -70,21 +71,106 @@ class QueryFixedDataActionTest extends TestCase
             05,
             'temperature',
         );
-
         $this->assertEquals(
             200,
             $response->getStatusCode(),
         );
-        $this->assertEqualsCanonicalizing(
-            [[1, 10], [2, 20]],
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'temperature' => 10,
+                ],
+                [
+                    'timestamp' => 2,
+                    'temperature' => 20,
+                ],
+            ],
             json_decode((string)$response->getBody(), true),
         );
     }
 
     /**
-     * Check that all measured quantities for a location can be listed.
+     * Check that the data measured for all quantities at a given location in
+     * a given year and month can be queried.
      */
-    public function testQueryTheDataOfAYear(): void
+    public function testQueryTheDataOfAMonthForAllQuantities(): void
+    {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(4))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['humidity', 1],
+                           ['humidity', 2],
+                           ['temperature', 2],
+                           ['temperature', 3],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           1,
+                           2,
+                           20,
+                           30,
+                       );
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryQuantities')
+                          ->with('outdoor')
+                          ->willReturn(['humidity', 'temperature']);
+        $weatherRepository->expects($this->exactly(2))
+                          ->method('queryMonth')
+                          ->withConsecutive(
+                              ['outdoor', 'humidity', 2021, 05],
+                              ['outdoor', 'temperature', 2021, 05],
+                          )
+                          ->willReturnOnConsecutiveCalls(
+                              [
+                                  1 => 1,
+                                  2 => 2,
+                              ],
+                              [
+                                  2 => 2,
+                                  3 => 3,
+                              ],
+                          );
+
+        $action = new QueryFixedDataAction();
+        $response = ($action)(
+            $normalizerMock,
+            $weatherRepository,
+            'outdoor',
+            'json',
+            2021,
+            05,
+        );
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'humidity' => 1,
+                ],
+                [
+                    'timestamp' => 2,
+                    'humidity' => 2,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 30,
+                ],
+            ],
+            json_decode((string)$response->getBody(), true),
+        );
+    }
+
+    /**
+     * Check that the data measured for a single quantity at a given location in
+     * a given year can be queried.
+     */
+    public function testQueryTheDataOfAYearForSingleQuantity(): void
     {
         $normalizerMock = $this->createMock(NormalizerInterface::class);
         $normalizerMock->expects($this->exactly(2))
@@ -123,8 +209,92 @@ class QueryFixedDataActionTest extends TestCase
             200,
             $response->getStatusCode(),
         );
-        $this->assertEqualsCanonicalizing(
-            [[1, 20], [3, 40]],
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 40,
+                ],
+            ],
+            json_decode((string)$response->getBody(), true),
+        );
+    }
+
+    /**
+     * Check that the data measured for all quantities at a given location in
+     * a given year can be queried.
+     */
+    public function testQueryTheDataOfAYearForAllQuantities(): void
+    {
+        $normalizerMock = $this->createMock(NormalizerInterface::class);
+        $normalizerMock->expects($this->exactly(4))
+                       ->method('denormalizeValue')
+                       ->withConsecutive(
+                           ['humidity', 1],
+                           ['humidity', 2],
+                           ['temperature', 2],
+                           ['temperature', 3],
+                       )
+                       ->willReturnOnConsecutiveCalls(
+                           1,
+                           2,
+                           20,
+                           30,
+                       );
+        $weatherRepository = $this->createMock(WeatherRepositoryInterface::class);
+        $weatherRepository->expects($this->once())
+                          ->method('queryQuantities')
+                          ->with('outdoor')
+                          ->willReturn(['humidity', 'temperature']);
+        $weatherRepository->expects($this->exactly(2))
+                          ->method('queryYear')
+                          ->withConsecutive(
+                              ['outdoor', 'humidity', 2021],
+                              ['outdoor', 'temperature', 2021],
+                          )
+                          ->willReturnOnConsecutiveCalls(
+                              [
+                                  1 => 1,
+                                  2 => 2,
+                              ],
+                              [
+                                  2 => 2,
+                                  3 => 3,
+                              ],
+                          );
+
+        $action = new QueryFixedDataAction();
+        $response = ($action)(
+            $normalizerMock,
+            $weatherRepository,
+            'outdoor',
+            'json',
+            2021,
+        );
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+        );
+        $this->assertEquals(
+            [
+                [
+                    'timestamp' => 1,
+                    'humidity' => 1,
+                ],
+                [
+                    'timestamp' => 2,
+                    'humidity' => 2,
+                    'temperature' => 20,
+                ],
+                [
+                    'timestamp' => 3,
+                    'temperature' => 30,
+                ],
+            ],
             json_decode((string)$response->getBody(), true),
         );
     }
