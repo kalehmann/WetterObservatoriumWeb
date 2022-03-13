@@ -175,18 +175,8 @@ return [
                     ListQuantitiesAction::class,
                 );
                 $routeCollector->addGroup(
-                    '/api/{location:[a-z]*}/{quantity:[a-z]*}',
+                    '/api/{location:[a-z]*}',
                     function (RouteCollector $routeCollector) {
-                        $routeCollector->addRoute(
-                            'GET',
-                            '.svg',
-                            GraphAction::class,
-                        );
-                        $routeCollector->addRoute(
-                            'GET',
-                            '/{timespan:24h|31d}.svg',
-                            GraphAction::class,
-                        );
                         $routeCollector->addRoute(
                             'GET',
                             '.{format}',
@@ -196,6 +186,31 @@ return [
                             'GET',
                             '/{timespan:24h|31d}.{format}',
                             QueryContinuousDataAction::class,
+                        );
+                        $routeCollector->addGroup(
+                            '/{quantity:[a-z]*}',
+                            function (RouteCollector $routeCollector) {
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '.svg',
+                                    GraphAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '/{timespan:24h|31d}.svg',
+                                    GraphAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '.{format}',
+                                    QueryContinuousDataAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '/{timespan:24h|31d}.{format}',
+                                    QueryContinuousDataAction::class,
+                                );
+                            }
                         );
                     }
                 );
