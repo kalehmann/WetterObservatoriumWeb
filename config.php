@@ -215,27 +215,42 @@ return [
                     }
                 );
                 $routeCollector->addGroup(
-                    '/api/{location:[a-z]*}/{quantity:[a-z]*}/{year:\d{4}}',
+                    '/api/{location:[a-z]*}',
                     function (RouteCollector $routeCollector) {
                         $routeCollector->addRoute(
                             'GET',
-                            '.svg',
-                            GraphAction::class,
-                        );
-                        $routeCollector->addRoute(
-                            'GET',
-                            '/{month:\d{2}}.svg',
-                            GraphAction::class,
-                        );
-                        $routeCollector->addRoute(
-                            'GET',
-                            '.{format}',
+                            '/{year:\d{4}}.{format}',
                             QueryFixedDataAction::class,
                         );
                         $routeCollector->addRoute(
                             'GET',
-                            '/{month:\d{2}}.{format}',
-                            QueryContinuousDataAction::class,
+                            '/{year:\d{4}}/{month:\d{2}}.{format}',
+                            QueryFixedDataAction::class,
+                        );
+                        $routeCollector->addGroup(
+                            '/{quantity:[a-z]*}/{year:\d{4}}',
+                            function (RouteCollector $routeCollector) {
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '.svg',
+                                    GraphAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '/{month:\d{2}}.svg',
+                                    GraphAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '.{format}',
+                                    QueryFixedDataAction::class,
+                                );
+                                $routeCollector->addRoute(
+                                    'GET',
+                                    '/{month:\d{2}}.{format}',
+                                    QueryContinuousDataAction::class,
+                                );
+                            }
                         );
                     }
                 );
