@@ -188,6 +188,16 @@ return [
                             '/{timespan:24h|31d}.{format}',
                             QueryContinuousDataAction::class,
                         );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{year:\d{4}}.{format}',
+                            QueryFixedDataAction::class,
+                        );
+                        $routeCollector->addRoute(
+                            'GET',
+                            '/{year:\d{4}}/{month:\d{2}}.{format}',
+                            QueryFixedDataAction::class,
+                        );
                         $routeCollector->addGroup(
                             '/{quantity:[a-z]*}',
                             function (RouteCollector $routeCollector) {
@@ -211,45 +221,30 @@ return [
                                     '/{timespan:24h|31d}.{format}',
                                     QueryContinuousDataAction::class,
                                 );
-                            }
-                        );
-                    }
-                );
-                $routeCollector->addGroup(
-                    '/api/{location:[a-z]*}',
-                    function (RouteCollector $routeCollector) {
-                        $routeCollector->addRoute(
-                            'GET',
-                            '/{year:\d{4}}.{format}',
-                            QueryFixedDataAction::class,
-                        );
-                        $routeCollector->addRoute(
-                            'GET',
-                            '/{year:\d{4}}/{month:\d{2}}.{format}',
-                            QueryFixedDataAction::class,
-                        );
-                        $routeCollector->addGroup(
-                            '/{quantity:[a-z]*}/{year:\d{4}}',
-                            function (RouteCollector $routeCollector) {
-                                $routeCollector->addRoute(
-                                    'GET',
-                                    '.svg',
-                                    GraphAction::class,
-                                );
-                                $routeCollector->addRoute(
-                                    'GET',
-                                    '/{month:\d{2}}.svg',
-                                    GraphAction::class,
-                                );
-                                $routeCollector->addRoute(
-                                    'GET',
-                                    '.{format}',
-                                    QueryFixedDataAction::class,
-                                );
-                                $routeCollector->addRoute(
-                                    'GET',
-                                    '/{month:\d{2}}.{format}',
-                                    QueryContinuousDataAction::class,
+                                $routeCollector->addGroup(
+                                    '/{year:\d{4}}',
+                                    function (RouteCollector $routeCollector) {
+                                        $routeCollector->addRoute(
+                                            'GET',
+                                            '.svg',
+                                            GraphAction::class,
+                                        );
+                                        $routeCollector->addRoute(
+                                            'GET',
+                                            '/{month:\d{2}}.svg',
+                                            GraphAction::class,
+                                        );
+                                        $routeCollector->addRoute(
+                                            'GET',
+                                            '.{format}',
+                                            QueryFixedDataAction::class,
+                                        );
+                                        $routeCollector->addRoute(
+                                            'GET',
+                                            '/{month:\d{2}}.{format}',
+                                            QueryFixedDataAction::class,
+                                        );
+                                    }
                                 );
                             }
                         );
