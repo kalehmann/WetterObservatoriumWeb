@@ -3,16 +3,26 @@
     width="100%"
     xmlns="http://www.w3.org/2000/svg">
     <style>
+    {% block style %}
       * {
           background: #fdfdfd;
           stroke: #020202;
+      }
+
+      .light-path {
+          stroke: #5b5b5b;
       }
       @media (prefers-color-scheme: dark){
           * {
               background: #020202;
               stroke: #fdfdfd;
           }
+
+	  .light-path {
+              stroke: #ababab;
+      	  }
       }
+    {% endblock %}
     </style>
     {% set frameSize = 800 %}
     {% block contents %}

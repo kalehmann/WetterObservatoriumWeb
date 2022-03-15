@@ -1,0 +1,43 @@
+{% extends 'graphs/graph.svg.twig' %}
+
+{% set measuredData = data["sun"] %}
+
+{% block frame %}
+   <circle
+     cx="{{ frameSize / 2 + 100}}" cy="{{ frameSize / 2 + 80}}" r="{{ frameSize / 2 }}" fill="none" />
+   <g transform="translate({{ frameSize / 2 + 100}}, {{ frameSize / 2 + 80}})">
+      <circle r="2" fill="black" class="light-path" stroke-width="0.5" />
+      <circle r="10" fill="none" />
+      {% for i in 1..9 %}
+        <text x="3" y="-{{ frameSize / 200 * i * 10 + 5}}" font-size="9" class="light-path">{{ i * 10}} %</text>
+        <circle r="{{ frameSize / 200 * i * 10 }}" fill="none" class="light-path" stroke-width="0.5" />
+      {% endfor %}
+      {% for i in 0..11 %}
+        <g transform="rotate({{ i * 15}})">
+          <path d="M -{{frameSize / 2}}, 0 L -10, 0 M 10, 0 L {{ frameSize / 2}}, 0" class="light-path" stroke-width="0.5" />
+	</g>
+      {% endfor %}
+      {% for i in 0..23 %}
+        <text
+	  text-anchor="middle" alignment-baseline="central"
+	  x="{{ circleCoordinates(i * 15, frameSize / 2 + 20).x }}"
+	  y="{{ circleCoordinates(i * 15, frameSize / 2 + 20).y }}"
+	>{{ i }}</text>
+      {% endfor %}
+      <path d="
+        {% for timestamp, value in measuredData %}
+    	  {% set angle = timestamp|date('G') * 15 + timestamp|date('i') * 0.25 %}
+    	  {% set radius = value * frameSize / 200 + 1 %}
+	  {% set x = circleCoordinates(angle, radius).x|number_format(2) %}
+	  {% set y = circleCoordinates(angle, radius).y|number_format(2) %}
+    	  {% if loop.index == 1 %}
+	    M {{ x }} {{ y }}
+    	  {% else %}
+	    L {{ x }} {{ y }}
+    	  {% endif %}
+	{% endfor %}
+      "
+      fill="transparent"
+      stroke-width="1.5" />
+   </g>
+{% endblock %}

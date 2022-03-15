@@ -70,9 +70,31 @@ class GraphExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
+                'circleCoordinates',
+                [self::class, 'circleCoordinates'],
+            ),
+            new TwigFunction(
                 'yTicks',
                 [self::class, 'yTicks'],
             ),
+        ];
+    }
+
+    /**
+     * Calculates the vector to a point with a given distance and angle.
+     *
+     * @param float $angle the angle of the point
+     * @param float $radius the distance to the point
+     *
+     * @return array<string, float> an array with the keys `x` and `y`
+     */
+    public static function circleCoordinates(
+        float $angle,
+        float $radius,
+    ): array {
+        return [
+            'x' => sin(deg2rad($angle)) * $radius,
+            'y' => -cos(deg2rad($angle)) * $radius,
         ];
     }
 
