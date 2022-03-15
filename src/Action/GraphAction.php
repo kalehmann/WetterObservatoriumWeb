@@ -218,6 +218,14 @@ class GraphAction
                 $location,
                 $q,
             );
+
+            $latestMeasurement = max(array_keys($data[$quantity]));
+            $threshold = $latestMeasurement - 24 * 60 * 60;
+            $data[$quantity] = array_filter(
+                $data[$quantity],
+                fn ($val, int $timestamp) => $timestamp > $threshold,
+                ARRAY_FILTER_USE_BOTH,
+            );
         }
 
         return $data;
