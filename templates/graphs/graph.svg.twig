@@ -34,6 +34,18 @@
                 height="{{ frameSize }}"
                 fill="none"
             ></rect>
+	    <g transform="translate(100, 100)">
+	    {% for i in yTicks(vMin|round(0, 'ceil'), vMax|round(0, 'floor')) %}
+	        <path
+		    class="light-path"
+		    d="M 0, {{ i|mapRange(vMin, vMax, frameSize - 40, 0) - 5 }} l {{ frameSize}}, 0"
+		    stroke-width="0.5" />
+		<path
+		    class="light-path"
+		    d="M {{ i|mapRange(vMin, vMax, frameSize - 40, 0) }}, -20 l 0, {{ frameSize}}"
+		    stroke-width="0.5" />
+            {% endfor %}
+	    </g>
         {% endblock %}
         <g transform="translate(100, 100)">
             {% block graph %}
