@@ -1,7 +1,45 @@
 ---
 kind: "pipeline"
 type: "docker"
+name: "tests"
+
+steps:
+        - name: "Install the PHP dependencies"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - "composer install"
+        - name: "Static analysis of PHP code"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - >-
+                        /usr/bin/env php -dmemory_limit=-1 vendor/bin/phpstan
+                        --level=max analyze config.php public/ src/ tests/
+          depends_on:
+                  - "Install the PHP dependencies"
+        - name: "Style check of PHP code"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - >-
+                        /usr/bin/env php vendor/bin/phpcs
+                        --standard=PSR12 config.php public/api.php src/ tests/
+          depends_on:
+                  - "Install the PHP dependencies"
+        - name: "PHP unit tests"
+          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
+          commands:
+                  - "/usr/bin/env php vendor/bin/phpunit tests/"
+          depends_on:
+                  - "Install the PHP dependencies"
+
+image_pull_secrets:
+        - "dockerconfigjson"
+
+---
+kind: "pipeline"
+type: "docker"
 name: "deployment"
+depends_on:
+        - "tests"
 
 steps:
         - name: "Install the Node dependencies"
