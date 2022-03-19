@@ -23,7 +23,7 @@ services:
         php:
                 build:
                         args:
-                                PHP_VERSION: "8"
+                                PHP_VERSION: "8.1"
                         context: "."
                         target: "wo_php"
                 working_dir: "/application"
