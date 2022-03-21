@@ -7,7 +7,7 @@ jobs:
                 name: "PHPStan static analysis"
                 steps:
                         - uses: "actions/checkout@v2"
-                        - uses: "php-actions/composer@v5"
+                        - uses: "php-actions/composer@v6"
                         - name: "PHPStan static analysis"
                           uses: "./.github/actions/static-analysis"
                           with:
@@ -18,7 +18,7 @@ jobs:
                 name: "PHP CodeSniffer analysis"
                 steps:
                         - uses: "actions/checkout@v2"
-                        - uses: "php-actions/composer@v5"
+                        - uses: "php-actions/composer@v6"
                         - name: "PHP CodeSniffer analysis"
                           uses: "./.github/actions/code-sniffer"
                           with:
@@ -29,7 +29,7 @@ jobs:
                 name: "PHPUnit tests"
                 steps:
                         - uses: "actions/checkout@v2"
-                        - uses: "php-actions/composer@v5"
+                        - uses: "php-actions/composer@v6"
                         - name: "PHPUnit tests"
                           uses: "./.github/actions/phpunit-tests"
                           with:
@@ -39,9 +39,9 @@ jobs:
                 steps:
                         - uses: "actions/checkout@v2"
                         - name: "Set up Python"
-                          uses: "actions/setup-python@v2"
+                          uses: "actions/setup-python@v3"
                           with:
-                                  python-version: "3.8"
+                                  python-version: "3.9"
                         - name: "Install yamllint"
                           run: "pip install yamllint"
                         - name: "Lint YAML files"
