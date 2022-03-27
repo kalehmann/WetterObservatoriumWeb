@@ -11,7 +11,7 @@ jobs:
                         - name: "PHPStan static analysis"
                           uses: "./.github/actions/static-analysis"
                           with:
-                                  source-directories: >-
+                                  path: >-
                                           config.php public/ src/ tests/
         style-check:
                 runs-on: "ubuntu-latest"
@@ -22,7 +22,7 @@ jobs:
                         - name: "PHP CodeSniffer analysis"
                           uses: "./.github/actions/code-sniffer"
                           with:
-                                  source-directories: >-
+                                  path: >-
                                           config.php public/api.php src/ tests/
         unit-tests:
                 runs-on: "ubuntu-latest"

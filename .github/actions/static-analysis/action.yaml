@@ -3,8 +3,8 @@ name: "PHPStan static analysis"
 author: "Karsten Lehmann <mail@kalehmann.de>"
 description: "Static analysis of PHP code with PHPStan"
 inputs:
-        source-directories:
-                description: "The directories containing the code"
+        path:
+                description: "The directories or files containing the code"
                 required: true
 runs:
         using: "docker"
@@ -14,5 +14,5 @@ runs:
                 - "-c"
                 - >-
                         php -dmemory_limit=-1 vendor/bin/phpstan --level=max
-                        analyze ${{ inputs.source-directories }}
+                        analyze ${{ inputs.path }}
 ...
