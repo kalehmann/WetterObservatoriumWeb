@@ -7,7 +7,7 @@ services:
         node:
                 build:
                         args:
-                                NODE_VERSION: "16"
+                                NODE_VERSION: "20"
                         context: "."
                         target: "wo_node"
                 command:
@@ -23,7 +23,7 @@ services:
         php:
                 build:
                         args:
-                                PHP_VERSION: "8.1"
+                                PHP_VERSION: "8.2"
                         context: "."
                         target: "wo_php"
                 working_dir: "/application"
