@@ -15,7 +15,7 @@ steps:
                 /usr/bin/env php -dmemory_limit=-1 vendor/bin/phpstan
                 --level=max analyze config.php public/ src/ tests/
       depends_on:
-              - 'Install the PHP dependencies'
+          - 'Install the PHP dependencies'
     - name: 'Style check of PHP code'
       image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
       commands:
