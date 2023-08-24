@@ -1,109 +1,108 @@
 ---
-kind: "pipeline"
-type: "docker"
-name: "tests"
+kind: 'pipeline'
+name: 'tests'
+type: 'docker'
 
 steps:
-        - name: "Install the PHP dependencies"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - "composer install"
-        - name: "Static analysis of PHP code"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - >-
-                        /usr/bin/env php -dmemory_limit=-1 vendor/bin/phpstan
-                        --level=max analyze config.php public/ src/ tests/
-          depends_on:
-                  - "Install the PHP dependencies"
-        - name: "Style check of PHP code"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - >-
-                        /usr/bin/env php vendor/bin/phpcs
-                        --standard=PSR12 config.php public/api.php src/ tests/
-          depends_on:
-                  - "Install the PHP dependencies"
-        - name: "PHP unit tests"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - "/usr/bin/env php vendor/bin/phpunit tests/"
-          depends_on:
-                  - "Install the PHP dependencies"
+    - name: 'Install the PHP dependencies'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
+      commands:
+          - 'composer install'
+    - name: 'Static analysis of PHP code'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
+      commands:
+          - >-
+                /usr/bin/env php -dmemory_limit=-1 vendor/bin/phpstan
+                --level=max analyze config.php public/ src/ tests/
+      depends_on:
+              - 'Install the PHP dependencies'
+    - name: 'Style check of PHP code'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
+      commands:
+          - >-
+                /usr/bin/env php vendor/bin/phpcs
+                --standard=PSR12 config.php public/api.php src/ tests/
+      depends_on:
+          - 'Install the PHP dependencies'
+    - name: 'PHP unit tests'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
+      commands:
+          - '/usr/bin/env php vendor/bin/phpunit tests/'
+      depends_on:
+          - 'Install the PHP dependencies'
 
 image_pull_secrets:
-        - "dockerconfigjson"
-
+    - 'dockerconfigjson'
 ---
-kind: "pipeline"
-type: "docker"
-name: "deployment"
+kind: 'pipeline'
+name: 'deployment'
+type: 'docker'
 depends_on:
-        - "tests"
+    - 'tests'
 
 steps:
-        - name: "Install the Node dependencies"
-          image: "node:16-alpine"
-          commands:
-                  - "yarn install"
-        - name: "Install the PHP dependencies"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - "composer install --no-dev --classmap-authoritative"
-        - name: "Run webpack"
-          image: "node:16-alpine"
-          commands:
-                  - "yarn run webpack --mode=production"
-          depends_on:
-                  - "Install the Node dependencies"
-        - name: "Deploy the website"
-          image: "registry.kalehmann.de/testing/wetterobservatoriumweb:latest"
-          commands:
-                  - 'echo "$${ENV_FILE}" | tr " " "\n" > .env'
-                  - 'lftp -e "
-                      set ftp:ssl-force true;
-                      set ssl:verify-certificate yes;
-                      open -u $${USER},$${PASSWORD} $${SERVER};
-                      mirror
-                        --delete
-                        --exclude=^.dockerignore
-                        --exclude=^.drone.yaml
-                        --exclude=^.editorconfig
-                        --exclude=^.git
-                        --exclude=^.pnp.cjs
-                        --exclude=^.yarn
-                        --exclude=^.yarnrc.yml
-                        --exclude=^assets
-                        --exclude=^data
-                        --exclude=^doc
-                        --exclude=^docker
-                        --exclude=^Dockerfile
-                        --exclude=^package.json
-                        --exclude=^scripts
-                        --exclude=^tests
-                        --exclude=^webpack.config.js
-                        --exclude=^yarn.lock
-                        --parallel=20
-                        --reverse
-                        $(pwd)
-                        public_html/alaunwetter-kalehmann-de;
-                      exit;"'
-          depends_on:
-                  - "Install the PHP dependencies"
-                  - "Run webpack"
-          environment:
-                  ENV_FILE:
-                          from_secret: "env_file"
-                  USER:
-                          from_secret: "ftp_user"
-                  PASSWORD:
-                          from_secret: "ftp_password"
-                  SERVER:
-                          from_secret: "ftp_server"
-          when:
-                  branch:
-                          - "master"
+    - name: 'Install the Node dependencies'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/node'
+      commands:
+          - 'yarn install'
+    - name: 'Install the PHP dependencies'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/php'
+      commands:
+          - 'composer install --no-dev --classmap-authoritative'
+    - name: 'Run webpack'
+      image: 'git.kalehmann.de/karsten/wetterobservatoriumweb/node'
+      commands:
+          - 'yarn run webpack --mode=production'
+      depends_on:
+          - 'Install the Node dependencies'
+    - name: 'Deploy the website'
+      image: 'git.kalehmann.de/infrastructure/dockerimages/lftp'
+      commands:
+          - 'echo "$${ENV_FILE}" | tr " " "\n" > .env'
+          - 'lftp -e "
+                 set ftp:ssl-force true;
+                 set ssl:verify-certificate yes;
+                 open -u $${USER},$${PASSWORD} $${SERVER};
+                 mirror
+                     --delete
+                     --exclude=^.dockerignore
+                     --exclude=^.drone.yaml
+                     --exclude=^.editorconfig
+                     --exclude=^.git
+                     --exclude=^.pnp.cjs
+                     --exclude=^.yarn
+                     --exclude=^.yarnrc.yml
+                     --exclude=^assets
+                     --exclude=^data
+                     --exclude=^doc
+                     --exclude=^docker
+                     --exclude=^Dockerfile
+                     --exclude=^package.json
+                     --exclude=^scripts
+                     --exclude=^tests
+                     --exclude=^webpack.config.js
+                     --exclude=^yarn.lock
+                     --parallel=20
+                     --reverse
+                     $(pwd)
+                     public_html/alaunwetter-kalehmann-de;
+                 exit;"'
+      depends_on:
+          - 'Install the PHP dependencies'
+          - 'Run webpack'
+      environment:
+          ENV_FILE:
+              from_secret: 'env_file'
+          USER:
+              from_secret: 'ftp_user'
+          PASSWORD:
+              from_secret: 'ftp_password'
+          SERVER:
+              from_secret: 'ftp_server'
+      when:
+          branch:
+              - 'master'
 
 image_pull_secrets:
-        - "dockerconfigjson"
+    - 'dockerconfigjson'
 ...
